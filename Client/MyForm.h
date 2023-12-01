@@ -34,6 +34,10 @@ namespace Client {
 				delete components;
 			}
 		}
+	private: System::Windows::Forms::ListBox^ listBox1;
+	private: System::Windows::Forms::Button^ button1;
+	private: System::Windows::Forms::TextBox^ textBox1;
+	protected:
 
 	private:
 		/// <summary>
@@ -48,11 +52,51 @@ namespace Client {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->components = gcnew System::ComponentModel::Container();
-			this->Size = System::Drawing::Size(300,300);
-			this->Text = L"MyForm";
-			this->Padding = System::Windows::Forms::Padding(0);
+			this->listBox1 = (gcnew System::Windows::Forms::ListBox());
+			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->SuspendLayout();
+			// 
+			// listBox1
+			// 
+			this->listBox1->FormattingEnabled = true;
+			this->listBox1->ItemHeight = 16;
+			this->listBox1->Location = System::Drawing::Point(306, 12);
+			this->listBox1->Name = L"listBox1";
+			this->listBox1->Size = System::Drawing::Size(616, 532);
+			this->listBox1->TabIndex = 1;
+			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(803, 575);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(119, 64);
+			this->button1->TabIndex = 2;
+			this->button1->Text = L"button1";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
+			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(306, 575);
+			this->textBox1->Multiline = true;
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(478, 64);
+			this->textBox1->TabIndex = 3;
+			// 
+			// MyForm
+			// 
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->ClientSize = System::Drawing::Size(1179, 667);
+			this->Controls->Add(this->textBox1);
+			this->Controls->Add(this->button1);
+			this->Controls->Add(this->listBox1);
+			this->Name = L"MyForm";
+			this->Text = L"MyForm";
+			this->ResumeLayout(false);
+			this->PerformLayout();
+
 		}
 #pragma endregion
 
@@ -60,5 +104,8 @@ namespace Client {
 
 
 
+	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+
+	}
 	};
 }
