@@ -1,5 +1,5 @@
 #pragma once
-
+#include "ServerConnection.h"
 namespace Client {
 
 	using namespace System;
@@ -18,9 +18,7 @@ namespace Client {
 		MyForm(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+			s1 = new SocketServer();
 		}
 
 	protected:
@@ -97,15 +95,28 @@ namespace Client {
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
+			
+
 		}
 #pragma endregion
+		SocketServer *s1;
 
-
-
-
+	private: void MarshalString(String^ s, std::string& os) {
+		using namespace Runtime::InteropServices;
+		const char* chars =
+			(const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
+		os = chars;
+		Marshal::FreeHGlobal(IntPtr((void*)chars));
+	}
 
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-
+		std::string str;
+		MarshalString(textBox1->Text, str);
+		s1->Send(SEND_MESSAGE, str.c_str());
+		str.clear();
+		s1->Receive(str);
+		//String mess(str.c_str());
+		listBox1->Items->Add(gcnew String(str.c_str()));
 	}
 	};
 }

@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <thread>
-
+#include <vector>
 #include <execution>
 
 // Need to link with Ws2_32.lib
@@ -16,11 +16,10 @@
 // #pragma comment (lib, "Mswsock.lib")
 
 class SockedThread {
-    char recvbuf[DEFAULT_BUFLEN];
-    int recvbuflen = DEFAULT_BUFLEN;
     SOCKET ClientSocket = INVALID_SOCKET;
-
-
+    std::thread* myThread;
+    bool isActive = true;
+    int userId = 0;
 
 public:
     SockedThread(SOCKET clientSocket) {
@@ -29,19 +28,26 @@ public:
     }
 
     static void Run(SockedThread socketThread) {
-        int iResult = 0;
+        
+       // socketThread.recvbuf[0] = 0;
         do {
+            char recvbuf[DEFAULT_BUFLEN] = "";
+            int recvbuflen = DEFAULT_BUFLEN;
+            int iResult = 0;
+          
             iResult = recv(socketThread.ClientSocket,
-                socketThread.recvbuf,
-                socketThread.recvbuflen,
-                0);
+                    recvbuf,
+                    recvbuflen,
+                    0);
 
             if (iResult > 0) {
                 printf("Socked %d :Bytes received: %d\n", socketThread.ClientSocket, iResult);
 
-                int iSendResult = send(socketThread.ClientSocket, socketThread.recvbuf, iResult, 0);
+                int iSendResult = send(socketThread.ClientSocket, recvbuf, iResult, 0);
                 if (iSendResult == SOCKET_ERROR) {
+                    printf("send failed with error: %d\n", WSAGetLastError());
                     closesocket(socketThread.ClientSocket);
+                    socketThread.isActive = false;
                     return;
                 }
                 printf("Bytes sent: %d\n", iSendResult);
@@ -51,18 +57,23 @@ public:
             else {
                 printf("recv failed with error: %d\n", WSAGetLastError());
                 closesocket(socketThread.ClientSocket);
+                socketThread.isActive = false;
                 return;
             }
 
         } while (true);
     };
 
+    void setThread(std::thread* th) {
+        myThread = th;
+    }
+
 };
 
 class SocketServer
 {
     SOCKET ListenSocket = INVALID_SOCKET;
-
+    std::vector<SockedThread> clients;
 public:
     SocketServer() {
         WSADATA wsaData;
@@ -114,8 +125,9 @@ public:
             Listen();
             try {
                 sockaddr* addr = NULL;
-                SockedThread client(accept(ListenSocket, addr, NULL));
-                std::thread thread(SockedThread::Run, client);
+                clients.emplace_back(SockedThread (accept(ListenSocket, addr, NULL)));
+                std::thread* th = new std::thread(SockedThread::Run, *clients.end());
+                clients.end()->setThread(th);
             }
             catch (std::exception e) {};
         }
