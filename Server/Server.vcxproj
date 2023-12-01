@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{34597d24-e28c-407b-bf3a-c675c2af8422}</ProjectGuid>
-    <RootNamespace>Server</RootNamespace>
+    <ProjectGuid>{303cff18-34f8-4652-85a8-5374b88a8cfe}</ProjectGuid>
+    <RootNamespace>server</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,15 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="PipeServer.h" />
-    <ClInclude Include="Server.h" />
-    <ClInclude Include="SocketServer.h" />
+    <ClCompile Include="PipeServer.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="SocketServe.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="PipeServer.cpp" />
-    <ClCompile Include="Server.cpp" />
-    <ClCompile Include="SocketServer.cpp" />
+    <ClInclude Include="PipeServer.h" />
+    <ClInclude Include="SocketServe.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

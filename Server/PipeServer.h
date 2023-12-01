@@ -2,6 +2,9 @@
 class PipeServer
 {
 public:
-	static void Run(PipeServer pipeServer) {};
+	void Run() {
+		while (true);
+	};
+
 };
 

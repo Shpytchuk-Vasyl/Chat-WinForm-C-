@@ -1,6 +1,13 @@
-#include "Server.h"
+#include "SocketServe.h"
+#include "PipeServer.h"
 
-int main() {
-	Server servers;
-	servers.Run();
+
+
+int __cdecl main(void)
+{
+   
+    SocketServer s;
+    std::thread t(&SocketServer::Run, s);
+    PipeServer pipe;
+    pipe.Run();
 }
