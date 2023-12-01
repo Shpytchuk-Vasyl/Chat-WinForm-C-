@@ -121,7 +121,7 @@
   <ItemGroup>
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="PipeServer.cpp" />
-    <ClCompile Include="SockedServer.cpp" />
+    <ClCompile Include="SocketServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
