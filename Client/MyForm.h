@@ -1,6 +1,8 @@
 #pragma once
 #include "ServerConnection.h"
 #include "ChatNode.h"
+#include "RequestManager.h"
+
 	
 
 namespace Client {
@@ -642,7 +644,7 @@ namespace Client {
 			try {
 				server = new SocketServer();
 				server->Connect(DEFAULT_IP, DEFAULT_PORT);
-				// serer->
+				server->Send(TypeRequest::START_REQUEST, RequestManager::generateMessage(TypeRequest::START_REQUEST, ""));
 
 
 			}

@@ -8,6 +8,7 @@ private:
 	int i_picture = 0;
 public:
 	friend class CDatabase;
+    CUser() {};
 	CUser(char name[50], char password[50],int picture) {
 		std::memcpy(s_name, name, 50);
 		std::memcpy(s_password, password, 50);
@@ -19,5 +20,36 @@ public:
 		i_picture = 0;
 	}
 	
+
+    // Getter for s_name
+    const char* getName() const {
+        return s_name;
+    }
+
+    // Setter for s_name
+    void setName(char name[50]) {
+        std::memcpy(s_name, name, 50);
+    }
+
+    // Getter for s_password
+    const char* getPassword() const {
+        return s_password;
+    }
+
+    // Setter for s_password
+    void setPassword(char password[50]) {
+        std::memcpy(s_password, password, 50);
+    }
+
+    // Getter for i_picture
+    int getPicture() const {
+        return i_picture;
+    }
+
+    // Setter for i_picture
+    void setPicture(int picture) {
+        i_picture = picture;
+    }
 };
+
 

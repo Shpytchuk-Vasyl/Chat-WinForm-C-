@@ -14,14 +14,17 @@
 #pragma comment (lib, "AdvApi32.lib")
 #include <string>
 #include "TypeRequest.h"
-
+#include "../server/CUser.h"
+#include "../server/CChat.h"
+#include "../server/CMessage.h"
+#include <vector>
 
 class ServerConnection {
 public:
 	 virtual bool Connect(std::string ip, std::string port) = 0;
 	 virtual int Send(TypeRequest type, std::string info) = 0;
 	 virtual int Receive(std::string& info) = 0;
-
+     virtual int RegisterUser(CUser user) = 0;
 };
 
 
@@ -96,8 +99,7 @@ public:
              printf("send failed with error: %d\n", WSAGetLastError());
          }
          return iResult;
-     };
-	 
+     };	 
      int Receive(std::string& info) {
          int iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
          if (iResult > 0)
@@ -110,8 +112,42 @@ public:
          info = recvbuf;
          return iResult;
      };
+    
 
+     int RegisterUser(CUser user) {
+         send(ConnectSocket, std::to_string(TypeRequest::REGISTER_REQUEST).c_str(), sizeof(REGISTER_REQUEST), 0);
+        
+         int iResult = send(ConnectSocket, (char *)(&user), sizeof(user), 0);
+         if (iResult == SOCKET_ERROR) {
+             printf("send failed with error: %d\n", WSAGetLastError());
+         }
+         return iResult;
+     }
+     
+     int addNewChat(CUser other) {
+         send(ConnectSocket, std::to_string(TypeRequest::ADD_NEW_CHAT).c_str(), sizeof(ADD_NEW_CHAT), 0);
+         
+         int iResult = send(ConnectSocket, (char*)(&other), sizeof(other), 0);
+         if (iResult == SOCKET_ERROR) {
+             printf("send failed with error: %d\n", WSAGetLastError());
+         }
+         return iResult;
+     }
+
+     std::vector<CChat> getAllChats(CUser me) {
+         send(ConnectSocket, std::to_string(TypeRequest::START_REQUEST).c_str(), sizeof(START_REQUEST), 0);
+
+         int size = 0;
+         std::vector<CChat> chats;
+         CChat chat;
+         do {
+             size = recv(ConnectSocket, (char*)&chat, sizeof(chat), 0);
+             chats.push_back(chat);
+         } while (size > 0);
+         return chats;
+     }
  };
+
 
  class PipeServer : ServerConnection {
  public:

@@ -1,6 +1,8 @@
 #pragma once
 #include "ServerConnection.h"
 #include "TypeRequest.h"
+#include "../server/CUser.h"
+
 class RequestManager
 {
 	ServerConnection* server;
@@ -23,11 +25,8 @@ public:
 
 	}
 
-	static std::string RegisterUser(std::string name, std::string surName, std::string phone, std::string email) {
-		return "FIRST_NAME : " + name + "\n" +
-			"LAST_NAME : " + surName + "\n" +
-			"PHONE : " + phone + "\n" +
-			"EMAIL : " + email + "\n";
+	static CUser RegisterUser(std::string name, std::string password, int iconIndex) {
+		return CUser(name.c_str(), password.c_str(), iconIndex);
 	}
 
 	static std::string GetMessage() {
