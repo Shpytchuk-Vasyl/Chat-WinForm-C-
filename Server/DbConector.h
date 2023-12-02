@@ -6,10 +6,11 @@
 #include <cppconn/prepared_statement.h>
 #include <cppconn/resultset.h>
 
+
 #include "CUser.h"
 #include "CMessage.h"
 #include "CChat.h"
-
+#include <memory>
 #define USER "root"
 #define PASSWORD "password"
 #define PORT "tcp://127.0.0.1:3306"
@@ -36,8 +37,33 @@ public:
     std::vector<CMessage> get_all_message_from_chat(const CChat) const;
 
     int  get_user_id(const CUser)const;
+    std::string get_message_text_by_id(int);
+    std::vector<CChat> get_chats() const;
+    CUser get_user_by_id(int) const;
     int get_chat_id(const CChat) const;
 };
+
+std::string CDatabase::get_message_text_by_id(int message_id) {
+    sql::PreparedStatement* pstmt = con->prepareStatement("SELECT content FROM messages WHERE id = ?");
+    pstmt->setInt(1, message_id);
+
+    sql::ResultSet* resultSet = pstmt->executeQuery();
+
+    if (resultSet->next()) {
+        std::string message_text = resultSet->getString("content");
+
+        delete resultSet;
+        delete pstmt;
+
+        return message_text;
+    }
+    else {
+        // Повідомлення з заданим id не знайдено
+        delete resultSet;
+        delete pstmt;
+        throw std::exception();
+    }
+}
 
 void CDatabase::add_user(const CUser user) const {
     if (!con->isValid()) {
@@ -70,6 +96,57 @@ int CDatabase::get_user_id(const CUser user)const {
         return -1;
     }
 }
+
+CUser CDatabase::get_user_by_id(int id)const {
+    sql::PreparedStatement* pstmt = con->prepareStatement("SELECT id FROM users WHERE id = ?");
+    pstmt->setInt(1, id);
+
+    sql::ResultSet* resultSet = pstmt->executeQuery();
+
+    if (resultSet->next()) {
+       
+        CUser user;
+    
+        std::memcpy(user.s_name, std::string(resultSet->getString("name")).c_str(), 50);
+        std::memcpy(user.s_password, std::string(resultSet->getString("password")).c_str(), 50);
+        user.i_picture = resultSet->getInt("avatar");
+
+        delete resultSet;
+        delete pstmt;
+
+        return user;
+    }
+    else {
+        // Користувач з заданим іменем не знайдений
+        delete resultSet;
+        delete pstmt;
+        throw std::exception();
+    }
+}
+
+std::vector<CChat> CDatabase::get_chats() const {
+    std::vector<CChat> chats;
+
+    sql::PreparedStatement* pstmt = con->prepareStatement("SELECT id, first_user_id, num_first_unread, second_user_id, num_second_unread, created_at FROM chats");
+    sql::ResultSet* resultSet = pstmt->executeQuery();
+
+    while (resultSet->next()) {
+        CChat chat;
+        chat.user1_id = resultSet->getInt("first_user_id");
+        chat.unread1 = resultSet->getInt("num_first_unread");
+        chat.user2_id = resultSet->getInt("second_user_id");
+        chat.unread2 = resultSet->getInt("num_second_unread");
+        chat.user1 = this->get_user_by_id(chat.user1_id);
+        chat.user2 = this->get_user_by_id(chat.user2_id);
+        // Якщо created_at є рядком, не забудьте додати його обробку
+        chats.push_back(chat);
+    }
+
+    delete resultSet;
+    delete pstmt;
+    return chats;
+}
+
 
 int CDatabase::get_chat_id(const CChat chat)const {
     sql::PreparedStatement* pstmt = con->prepareStatement(
