@@ -33,7 +33,7 @@ public:
     void add_message(const CMessage) const;
     void add_chat(const CChat) const;
 
-    void update_chat(int id,CChat chat) const;
+    void update_chat(CChat chat) const;
     std::vector<CMessage> get_all_message_from_chat(const CChat) const;
 
     int  get_user_id(const CUser)const;
@@ -210,7 +210,8 @@ void CDatabase::add_chat(const CChat chat) const {
     }
 }
 
-void CDatabase::update_chat(int id,CChat chat) const {
+void CDatabase::update_chat(CChat chat) const {
+    int id = get_chat_id(chat);
     sql::PreparedStatement* pstmt = con->prepareStatement(
         "UPDATE chats SET num_first_unread = ? WHERE id = ?"
     );

@@ -16,6 +16,16 @@ public:
     {}
     CChat() {}
     
+    // Getter for user2_id
+    int getUser1Id() const {
+        return user2_id;
+    }
+
+    // Setter for user2_id
+    void setUser1Id(int id) {
+        user2_id = id;
+    }
+
 
     // Getter for user2_id
     int getUser2Id() const {

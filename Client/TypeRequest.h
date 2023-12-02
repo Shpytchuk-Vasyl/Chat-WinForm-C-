@@ -4,7 +4,7 @@ static const char* DEFAULT_PORT = "31098";
 static const char* DEFAULT_IP = "localhost";
 
 enum TypeRequest {
-	SECCESS,
+	SECCESS, // опечатка , не хочу змінювати всюди , тому просто буду так юзав поки , потім побацим 
 	REGISTER_REQUEST,
 	START_REQUEST,
 	GET_MESSAGE,
@@ -14,5 +14,6 @@ enum TypeRequest {
 	FIND_PEOPLE,
 	FINISH_WORK,
 	UPDATE_CHATS,
-	GET_MESSAGES_FROM_CHAT
+	GET_MESSAGES_FROM_CHAT,
+	OPEN_CHAT
 };
