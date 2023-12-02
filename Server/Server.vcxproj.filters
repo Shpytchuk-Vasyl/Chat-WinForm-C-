@@ -24,6 +24,15 @@
     <ClCompile Include="PipeServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CUser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CMessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CChat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SocketServe.h">
@@ -32,5 +41,22 @@
     <ClInclude Include="PipeServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DbConector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CUser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CChat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="database_setup.sql">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
