@@ -6,6 +6,7 @@ class CChat
     int user2_id = 0;
     int unread1 = 0;
     int unread2 = 0;
+    int chat_id = 0;
     CUser user1, user2;
 public:
     friend class CDatabase;
@@ -14,15 +15,7 @@ public:
         user2_id(u2)
     {}
     CChat() {}
-    // Getter for user1_id
-    int getUser1Id() const {
-        return user1_id;
-    }
-
-    // Setter for user1_id
-    void setUser1Id(int id) {
-        user1_id = id;
-    }
+    
 
     // Getter for user2_id
     int getUser2Id() const {
@@ -34,15 +27,7 @@ public:
         user2_id = id;
     }
 
-    // Getter for user2_id
-    int getUser2Id() const {
-        return user2_id;
-    }
 
-    // Setter for user2_id
-    void setUser2Id(int id) {
-        user2_id = id;
-    }
 
     // Getter for unread1
     int getUnread1() const {

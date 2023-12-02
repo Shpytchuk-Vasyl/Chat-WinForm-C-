@@ -642,9 +642,9 @@ namespace Client {
 		protected:   Void onShown(EventArgs^ a) override {
 			this->onShown(a);
 			try {
-				server = new SocketServer();
+				server = new ServerConnection();
 				server->Connect(DEFAULT_IP, DEFAULT_PORT);
-				server->Send(TypeRequest::START_REQUEST, RequestManager::generateMessage(TypeRequest::START_REQUEST, ""));
+				//server->(TypeRequest::START_REQUEST, RequestManager::generateMessage(TypeRequest::START_REQUEST, ""));
 
 
 			}
@@ -813,7 +813,7 @@ namespace Client {
 		};
 
 	   
-		public: SocketServer* server;
+		public: ServerConnection* server;
 		public:  ChatNode^ currentNode;
 		public:  System::Collections::ArrayList ^ chatNodes;
 		public:  static property MyForm ^ pointer;
