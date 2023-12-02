@@ -20,45 +20,6 @@
 // C:\Program Files\MySQL\MySQL Server 8.2\bin>mysql -u root -p
 
 
-
-
-
-//int connect() { EXAMPLE
-//    sql::mysql::MySQL_Driver* driver;
-//    sql::Connection* con;
-//    sql::Statement* stmt;
-//    sql::ResultSet* res;
-//
-//    try {
-//        // Створення екземпляру драйвера та з'єднання з базою даних
-//        driver = sql::mysql::get_mysql_driver_instance();
-//        con = driver->connect("tcp://127.0.0.1:3306", "root", "password");
-//        con->setSchema("db");  // Замініть на ім'я вашої бази даних
-//
-//        // Виконання SQL-запиту для вибору всіх записів у таблиці
-//        stmt = con->createStatement();
-//        res = stmt->executeQuery("SELECT * FROM your_table_name");  // Замініть на ім'я вашої таблиці
-//
-//        // Обробка результатів
-//        while (res->next()) {
-//            std::cout << "ID: " << res->getString("id") << std::endl;
-//            // Якщо у вас є інші поля, виводьте їх відповідно
-//        }
-//
-//        // Звільнення ресурсів
-//        delete res;
-//        delete stmt;
-//        delete con;
-//
-//    }
-//    catch (sql::SQLException& e) {
-//        std::cerr << "MySQL Error: " << e.what() << std::endl;
-//        con = driver->connect("tcp://127.0.0.1:3306", "root", "password");
-//        con->setSchema("db");
-//    }
-//
-//    return 0;
-//}
 class CDatabase {    
 public:
     sql::Connection* con;
@@ -72,6 +33,7 @@ public:
     void add_chat(const CChat) const;
 
     void update_chat(int id,CChat chat) const;
+    std::vector<CMessage> get_all_message_from_chat(const CChat) const;
 
     int  get_user_id(const CUser)const;
     int get_chat_id(const CChat) const;
@@ -189,6 +151,33 @@ void CDatabase::update_chat(int id,CChat chat) const {
     delete pstmt2;
 }
 
+std::vector<CMessage> CDatabase::get_all_message_from_chat(const CChat chat) const {
+    int chatId = get_chat_id(chat);
+    sql::PreparedStatement* pstmt = con->prepareStatement(
+        "SELECT * FROM messages WHERE chat_id = ?"
+    );
+    pstmt->setInt(1, chatId);
+    sql::ResultSet* resultSet = pstmt->executeQuery();
+
+    // Створення вектора для збереження результатів
+    std::vector<CMessage> messages;
+    while (resultSet->next()) {
+        CMessage message;
+        // Заповнення об'єкта CMessage даними з результату запиту
+        message.user_id = resultSet->getInt("user_id");
+        message.chat_id = resultSet->getInt("chat_id");
+        std::memcpy(message.text ,std::string(resultSet->getString("content")).c_str(), 1024);
+        std::memcpy(message.created_at, std::string(resultSet->getString("created_at")).c_str(), 20);
+
+        // Додавання повідомлення до вектора
+        messages.push_back(message);
+    }
+
+    // Звільнення ресурсів
+    delete pstmt;
+    delete resultSet;
+    return messages;
+}
 
 
 
