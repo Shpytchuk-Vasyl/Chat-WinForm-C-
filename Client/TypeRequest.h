@@ -4,6 +4,7 @@ static const char* DEFAULT_PORT = "31098";
 static const char* DEFAULT_IP = "localhost";
 
 enum TypeRequest {
+	SECCESS,
 	REGISTER_REQUEST,
 	START_REQUEST,
 	GET_MESSAGES,
