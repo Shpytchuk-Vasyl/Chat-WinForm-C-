@@ -22,6 +22,7 @@ namespace Client {
 		{
 			InitializeComponent();
 			s1 = new SocketServer();
+			i = this;
 		}
 
 	protected:
@@ -90,18 +91,18 @@ namespace Client {
 
 
 
-	private: Guna::UI2::WinForms::Guna2GradientPanel^ guna2GradientPanel2;
 
-	private: Guna::UI2::WinForms::Guna2CirclePictureBox^ guna2CirclePictureBox4;
-	private: System::Windows::Forms::Label^ label7;
 
-	private: System::Windows::Forms::Label^ label8;
+
+
+
+
 	private: Guna::UI2::WinForms::Guna2VScrollBar^ guna2VScrollBar1;
 	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel2;
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel3;
 	private: Guna::UI2::WinForms::Guna2CirclePictureBox^ guna2CirclePictureBox10;
 	private: System::Windows::Forms::Label^ label14;
-	private: Guna::UI2::WinForms::Guna2CircleButton^ guna2CircleButton4;
+
 
 
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel8;
@@ -119,12 +120,12 @@ namespace Client {
 
 
 	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel1;
-	private: Guna::UI2::WinForms::Guna2GradientPanel^ guna2GradientPanel9;
-	private: System::Windows::Forms::Label^ label24;
-	private: Guna::UI2::WinForms::Guna2CircleButton^ guna2CircleButton8;
-	private: Guna::UI2::WinForms::Guna2CirclePictureBox^ guna2CirclePictureBox11;
-	private: System::Windows::Forms::Label^ label25;
-	private: System::Windows::Forms::Label^ label26;
+
+
+
+
+
+
 
 
 
@@ -160,7 +161,7 @@ namespace Client {
 	private: System::Windows::Forms::Label^ label16;
 
 
-	private: System::Windows::Forms::Label^ label9;
+
 
 	private: Guna::UI2::WinForms::Guna2CircleButton^ guna2CircleButton6;
 	private: System::Windows::Forms::Label^ label18;
@@ -169,6 +170,7 @@ namespace Client {
 private: System::Windows::Forms::Label^ label20;
 private: System::Windows::Forms::Label^ label19;
 private: Guna::UI2::WinForms::Guna2CirclePictureBox^ guna2CirclePictureBox9;
+private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel6;
 private: System::ComponentModel::IContainer^ components;
 
 
@@ -233,18 +235,6 @@ private: System::ComponentModel::IContainer^ components;
 			this->guna2Panel4 = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->guna2VScrollBar1 = (gcnew Guna::UI2::WinForms::Guna2VScrollBar());
 			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
-			this->guna2GradientPanel2 = (gcnew Guna::UI2::WinForms::Guna2GradientPanel());
-			this->label9 = (gcnew System::Windows::Forms::Label());
-			this->guna2CirclePictureBox4 = (gcnew Guna::UI2::WinForms::Guna2CirclePictureBox());
-			this->label7 = (gcnew System::Windows::Forms::Label());
-			this->guna2CircleButton4 = (gcnew Guna::UI2::WinForms::Guna2CircleButton());
-			this->label8 = (gcnew System::Windows::Forms::Label());
-			this->guna2GradientPanel9 = (gcnew Guna::UI2::WinForms::Guna2GradientPanel());
-			this->label24 = (gcnew System::Windows::Forms::Label());
-			this->guna2CircleButton8 = (gcnew Guna::UI2::WinForms::Guna2CircleButton());
-			this->guna2CirclePictureBox11 = (gcnew Guna::UI2::WinForms::Guna2CirclePictureBox());
-			this->label25 = (gcnew System::Windows::Forms::Label());
-			this->label26 = (gcnew System::Windows::Forms::Label());
 			this->guna2Panel5 = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->guna2Panel8 = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->guna2CircleButton6 = (gcnew Guna::UI2::WinForms::Guna2CircleButton());
@@ -260,6 +250,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->flowLayoutPanel2 = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->guna2Panel7 = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->guna2Panel3 = (gcnew Guna::UI2::WinForms::Guna2Panel());
+			this->guna2Panel6 = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->guna2Panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->guna2CirclePictureBox1))->BeginInit();
 			this->guna2Panel2->SuspendLayout();
@@ -269,10 +260,6 @@ private: System::ComponentModel::IContainer^ components;
 			this->guna2Panel_top->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->guna2CirclePictureBox9))->BeginInit();
 			this->guna2Panel4->SuspendLayout();
-			this->guna2GradientPanel2->SuspendLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->guna2CirclePictureBox4))->BeginInit();
-			this->guna2GradientPanel9->SuspendLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->guna2CirclePictureBox11))->BeginInit();
 			this->guna2Panel5->SuspendLayout();
 			this->guna2Panel8->SuspendLayout();
 			this->guna2GradientPanel6->SuspendLayout();
@@ -282,6 +269,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->flowLayoutPanel2->SuspendLayout();
 			this->guna2Panel7->SuspendLayout();
 			this->guna2Panel3->SuspendLayout();
+			this->guna2Panel6->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// guna2Panel1
@@ -672,6 +660,7 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// flowLayoutPanel1
 			// 
+			this->flowLayoutPanel1->AutoScroll = true;
 			this->flowLayoutPanel1->AutoSize = true;
 			this->flowLayoutPanel1->BackColor = System::Drawing::Color::Transparent;
 			this->flowLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Left;
@@ -680,210 +669,6 @@ private: System::ComponentModel::IContainer^ components;
 			this->flowLayoutPanel1->Size = System::Drawing::Size(0, 514);
 			this->flowLayoutPanel1->TabIndex = 19;
 			this->flowLayoutPanel1->UseWaitCursor = true;
-			// 
-			// guna2GradientPanel2
-			// 
-			this->guna2GradientPanel2->BorderThickness = 2;
-			this->guna2GradientPanel2->Controls->Add(this->label9);
-			this->guna2GradientPanel2->Controls->Add(this->guna2CirclePictureBox4);
-			this->guna2GradientPanel2->Controls->Add(this->label7);
-			this->guna2GradientPanel2->Controls->Add(this->guna2CircleButton4);
-			this->guna2GradientPanel2->Controls->Add(this->label8);
-			this->guna2GradientPanel2->CustomBorderColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)),
-				static_cast<System::Int32>(static_cast<System::Byte>(36)), static_cast<System::Int32>(static_cast<System::Byte>(206)));
-			this->guna2GradientPanel2->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(23)),
-				static_cast<System::Int32>(static_cast<System::Byte>(28)), static_cast<System::Int32>(static_cast<System::Byte>(41)));
-			this->guna2GradientPanel2->FillColor2 = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(23)),
-				static_cast<System::Int32>(static_cast<System::Byte>(28)), static_cast<System::Int32>(static_cast<System::Byte>(41)));
-			this->guna2GradientPanel2->Location = System::Drawing::Point(259, 160);
-			this->guna2GradientPanel2->Name = L"guna2GradientPanel2";
-			this->guna2GradientPanel2->ShadowDecoration->Color = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(17)),
-				static_cast<System::Int32>(static_cast<System::Byte>(22)), static_cast<System::Int32>(static_cast<System::Byte>(32)));
-			this->guna2GradientPanel2->Size = System::Drawing::Size(250, 80);
-			this->guna2GradientPanel2->TabIndex = 14;
-			this->guna2GradientPanel2->UseWaitCursor = true;
-			this->guna2GradientPanel2->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::guna2GradientPanel2_MouseClick);
-			this->guna2GradientPanel2->MouseEnter += gcnew System::EventHandler(this, &MyForm::guna2GradientPanel1_MouseEnter);
-			this->guna2GradientPanel2->MouseLeave += gcnew System::EventHandler(this, &MyForm::guna2GradientPanel1_MouseLeave);
-			// 
-			// label9
-			// 
-			this->label9->AutoSize = true;
-			this->label9->BackColor = System::Drawing::Color::Transparent;
-			this->label9->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label9->ForeColor = System::Drawing::Color::Silver;
-			this->label9->Location = System::Drawing::Point(70, 10);
-			this->label9->Name = L"label9";
-			this->label9->Size = System::Drawing::Size(42, 20);
-			this->label9->TabIndex = 18;
-			this->label9->Text = L"User1";
-			this->label9->UseWaitCursor = true;
-			// 
-			// guna2CirclePictureBox4
-			// 
-			this->guna2CirclePictureBox4->BackColor = System::Drawing::Color::Transparent;
-			this->guna2CirclePictureBox4->FillColor = System::Drawing::Color::Transparent;
-			this->guna2CirclePictureBox4->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"guna2CirclePictureBox4.Image")));
-			this->guna2CirclePictureBox4->ImageRotate = 0;
-			this->guna2CirclePictureBox4->Location = System::Drawing::Point(20, 20);
-			this->guna2CirclePictureBox4->Name = L"guna2CirclePictureBox4";
-			this->guna2CirclePictureBox4->ShadowDecoration->Color = System::Drawing::Color::Fuchsia;
-			this->guna2CirclePictureBox4->ShadowDecoration->Enabled = true;
-			this->guna2CirclePictureBox4->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
-			this->guna2CirclePictureBox4->Size = System::Drawing::Size(36, 36);
-			this->guna2CirclePictureBox4->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
-			this->guna2CirclePictureBox4->TabIndex = 11;
-			this->guna2CirclePictureBox4->TabStop = false;
-			this->guna2CirclePictureBox4->UseWaitCursor = true;
-			// 
-			// label7
-			// 
-			this->label7->AutoSize = true;
-			this->label7->BackColor = System::Drawing::Color::Transparent;
-			this->label7->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 7.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label7->ForeColor = System::Drawing::Color::Silver;
-			this->label7->Location = System::Drawing::Point(190, 10);
-			this->label7->Name = L"label7";
-			this->label7->Size = System::Drawing::Size(39, 17);
-			this->label7->TabIndex = 14;
-			this->label7->Text = L"Online";
-			this->label7->UseWaitCursor = true;
-			// 
-			// guna2CircleButton4
-			// 
-			this->guna2CircleButton4->BackColor = System::Drawing::Color::Transparent;
-			this->guna2CircleButton4->DisabledState->BorderColor = System::Drawing::Color::DarkGray;
-			this->guna2CircleButton4->DisabledState->CustomBorderColor = System::Drawing::Color::DarkGray;
-			this->guna2CircleButton4->DisabledState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(169)),
-				static_cast<System::Int32>(static_cast<System::Byte>(169)), static_cast<System::Int32>(static_cast<System::Byte>(169)));
-			this->guna2CircleButton4->DisabledState->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(141)),
-				static_cast<System::Int32>(static_cast<System::Byte>(141)), static_cast<System::Int32>(static_cast<System::Byte>(141)));
-			this->guna2CircleButton4->FillColor = System::Drawing::Color::Magenta;
-			this->guna2CircleButton4->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 7.8F, System::Drawing::FontStyle::Regular,
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-			this->guna2CircleButton4->ForeColor = System::Drawing::Color::White;
-			this->guna2CircleButton4->Location = System::Drawing::Point(190, 30);
-			this->guna2CircleButton4->Name = L"guna2CircleButton4";
-			this->guna2CircleButton4->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
-			this->guna2CircleButton4->Size = System::Drawing::Size(40, 40);
-			this->guna2CircleButton4->TabIndex = 20;
-			this->guna2CircleButton4->Text = L"7";
-			this->guna2CircleButton4->UseWaitCursor = true;
-			// 
-			// label8
-			// 
-			this->label8->AutoSize = true;
-			this->label8->BackColor = System::Drawing::Color::Transparent;
-			this->label8->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label8->ForeColor = System::Drawing::Color::Gray;
-			this->label8->Location = System::Drawing::Point(70, 40);
-			this->label8->Name = L"label8";
-			this->label8->Size = System::Drawing::Size(85, 20);
-			this->label8->TabIndex = 13;
-			this->label8->Text = L"Last message";
-			this->label8->UseWaitCursor = true;
-			// 
-			// guna2GradientPanel9
-			// 
-			this->guna2GradientPanel9->Controls->Add(this->label24);
-			this->guna2GradientPanel9->Controls->Add(this->guna2CircleButton8);
-			this->guna2GradientPanel9->Controls->Add(this->guna2CirclePictureBox11);
-			this->guna2GradientPanel9->Controls->Add(this->label25);
-			this->guna2GradientPanel9->Controls->Add(this->label26);
-			this->guna2GradientPanel9->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(250)),
-				static_cast<System::Int32>(static_cast<System::Byte>(48)), static_cast<System::Int32>(static_cast<System::Byte>(90)));
-			this->guna2GradientPanel9->FillColor2 = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)),
-				static_cast<System::Int32>(static_cast<System::Byte>(36)), static_cast<System::Int32>(static_cast<System::Byte>(206)));
-			this->guna2GradientPanel9->Location = System::Drawing::Point(3, 160);
-			this->guna2GradientPanel9->Name = L"guna2GradientPanel9";
-			this->guna2GradientPanel9->ShadowDecoration->Color = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(17)),
-				static_cast<System::Int32>(static_cast<System::Byte>(22)), static_cast<System::Int32>(static_cast<System::Byte>(32)));
-			this->guna2GradientPanel9->Size = System::Drawing::Size(250, 80);
-			this->guna2GradientPanel9->TabIndex = 18;
-			this->guna2GradientPanel9->UseWaitCursor = true;
-			// 
-			// label24
-			// 
-			this->label24->AutoSize = true;
-			this->label24->BackColor = System::Drawing::Color::Transparent;
-			this->label24->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label24->ForeColor = System::Drawing::Color::Silver;
-			this->label24->Location = System::Drawing::Point(73, 9);
-			this->label24->Name = L"label24";
-			this->label24->Size = System::Drawing::Size(42, 20);
-			this->label24->TabIndex = 17;
-			this->label24->Text = L"User1";
-			this->label24->UseWaitCursor = true;
-			// 
-			// guna2CircleButton8
-			// 
-			this->guna2CircleButton8->BackColor = System::Drawing::Color::Transparent;
-			this->guna2CircleButton8->DisabledState->BorderColor = System::Drawing::Color::DarkGray;
-			this->guna2CircleButton8->DisabledState->CustomBorderColor = System::Drawing::Color::DarkGray;
-			this->guna2CircleButton8->DisabledState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(169)),
-				static_cast<System::Int32>(static_cast<System::Byte>(169)), static_cast<System::Int32>(static_cast<System::Byte>(169)));
-			this->guna2CircleButton8->DisabledState->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(141)),
-				static_cast<System::Int32>(static_cast<System::Byte>(141)), static_cast<System::Int32>(static_cast<System::Byte>(141)));
-			this->guna2CircleButton8->FillColor = System::Drawing::Color::Magenta;
-			this->guna2CircleButton8->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 7.8F, System::Drawing::FontStyle::Regular,
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-			this->guna2CircleButton8->ForeColor = System::Drawing::Color::White;
-			this->guna2CircleButton8->Location = System::Drawing::Point(190, 30);
-			this->guna2CircleButton8->Name = L"guna2CircleButton8";
-			this->guna2CircleButton8->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
-			this->guna2CircleButton8->Size = System::Drawing::Size(40, 40);
-			this->guna2CircleButton8->TabIndex = 15;
-			this->guna2CircleButton8->Text = L"7";
-			this->guna2CircleButton8->UseWaitCursor = true;
-			// 
-			// guna2CirclePictureBox11
-			// 
-			this->guna2CirclePictureBox11->BackColor = System::Drawing::Color::Transparent;
-			this->guna2CirclePictureBox11->FillColor = System::Drawing::Color::Transparent;
-			this->guna2CirclePictureBox11->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"guna2CirclePictureBox11.Image")));
-			this->guna2CirclePictureBox11->ImageRotate = 0;
-			this->guna2CirclePictureBox11->Location = System::Drawing::Point(18, 20);
-			this->guna2CirclePictureBox11->Name = L"guna2CirclePictureBox11";
-			this->guna2CirclePictureBox11->ShadowDecoration->Color = System::Drawing::Color::Fuchsia;
-			this->guna2CirclePictureBox11->ShadowDecoration->Enabled = true;
-			this->guna2CirclePictureBox11->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
-			this->guna2CirclePictureBox11->Size = System::Drawing::Size(36, 36);
-			this->guna2CirclePictureBox11->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
-			this->guna2CirclePictureBox11->TabIndex = 11;
-			this->guna2CirclePictureBox11->TabStop = false;
-			this->guna2CirclePictureBox11->UseWaitCursor = true;
-			// 
-			// label25
-			// 
-			this->label25->AutoSize = true;
-			this->label25->BackColor = System::Drawing::Color::Transparent;
-			this->label25->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 7.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label25->ForeColor = System::Drawing::Color::Silver;
-			this->label25->Location = System::Drawing::Point(191, 9);
-			this->label25->Name = L"label25";
-			this->label25->Size = System::Drawing::Size(39, 17);
-			this->label25->TabIndex = 14;
-			this->label25->Text = L"Online";
-			this->label25->UseWaitCursor = true;
-			// 
-			// label26
-			// 
-			this->label26->AutoSize = true;
-			this->label26->BackColor = System::Drawing::Color::Transparent;
-			this->label26->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label26->ForeColor = System::Drawing::Color::Gray;
-			this->label26->Location = System::Drawing::Point(72, 37);
-			this->label26->Name = L"label26";
-			this->label26->Size = System::Drawing::Size(85, 20);
-			this->label26->TabIndex = 13;
-			this->label26->Text = L"Last message";
-			this->label26->UseWaitCursor = true;
 			// 
 			// guna2Panel5
 			// 
@@ -982,7 +767,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->label18->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 10.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->label18->ForeColor = System::Drawing::Color::White;
-			this->label18->Location = System::Drawing::Point(82, 19);
+			this->label18->Location = System::Drawing::Point(70, 10);
 			this->label18->Name = L"label18";
 			this->label18->Size = System::Drawing::Size(189, 23);
 			this->label18->TabIndex = 18;
@@ -993,7 +778,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->guna2CirclePictureBox7->FillColor = System::Drawing::Color::Transparent;
 			this->guna2CirclePictureBox7->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"guna2CirclePictureBox7.Image")));
 			this->guna2CirclePictureBox7->ImageRotate = 0;
-			this->guna2CirclePictureBox7->Location = System::Drawing::Point(13, 12);
+			this->guna2CirclePictureBox7->Location = System::Drawing::Point(10, 10);
 			this->guna2CirclePictureBox7->Name = L"guna2CirclePictureBox7";
 			this->guna2CirclePictureBox7->ShadowDecoration->Color = System::Drawing::Color::Fuchsia;
 			this->guna2CirclePictureBox7->ShadowDecoration->CustomizableEdges->BottomLeft = false;
@@ -1027,7 +812,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->guna2CirclePictureBox10->FillColor = System::Drawing::Color::Transparent;
 			this->guna2CirclePictureBox10->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"guna2CirclePictureBox10.Image")));
 			this->guna2CirclePictureBox10->ImageRotate = 0;
-			this->guna2CirclePictureBox10->Location = System::Drawing::Point(293, 21);
+			this->guna2CirclePictureBox10->Location = System::Drawing::Point(298, 13);
 			this->guna2CirclePictureBox10->Name = L"guna2CirclePictureBox10";
 			this->guna2CirclePictureBox10->ShadowDecoration->Color = System::Drawing::Color::Fuchsia;
 			this->guna2CirclePictureBox10->ShadowDecoration->CustomizableEdges->BottomLeft = false;
@@ -1040,6 +825,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->guna2CirclePictureBox10->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->guna2CirclePictureBox10->TabIndex = 19;
 			this->guna2CirclePictureBox10->TabStop = false;
+			this->guna2CirclePictureBox10->Click += gcnew System::EventHandler(this, &MyForm::guna2CirclePictureBox10_Click);
 			// 
 			// label14
 			// 
@@ -1069,10 +855,8 @@ private: System::ComponentModel::IContainer^ components;
 			this->flowLayoutPanel2->BackColor = System::Drawing::Color::Transparent;
 			this->flowLayoutPanel2->Controls->Add(this->guna2Panel7);
 			this->flowLayoutPanel2->Controls->Add(this->guna2Panel3);
-			this->flowLayoutPanel2->Controls->Add(this->guna2GradientPanel9);
-			this->flowLayoutPanel2->Controls->Add(this->guna2GradientPanel2);
 			this->flowLayoutPanel2->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->flowLayoutPanel2->Location = System::Drawing::Point(367, 67);
+			this->flowLayoutPanel2->Location = System::Drawing::Point(0, 0);
 			this->flowLayoutPanel2->Name = L"flowLayoutPanel2";
 			this->flowLayoutPanel2->Size = System::Drawing::Size(671, 457);
 			this->flowLayoutPanel2->TabIndex = 5;
@@ -1097,6 +881,16 @@ private: System::ComponentModel::IContainer^ components;
 			this->guna2Panel3->Size = System::Drawing::Size(657, 67);
 			this->guna2Panel3->TabIndex = 0;
 			// 
+			// guna2Panel6
+			// 
+			this->guna2Panel6->BackColor = System::Drawing::Color::Transparent;
+			this->guna2Panel6->Controls->Add(this->flowLayoutPanel2);
+			this->guna2Panel6->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->guna2Panel6->Location = System::Drawing::Point(367, 67);
+			this->guna2Panel6->Name = L"guna2Panel6";
+			this->guna2Panel6->Size = System::Drawing::Size(671, 457);
+			this->guna2Panel6->TabIndex = 6;
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
@@ -1104,7 +898,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)), static_cast<System::Int32>(static_cast<System::Byte>(32)),
 				static_cast<System::Int32>(static_cast<System::Byte>(47)));
 			this->ClientSize = System::Drawing::Size(1311, 581);
-			this->Controls->Add(this->flowLayoutPanel2);
+			this->Controls->Add(this->guna2Panel6);
 			this->Controls->Add(this->guna2Panel5);
 			this->Controls->Add(this->guna2Panel4);
 			this->Controls->Add(this->guna2Panel_top);
@@ -1126,12 +920,6 @@ private: System::ComponentModel::IContainer^ components;
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->guna2CirclePictureBox9))->EndInit();
 			this->guna2Panel4->ResumeLayout(false);
 			this->guna2Panel4->PerformLayout();
-			this->guna2GradientPanel2->ResumeLayout(false);
-			this->guna2GradientPanel2->PerformLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->guna2CirclePictureBox4))->EndInit();
-			this->guna2GradientPanel9->ResumeLayout(false);
-			this->guna2GradientPanel9->PerformLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->guna2CirclePictureBox11))->EndInit();
 			this->guna2Panel5->ResumeLayout(false);
 			this->guna2Panel8->ResumeLayout(false);
 			this->guna2GradientPanel6->ResumeLayout(false);
@@ -1143,6 +931,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->flowLayoutPanel2->ResumeLayout(false);
 			this->guna2Panel7->ResumeLayout(false);
 			this->guna2Panel3->ResumeLayout(false);
+			this->guna2Panel6->ResumeLayout(false);
 			this->ResumeLayout(false);
 
 		}
@@ -1170,6 +959,230 @@ private: System::ComponentModel::IContainer^ components;
 
 
 
+
+	ref class ChatNode : public Guna2GradientPanel
+		   {
+
+		   public:
+			   property Guna2CirclePictureBox^ photo;
+			   property Label^ chatName;
+			   property Label^ lastMessage;
+			   property Label^ online;
+			   property Guna2CircleButton^ countNewMessage;
+			   property FlowLayoutPanel^ messageView;
+			   ref class MessageNode : public Guna2GradientPanel
+			   {
+			   public:
+				   property Guna2CirclePictureBox^ photo;
+				   property Label^ message;
+
+				   MessageNode(String^ text, bool isMy, int photoIndex) : Guna2GradientPanel() {
+					
+
+
+					   this->photo = (gcnew Guna::UI2::WinForms::Guna2CirclePictureBox());
+					   this->photo->BackColor = System::Drawing::Color::Transparent;
+					   this->photo->FillColor = System::Drawing::Color::Transparent;
+					   this->photo->Image = Image::FromFile("userPhotos/user" + photoIndex + ".png");
+					   this->photo->ImageRotate = 0;
+					   this->photo->ShadowDecoration->Color = System::Drawing::Color::Fuchsia;
+					   this->photo->ShadowDecoration->Enabled = true;
+					   this->photo->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
+					   this->photo->Size = System::Drawing::Size(36, 36);
+					   this->photo->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
+					   this->photo->TabStop = false;
+					   this->photo->UseWaitCursor = true;
+					   //this->photo->Location = System::Drawing::Point(20, 20);
+
+					   this->message = gcnew Label();
+					   this->message->AutoSize = true;
+					   this->message->BackColor = System::Drawing::Color::Transparent;
+					   this->message->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 10.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+						   static_cast<System::Byte>(204)));
+					   this->message->ForeColor = System::Drawing::Color::White;
+					   this->message->Location = System::Drawing::Point(31, 26);
+					   this->message->Size = System::Drawing::Size(189, 23);
+					   this->message->TabIndex = 19;
+					   this->message->Text = text;
+					   if (isMy) {
+						   this->photo->Location = System::Drawing::Point(10, 10);
+						   this->message->Location = System::Drawing::Point(70, 10);
+					   }
+					   else {
+						   this->photo->Location = System::Drawing::Point(this->message->Size.Width - 10, 10);
+						   this->message->Location = System::Drawing::Point(10, 10);
+					   }
+					   this->BorderRadius = 15;
+
+					   this->Controls->Add(this->message);
+					   this->Controls->Add(this->photo);
+					   if (isMy) {
+						   this->Dock = System::Windows::Forms::DockStyle::Left;
+						   this->FillColor = System::Drawing::Color::FromArgb(255, 152, 93);
+						   this->FillColor2 = System::Drawing::Color::FromArgb(255, 61, 87);
+					   }
+					   else {
+						   this->Dock = System::Windows::Forms::DockStyle::Right;
+						   this->FillColor = System::Drawing::Color::FromArgb(250, 48, 90);
+						   this->FillColor2 = System::Drawing::Color::FromArgb(128, 36, 206);
+
+					   }
+					   this->Size = System::Drawing::Size(350, 80);
+
+
+
+				   }
+
+			   };
+
+		   public:
+
+			   ChatNode(String^ strChatName, String^ strLastMessage, int intCountNewMessage, int photoIndex, bool status) : Guna2GradientPanel() {
+
+				   messageView = gcnew FlowLayoutPanel();
+				   this->messageView->BackColor = System::Drawing::Color::Transparent;
+				   this->messageView->Dock = System::Windows::Forms::DockStyle::Fill;
+				   this->messageView->Location = System::Drawing::Point(367, 67);
+
+				   this->countNewMessage = (gcnew Guna::UI2::WinForms::Guna2CircleButton());
+				   this->countNewMessage->BackColor = System::Drawing::Color::Transparent;
+				   this->countNewMessage->DisabledState->BorderColor = System::Drawing::Color::DarkGray;
+				   this->countNewMessage->DisabledState->CustomBorderColor = System::Drawing::Color::DarkGray;
+				   this->countNewMessage->DisabledState->FillColor = System::Drawing::Color::FromArgb(169, 169, 169);
+				   this->countNewMessage->DisabledState->ForeColor = System::Drawing::Color::FromArgb(141, 141, 141);
+				   this->countNewMessage->FillColor = System::Drawing::Color::Magenta;
+				   this->countNewMessage->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 7.8F, System::Drawing::FontStyle::Regular,
+					   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+				   this->countNewMessage->ForeColor = System::Drawing::Color::White;
+				   this->countNewMessage->Location = System::Drawing::Point(150, 30);
+				   this->countNewMessage->Name = "countNewMessage : " + strChatName;
+				   this->countNewMessage->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
+				   this->countNewMessage->Size = System::Drawing::Size(30, 30);
+				   //this->countNewMessage->TabIndex = 20;
+				   this->countNewMessage->Text = intCountNewMessage.ToString();
+				   this->countNewMessage->UseWaitCursor = true;
+
+
+				   this->photo = (gcnew Guna::UI2::WinForms::Guna2CirclePictureBox());
+				   this->photo->BackColor = System::Drawing::Color::Transparent;
+				   this->photo->FillColor = System::Drawing::Color::Transparent;
+				   this->photo->Image = Image::FromFile("userPhotos/user" + photoIndex + ".png");
+				   this->photo->ImageRotate = 0;
+				   this->photo->Location = System::Drawing::Point(20, 20);
+				   this->photo->Name = "photo : " + strChatName;
+				   this->photo->ShadowDecoration->Color = System::Drawing::Color::Fuchsia;
+				   this->photo->ShadowDecoration->Enabled = true;
+				   this->photo->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
+				   this->photo->Size = System::Drawing::Size(36, 36);
+				   this->photo->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
+				   //this->photo->TabIndex = 11;
+				   this->photo->TabStop = false;
+				   this->photo->UseWaitCursor = true;
+
+				   this->online = (gcnew Label);
+				   this->online->AutoSize = true;
+				   this->online->BackColor = System::Drawing::Color::Transparent;
+				   this->online->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 7.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+					   static_cast<System::Byte>(204)));
+				   this->online->ForeColor = System::Drawing::Color::Silver;
+				   this->online->Location = System::Drawing::Point(150, 10);
+				   this->online->Name = L"online : " + strChatName;
+				   this->online->Size = System::Drawing::Size(39, 17);
+				   //this->online->TabIndex = 14;
+				   this->online->Text = status ? "Online" : "Offline";
+				   this->online->UseWaitCursor = true;
+
+
+
+
+				   this->lastMessage = (gcnew Label);
+				   this->lastMessage->AutoSize = true;
+				   this->lastMessage->BackColor = System::Drawing::Color::Transparent;
+				   this->lastMessage->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+					   static_cast<System::Byte>(204)));
+				   this->lastMessage->ForeColor = System::Drawing::Color::Gray;
+				   this->lastMessage->Location = System::Drawing::Point(60, 40);
+				   this->lastMessage->Name = L"lastMessage : " + strChatName;
+				   this->lastMessage->Size = System::Drawing::Size(50, 20);
+				   //this->lastMessage->TabIndex = 13;
+				   this->lastMessage->Text = strLastMessage;
+				   this->lastMessage->UseWaitCursor = true;
+
+
+				   this->chatName = (gcnew Label);
+				   this->chatName->AutoSize = true;
+				   this->chatName->BackColor = System::Drawing::Color::Transparent;
+				   this->chatName->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+					   static_cast<System::Byte>(204)));
+				   this->chatName->ForeColor = System::Drawing::Color::Silver;
+				   this->chatName->Location = System::Drawing::Point(60, 10);
+				   this->chatName->Name = "chatName : " + strChatName;
+				   this->chatName->Size = System::Drawing::Size(42, 20);
+				   this->chatName->Text = strChatName;
+
+
+
+
+
+				   this->BorderThickness = 2;
+				   this->Controls->Add(this->countNewMessage);
+				   this->Controls->Add(this->online);
+				   this->Controls->Add(this->chatName);
+				   this->Controls->Add(this->lastMessage);
+				   this->Controls->Add(this->photo);
+				   this->CustomBorderColor = System::Drawing::Color::FromArgb(128, 36, 206);
+				   this->FillColor = System::Drawing::Color::FromArgb(23, 28, 41);
+				   this->FillColor2 = System::Drawing::Color::FromArgb(23, 28, 41);
+				   this->AutoSize = false;
+				   //this->Anchor = (AnchorStyles::Left | AnchorStyles::Top);
+				   this->Location = System::Drawing::Point(3, 3);
+				   this->Name = "ChatNode : " + strChatName;
+				   this->ShadowDecoration->Color = System::Drawing::Color::FromArgb(17, 22, 32);
+				   this->Size = System::Drawing::Size(200, 80);
+				   this->UseWaitCursor = true;
+
+				   this->MouseEnter += gcnew System::EventHandler(this, &ChatNode::mouseEnter);
+				   this->MouseLeave += gcnew System::EventHandler(this, &ChatNode::mouseLeave);
+				   this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ChatNode::mouseClick);
+
+			   }
+
+
+		   public: System::Void resetColor() {
+			   this->FillColor = System::Drawing::Color::FromArgb(23, 28, 41);
+			   this->FillColor2 = System::Drawing::Color::FromArgb(23, 28, 41);
+		   }
+
+		   public: System::Void addMessage(MessageNode ^ msg) {
+			   Guna2Panel^ p = gcnew Guna2Panel();
+			   p->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+				   | System::Windows::Forms::AnchorStyles::Right));
+			   p->Controls->Add(msg);
+			   p->Location = System::Drawing::Point(3, 3);
+			   p->Size = System::Drawing::Size(this->messageView->Size.Width, 78);
+			   messageView->SuspendLayout();
+			   messageView->Controls->Add(p);
+			   messageView->ResumeLayout();
+		   }
+				 
+		   private: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+			   this->FillColor = System::Drawing::Color::FromArgb(250, 48, 90);
+			   this->FillColor2 = System::Drawing::Color::FromArgb(128, 36, 206);
+			   i->setCurrent(this);
+		   }
+		   private: System::Void mouseEnter(System::Object^ sender, System::EventArgs^ e) {
+			   ((Guna::UI2::WinForms::Guna2GradientPanel^)sender)->ShadowDecoration->Color = Color::DeepPink;
+		   }
+		   private: System::Void mouseLeave(System::Object^ sender, System::EventArgs^ e) {
+			   ((Guna::UI2::WinForms::Guna2GradientPanel^)sender)->ShadowDecoration->Color = Color::FromArgb(17, 22, 32);
+
+		   }
+
+
+
+			
+
+		};
 		 
 		   
 		   
@@ -1208,14 +1221,19 @@ private: System::ComponentModel::IContainer^ components;
 				 //  inputTextBox->Clear();
 			  // }
 		   //}
-		public: ChatNode^ currentNode;
-		public: System::Collections::ArrayList ^ chatNodes;
+		public:  ChatNode^ currentNode;
+		public:  System::Collections::ArrayList ^ chatNodes;
+		public:  property static MyForm^ i;
 
 		public: System::Void setCurrent(ChatNode ^node) {
-			   currentNode->resetColor();
+			   if(currentNode)
+					currentNode->resetColor();
 			   currentNode = node;
-			   flowLayoutPanel2 = node->messageView;
-		 }
+			   SuspendLayout();
+			   guna2Panel6->Controls->Clear();
+			   guna2Panel6->Controls->Add(currentNode->messageView);
+			   ResumeLayout();
+		}
 
 	private: System::Void treeView1_AfterSelect(System::Object^ sender, System::Windows::Forms::TreeViewEventArgs^ e) {
 	}
@@ -1236,16 +1254,26 @@ private: System::Void guna2GradientPanel1_MouseLeave(System::Object^ sender, Sys
 }
 private: System::Void guna2CircleButton5_Click(System::Object^ sender, System::EventArgs^ e) {
 }
+
 private: System::Void guna2CircleButton6_Click(System::Object^ sender, System::EventArgs^ e) {
-	ChatNode ^ p = gcnew ChatNode("Test", "Hello", 5, 1, false);
-	p->Size = System::Drawing::Size(200, 80);
-	flowLayoutPanel1->Controls->Add(p);
+	 String^ message = guna2TextBox2->Text;
+	 if (!String::IsNullOrEmpty(message))
+	 {
+		 guna2TextBox2->Text = "";
+		 ChatNode^ p = gcnew ChatNode("Test " + message[1], "Hello", 5, 1, false);
+		 p->Size = System::Drawing::Size(200, 80);
+		 flowLayoutPanel1->Controls->Add(p);
+		 if (currentNode == nullptr) currentNode = p;
+		 currentNode->addMessage(gcnew ChatNode::MessageNode(message, true, 1));
+	 }
 }
 
 
 
 
 private: System::Void guna2GradientPanel2_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+}
+private: System::Void guna2CirclePictureBox10_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 
