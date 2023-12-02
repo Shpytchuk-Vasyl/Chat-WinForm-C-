@@ -1,11 +1,17 @@
 #pragma once
-static const size_t DEFAULT_BUFLEN = 4096;
+static const size_t DEFAULT_BUFLEN = 8192;
 static const char* DEFAULT_PORT = "31098";
 static const char* DEFAULT_IP = "localhost";
 
 enum TypeRequest {
-	GET_CHATS = 0,
+	REGISTER_REQUEST,
+	START_REQUEST,
 	GET_MESSAGES,
 	SEND_MESSAGE,
-	GET_NEW_MESSAGES,
+	ADD_NEW_CHAT,
+	DELETE_CHAT,
+	ADD_NEW_PARTICIPAN,
+	DELETE_PARTICIPANT,
+	FIND_PEOPLE,
+	FINISH_WORK,
 };

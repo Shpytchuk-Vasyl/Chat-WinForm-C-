@@ -22,7 +22,6 @@ public:
 	 virtual int Send(TypeRequest type, std::string info) = 0;
 	 virtual int Receive(std::string& info) = 0;
 
-
 };
 
 
@@ -84,7 +83,7 @@ public:
 
          if (ConnectSocket == INVALID_SOCKET) {
              printf("Unable to connect to server!\n");
-             throw std::exception();
+            // throw std::exception();
          }
      }
 	 bool Connect(std::string ip, std::string port) {
