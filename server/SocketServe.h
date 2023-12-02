@@ -67,7 +67,7 @@ public:
     void setThread(std::thread* th) {
         myThread = th;
     }
-
+    
 };
 
 class SocketServer
