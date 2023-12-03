@@ -10,6 +10,7 @@ namespace Client {
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
+	using namespace System::Threading;
 	using namespace System::Data;
 	using namespace System::Drawing;
 
@@ -639,23 +640,18 @@ namespace Client {
 		}
 #pragma endregion
 
-		protected:   Void onShown(EventArgs^ a) override {
-			this->onShown(a);
-			try {
-				server = new ServerConnection();
-				server->Connect(DEFAULT_IP, DEFAULT_PORT);
-				//server->(TypeRequest::START_REQUEST, RequestManager::generateMessage(TypeRequest::START_REQUEST, ""));
+		
 
 
-			}
-			catch (std::exception er) {
-				MessageBox::Show("Unable to connect to server", "Unable connection",
-					MessageBoxButtons::OK, MessageBoxIcon::Error);
-			} 
-
+		ref class UserNode : public Guna2GradientPanel {
+		public: property bool isRegistered;
+		public: property int id;
+		public: property int pictureIndex;
+		public: UserNode(String^ file) {
+			isRegistered = true;
 		}
+		};
 
-	
 		ref class ChatNode : public Guna2GradientPanel
 		{
 
@@ -666,10 +662,14 @@ namespace Client {
 			property Label^ online;
 			property Guna2CircleButton^ countNewMessage;
 			property FlowLayoutPanel^ messageView;
+			property int id;
+			property int picture;
 
 		public:
 
-			ChatNode(String^ strChatName, String^ strLastMessage, int intCountNewMessage, int photoIndex, bool status) : Guna2GradientPanel() {
+			ChatNode(String^ strChatName, String^ strLastMessage, int intCountNewMessage, int photoIndex, bool status, int chat_id) : Guna2GradientPanel() {
+				id = chat_id;
+				picture = photoIndex;
 
 				messageView = gcnew FlowLayoutPanel();
 				this->messageView->BackColor = System::Drawing::Color::Transparent;
@@ -802,6 +802,7 @@ namespace Client {
 			this->FillColor2 = System::Drawing::Color::FromArgb(128, 36, 206);
 			pointer->setCurrent(this);
 		}
+
 		private: System::Void mouseEnter(System::Object^ sender, System::EventArgs^ e) {
 			((Guna::UI2::WinForms::Guna2GradientPanel^)sender)->ShadowDecoration->Color = Color::DeepPink;
 		}
@@ -813,15 +814,85 @@ namespace Client {
 		};
 
 	   
-		public: ServerConnection* server;
-		public:  ChatNode^ currentNode;
-		public:  System::Collections::ArrayList ^ chatNodes;
+		public: property ServerConnection* server;
+		public:  property ChatNode^ currentNode;
+		public:  property System::Collections::ArrayList ^ chatNodes;
 		public:  static property MyForm ^ pointer;
+		public: property UserNode^ user;
+		public: property Thread^ workerThread;
+		
+		protected:   Void onShown(EventArgs^ a) override {
+				  this->onShown(a);
+				  try {
+					  server = new ServerConnection();
+					  server->Connect(DEFAULT_IP, DEFAULT_PORT);
+					  user = gcnew UserNode("file");
+					  if (user->isRegistered) {
+						  workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
+						  workerThread->Start();
+					  }
+					  else {
+						  //register form
+
+
+
+
+					  }
+				  }
+				  catch (std::exception er) {
+					  MessageBox::Show("Unable to connect to server", "Unable connection",
+						  MessageBoxButtons::OK, MessageBoxIcon::Error);
+				  }
+			  }
+
+		public: System::Void downloadChats() {
+			std::vector<CChat> v = server->getAllChats();
+			if (!v.empty()) {
+				for (int i = 0; i < v.size(); i++) {
+					chatNodes->Add(
+						gcnew ChatNode(
+							gcnew String(v[i].getUser2().getName()),
+							"",
+							v[i].getUnread1(),
+							v[i].getUser2().getPicture(),
+							v[i].getUser2().getStatus(),
+							v[i].getChatId()));
+					array<ChatNode^>^ chatsArray = gcnew array<ChatNode^>(chatNodes->Count);
+					chatNodes->CopyTo(chatsArray);
+
+					this->BeginInvoke(gcnew addChatsToFormDelegare(this, &MyForm::addChatsToForm), chatsArray);
+				}
+			}
+		}
+
+		public: delegate System::Void addChatsToFormDelegare(array<ChatNode^>^ chats);
+		public: System::Void addChatsToForm(array<ChatNode^>^ chats) {
+			SuspendLayout();
+			placeForChats->Controls->AddRange(chats);
+			ResumeLayout();
+		}
 
 		public: System::Void setCurrent(ChatNode ^node) {
 			   if(currentNode)
 					currentNode->resetColor();
 			   currentNode = node;
+			   std::vector<CMessage> v;
+			   if (Int64::Parse(node->countNewMessage->Text) > 0 && node->messageView->Controls->Count == 0) {
+				   v = server->getAllMessageFromChat(CChat(node->id));
+			   }
+			   else if (node->messageView->Controls->Count == 0) {
+				   v = server->getAllMessageFromChat(CChat(node->id));
+			   }
+			   
+			   for (int i = 0; i < v.size(); i++) {
+				   currentNode->messageView->Controls->Add(gcnew
+					   MessageNode(
+						   gcnew String(v[i].get_text().c_str()),
+						   v[i].get_user_id() == user->id,
+						   v[i].get_user_id() == user->id ? user->pictureIndex : node->picture
+					   ));
+			   }
+
 			   SuspendLayout();
 			   placeForMessages->Controls->Clear();
 			   placeForMessages->Controls->Add(currentNode->messageView);

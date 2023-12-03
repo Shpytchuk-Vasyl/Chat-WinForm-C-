@@ -26,11 +26,10 @@ public:
     char recvbuf[DEFAULT_BUFLEN] = { 0 };
     int recvbuflen = DEFAULT_BUFLEN;
 
-
 public:
     ServerConnection()  {};
 
-    bool Connect(std::string ip, std::string port) {
+    bool Connect(const char* ip, const char* port) {
         WSADATA wsaData;
         struct addrinfo* result = NULL,
             * ptr = NULL,
@@ -50,7 +49,7 @@ public:
         hints.ai_protocol = IPPROTO_TCP;
 
         // Resolve the server address and port
-        iResult = getaddrinfo(DEFAULT_IP, DEFAULT_PORT, &hints, &result);
+        iResult = getaddrinfo(ip, port, &hints, &result);
         if (iResult != 0) {
             printf("getaddrinfo failed with error: %d\n", iResult);
             throw std::exception();
@@ -173,7 +172,6 @@ public:
         } while (size > 0);
         return msgs;
     }
-
 
     //Pipe
     CMessage getMessageAsyn() {    
