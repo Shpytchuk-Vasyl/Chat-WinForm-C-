@@ -220,7 +220,7 @@ void CDatabase::update_chat(CChat chat) const {
 }
 
 std::vector<CMessage> CDatabase::get_all_message_from_chat(const CChat chat) const {
-    int chatId = get_chat_id(chat);
+    int chatId = chat.chat_id;
     sql::PreparedStatement* pstmt = con->prepareStatement(
         "SELECT * FROM messages WHERE chat_id = ?"
     );

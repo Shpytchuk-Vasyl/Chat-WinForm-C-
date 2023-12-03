@@ -29,6 +29,7 @@ namespace Client {
 		{
 			InitializeComponent();
 			pointer = this;
+			chatNodes = gcnew ArrayList();
 			onShow(nullptr);
 		}
 
@@ -57,7 +58,8 @@ namespace Client {
 	private: Guna::UI2::WinForms::Guna2Button^ guna2Button4;
 	private: Guna::UI2::WinForms::Guna2Button^ guna2Button3;
 	private: Guna::UI2::WinForms::Guna2Button^ guna2Button2;
-	private: Guna::UI2::WinForms::Guna2VScrollBar^ guna2VScrollBar1;
+	private: Guna::UI2::WinForms::Guna2VScrollBar^ VScrollBarChats;
+
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel8;
 	private: System::Windows::Forms::FlowLayoutPanel^ placeForChats;
     private: Guna::UI2::WinForms::Guna2DragControl^ guna2DragControl1;
@@ -77,7 +79,10 @@ namespace Client {
     private: System::Windows::Forms::Label^ currentChatName;
     private: Guna::UI2::WinForms::Guna2CirclePictureBox^ currentChatPicture;
     private: Guna::UI2::WinForms::Guna2Panel^ placeForMessages;
-    private: System::ComponentModel::IContainer^ components;
+	private: Guna::UI2::WinForms::Guna2VScrollBar^ VScrollBarForMessages;
+
+
+	private: System::ComponentModel::IContainer^ components;
 
 	private:
 		/// <summary>
@@ -115,7 +120,7 @@ namespace Client {
 			this->currentChatPicture = (gcnew Guna::UI2::WinForms::Guna2CirclePictureBox());
 			this->searchText = (gcnew Guna::UI2::WinForms::Guna2TextBox());
 			this->guna2Panel4 = (gcnew Guna::UI2::WinForms::Guna2Panel());
-			this->guna2VScrollBar1 = (gcnew Guna::UI2::WinForms::Guna2VScrollBar());
+			this->VScrollBarChats = (gcnew Guna::UI2::WinForms::Guna2VScrollBar());
 			this->placeForChats = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->guna2Panel5 = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->guna2Panel8 = (gcnew Guna::UI2::WinForms::Guna2Panel());
@@ -124,6 +129,7 @@ namespace Client {
 			this->guna2DragControl1 = (gcnew Guna::UI2::WinForms::Guna2DragControl(this->components));
 			this->guna2ShadowForm1 = (gcnew Guna::UI2::WinForms::Guna2ShadowForm(this->components));
 			this->placeForMessages = (gcnew Guna::UI2::WinForms::Guna2Panel());
+			this->VScrollBarForMessages = (gcnew Guna::UI2::WinForms::Guna2VScrollBar());
 			this->guna2Panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->profilePicture))->BeginInit();
 			this->guna2Panel2->SuspendLayout();
@@ -478,7 +484,8 @@ namespace Client {
 			// 
 			// guna2Panel4
 			// 
-			this->guna2Panel4->Controls->Add(this->guna2VScrollBar1);
+			this->guna2Panel4->AutoScroll = true;
+			this->guna2Panel4->Controls->Add(this->VScrollBarChats);
 			this->guna2Panel4->Controls->Add(this->placeForChats);
 			this->guna2Panel4->Dock = System::Windows::Forms::DockStyle::Left;
 			this->guna2Panel4->Location = System::Drawing::Point(72, 67);
@@ -486,26 +493,28 @@ namespace Client {
 			this->guna2Panel4->Size = System::Drawing::Size(295, 514);
 			this->guna2Panel4->TabIndex = 3;
 			// 
-			// guna2VScrollBar1
+			// VScrollBarChats
 			// 
-			this->guna2VScrollBar1->AutoScroll = true;
-			this->guna2VScrollBar1->BackColor = System::Drawing::Color::Transparent;
-			this->guna2VScrollBar1->BindingContainer = this->placeForChats;
-			this->guna2VScrollBar1->BorderColor = System::Drawing::Color::Transparent;
-			this->guna2VScrollBar1->Dock = System::Windows::Forms::DockStyle::Right;
-			this->guna2VScrollBar1->FillColor = System::Drawing::Color::Transparent;
-			this->guna2VScrollBar1->InUpdate = false;
-			this->guna2VScrollBar1->LargeChange = 10;
-			this->guna2VScrollBar1->Location = System::Drawing::Point(285, 0);
-			this->guna2VScrollBar1->Margin = System::Windows::Forms::Padding(0);
-			this->guna2VScrollBar1->MaximumSize = System::Drawing::Size(10, 0);
-			this->guna2VScrollBar1->Name = L"guna2VScrollBar1";
-			this->guna2VScrollBar1->ScrollbarSize = 10;
-			this->guna2VScrollBar1->Size = System::Drawing::Size(10, 514);
-			this->guna2VScrollBar1->TabIndex = 19;
-			this->guna2VScrollBar1->ThumbColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(19)),
-				static_cast<System::Int32>(static_cast<System::Byte>(25)), static_cast<System::Int32>(static_cast<System::Byte>(40)));
-			this->guna2VScrollBar1->ThumbSize = 5;
+			this->VScrollBarChats->AutoRoundedCorners = true;
+			this->VScrollBarChats->AutoScroll = true;
+			this->VScrollBarChats->BackColor = System::Drawing::Color::Transparent;
+			this->VScrollBarChats->BindingContainer = this->placeForChats;
+			this->VScrollBarChats->BorderColor = System::Drawing::Color::Transparent;
+			this->VScrollBarChats->BorderRadius = 4;
+			this->VScrollBarChats->Dock = System::Windows::Forms::DockStyle::Right;
+			this->VScrollBarChats->FillColor = System::Drawing::Color::Transparent;
+			this->VScrollBarChats->InUpdate = false;
+			this->VScrollBarChats->LargeChange = 10;
+			this->VScrollBarChats->Location = System::Drawing::Point(285, 0);
+			this->VScrollBarChats->Margin = System::Windows::Forms::Padding(0);
+			this->VScrollBarChats->MaximumSize = System::Drawing::Size(10, 0);
+			this->VScrollBarChats->Name = L"VScrollBarChats";
+			this->VScrollBarChats->ScrollbarSize = 10;
+			this->VScrollBarChats->Size = System::Drawing::Size(10, 514);
+			this->VScrollBarChats->TabIndex = 19;
+			this->VScrollBarChats->ThumbColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(19)), static_cast<System::Int32>(static_cast<System::Byte>(25)),
+				static_cast<System::Int32>(static_cast<System::Byte>(40)));
+			this->VScrollBarChats->ThumbSize = 5;
 			// 
 			// placeForChats
 			// 
@@ -606,12 +615,35 @@ namespace Client {
 			// 
 			// placeForMessages
 			// 
+			this->placeForMessages->AutoSize = true;
 			this->placeForMessages->BackColor = System::Drawing::Color::Transparent;
 			this->placeForMessages->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->placeForMessages->Location = System::Drawing::Point(367, 67);
 			this->placeForMessages->Name = L"placeForMessages";
 			this->placeForMessages->Size = System::Drawing::Size(677, 457);
 			this->placeForMessages->TabIndex = 6;
+			// 
+			// VScrollBarForMessages
+			// 
+			this->VScrollBarForMessages->AutoRoundedCorners = true;
+			this->VScrollBarForMessages->AutoScroll = true;
+			this->VScrollBarForMessages->BackColor = System::Drawing::Color::Transparent;
+			this->VScrollBarForMessages->BorderColor = System::Drawing::Color::Transparent;
+			this->VScrollBarForMessages->BorderRadius = 4;
+			this->VScrollBarForMessages->Dock = System::Windows::Forms::DockStyle::Right;
+			this->VScrollBarForMessages->FillColor = System::Drawing::Color::Transparent;
+			this->VScrollBarForMessages->InUpdate = false;
+			this->VScrollBarForMessages->LargeChange = 10;
+			this->VScrollBarForMessages->Location = System::Drawing::Point(1034, 67);
+			this->VScrollBarForMessages->Margin = System::Windows::Forms::Padding(0);
+			this->VScrollBarForMessages->MaximumSize = System::Drawing::Size(10, 0);
+			this->VScrollBarForMessages->Name = L"VScrollBarForMessages";
+			this->VScrollBarForMessages->ScrollbarSize = 10;
+			this->VScrollBarForMessages->Size = System::Drawing::Size(10, 457);
+			this->VScrollBarForMessages->TabIndex = 20;
+			this->VScrollBarForMessages->ThumbColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(19)),
+				static_cast<System::Int32>(static_cast<System::Byte>(25)), static_cast<System::Int32>(static_cast<System::Byte>(40)));
+			this->VScrollBarForMessages->ThumbSize = 5;
 			// 
 			// MyForm
 			// 
@@ -620,6 +652,7 @@ namespace Client {
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)), static_cast<System::Int32>(static_cast<System::Byte>(32)),
 				static_cast<System::Int32>(static_cast<System::Byte>(47)));
 			this->ClientSize = System::Drawing::Size(1311, 581);
+			this->Controls->Add(this->VScrollBarForMessages);
 			this->Controls->Add(this->placeForMessages);
 			this->Controls->Add(this->guna2Panel5);
 			this->Controls->Add(this->guna2Panel4);
@@ -644,6 +677,7 @@ namespace Client {
 			this->guna2Panel5->ResumeLayout(false);
 			this->guna2Panel8->ResumeLayout(false);
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
@@ -677,6 +711,7 @@ namespace Client {
 				this->messageView->BackColor = System::Drawing::Color::Transparent;
 				this->messageView->Dock = System::Windows::Forms::DockStyle::Fill;
 				this->messageView->Location = System::Drawing::Point(367, 67);
+				this->messageView->AutoScroll = false;
 
 				this->countNewMessage = (gcnew Guna::UI2::WinForms::Guna2CircleButton());
 				this->countNewMessage->BackColor = System::Drawing::Color::Transparent;
@@ -806,11 +841,14 @@ namespace Client {
 		}
 
 		private: System::Void mouseEnter(System::Object^ sender, System::EventArgs^ e) {
-			((Guna::UI2::WinForms::Guna2GradientPanel^)sender)->ShadowDecoration->Color = Color::DeepPink;
+			if (this->FillColor != System::Drawing::Color::FromArgb(250, 48, 90)) {
+				this->FillColor = System::Drawing::Color::FromArgb(19, 25, 40);
+				this->FillColor2 = System::Drawing::Color::FromArgb(19, 25, 40);
+			}
 		}
 		private: System::Void mouseLeave(System::Object^ sender, System::EventArgs^ e) {
-			((Guna::UI2::WinForms::Guna2GradientPanel^)sender)->ShadowDecoration->Color = Color::FromArgb(17, 22, 32);
-
+			if(this->FillColor != System::Drawing::Color::FromArgb(250, 48, 90))
+			resetColor();
 		}
 
 		};
@@ -818,7 +856,7 @@ namespace Client {
 
 		public: property ServerConnection* server;
 		public:  property ChatNode^ currentNode;
-		public:  property System::Collections::ArrayList^ chatNodes;
+		public:  property ArrayList^ chatNodes;
 		public:  static property MyForm^ pointer;
 		public: property UserNode^ user;
 		public: property Thread^ workerThread;
@@ -828,7 +866,7 @@ namespace Client {
 			try {
 				server = new ServerConnection();
 				server->Connect(DEFAULT_IP, DEFAULT_PORT);
-				UserNode::MyUserData(8, 1, "user 1");
+				UserNode::MyUserData(8, 1, "user 1").WriteToFile("userData/user.bin");
 				user = gcnew UserNode("userData/user.bin");
 				if (user->isRegistered) {
 					workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
@@ -841,8 +879,7 @@ namespace Client {
 					for (size_t i = 0; i < 100; i++)
 					{
 						if (server->RegisterUser(CUser(("user " + std::to_string(i)).c_str(), "password", 1))) {
-							user->userName = gcnew String(("user " + std::to_string(i)).c_str());
-							server->addNewChat(CUser(("user " + std::to_string(i - 1)).c_str(), "password", 1));
+						
 							workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
 							workerThread->Start();
 							break;
@@ -885,18 +922,23 @@ namespace Client {
 								v[i].getChatId()));
 					}
 				}
-				array<ChatNode^>^ chatsArray = gcnew array<ChatNode^>(chatNodes->Count);
-				chatNodes->CopyTo(chatsArray);
 
-				this->BeginInvoke(gcnew addChatsToFormDelegare(this, &MyForm::addChatsToForm), chatsArray);
+
+				this->BeginInvoke(gcnew addChatsToFormDelegare(this, &MyForm::addChatsToForm));
 
 			}
 		}
 
-		public: delegate System::Void addChatsToFormDelegare(array<ChatNode^>^ chats);
-		public: System::Void addChatsToForm(array<ChatNode^>^ chats) {
+		public: delegate System::Void addChatsToFormDelegare();
+		public: System::Void addChatsToForm() {
 			SuspendLayout();
-			placeForChats->Controls->AddRange(chats);
+
+			// Конвертуємо ArrayList до array<ChatNode^>
+			array<ChatNode^>^ chatNodesArray = gcnew array<ChatNode^>(chatNodes->Count);
+			chatNodes->CopyTo(chatNodesArray);
+
+			placeForChats->Controls->AddRange(chatNodesArray);
+			placeForChats->AutoScroll = false;
 			ResumeLayout();
 		}
 		
@@ -909,6 +951,8 @@ namespace Client {
 			   workerThread->Start();
 
 			   SuspendLayout();
+			   VScrollBarForMessages->BindingContainer = currentNode->messageView;
+			   currentNode->messageView->AutoScroll = false;
 			   placeForMessages->Controls->Clear();
 			   placeForMessages->Controls->Add(currentNode->messageView);
 			   ResumeLayout();
@@ -1009,7 +1053,7 @@ namespace Client {
 
 private: System::Void CreateNewChat_Click(System::Object^ sender, System::EventArgs^ e) {
 	UsersViewForm^ usersWievForm = gcnew UsersViewForm();
-	usersWievForm->Show();
+	usersWievForm->ShowDialog();
 	if (usersWievForm->resultUser != nullptr) {
 		std::string name;
 		MarshalString(usersWievForm->resultUser->userName, name);
@@ -1017,6 +1061,7 @@ private: System::Void CreateNewChat_Click(System::Object^ sender, System::EventA
 		
 	}
 }
+
 };
 
 
