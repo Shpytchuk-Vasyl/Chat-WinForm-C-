@@ -85,28 +85,35 @@ public:
         return true;
     };
 
-    int RegisterUser(CUser user) {
+    bool RegisterUser(CUser user) {
         send(ConnectSocket, std::to_string(TypeRequest::REGISTER_REQUEST).c_str(), sizeof(REGISTER_REQUEST), 0);
 
         int iResult = send(ConnectSocket, (char*)(&user), sizeof(user), 0);
         if (iResult == SOCKET_ERROR) {
             printf("send failed with error: %d\n", WSAGetLastError());
         }
-        return iResult;
-    }
 
-    int addNewChat(CUser other) {
-        send(ConnectSocket, std::to_string(TypeRequest::ADD_NEW_CHAT).c_str(), sizeof(ADD_NEW_CHAT), 0);
-
-        int iResult = send(ConnectSocket, (char*)(&other), sizeof(other), 0);
+        TypeRequest type;
+        iResult = recv(ConnectSocket, (char*)&type, sizeof(type), 0);
         if (iResult == SOCKET_ERROR) {
             printf("send failed with error: %d\n", WSAGetLastError());
         }
-        return iResult;
+         
+        return type == SECCESS;
     }
 
-    std::vector<CChat> getAllChats() {
+    bool addNewChat(CUser other) {
+        int iResult = send(ConnectSocket, std::to_string(TypeRequest::ADD_NEW_CHAT).c_str(), sizeof(ADD_NEW_CHAT), 0);
+        iResult = send(ConnectSocket, (char*)(&other), sizeof(other), 0);
+        if (iResult == SOCKET_ERROR) {
+            printf("send failed with error: %d\n", WSAGetLastError());
+        }
+        return iResult != SOCKET_ERROR;
+    }
+
+    std::vector<CChat> getAllChats(CUser user) {
         send(ConnectSocket, std::to_string(TypeRequest::START_REQUEST).c_str(), sizeof(START_REQUEST), 0);
+        send(ConnectSocket, (char*) &user, sizeof(user), 0);
 
         int size = 0;
         std::vector<CChat> chats;
@@ -114,22 +121,22 @@ public:
         do {
             size = recv(ConnectSocket, (char*)&chat, sizeof(chat), 0);
             chats.push_back(chat);
-        } while (size > 0);
+        } while (size > sizeof(TypeRequest::SECCESS));
         return chats;
     }
 
-    int sendMessage(CMessage msg) {
+    bool sendMessage(CMessage msg) {
         send(ConnectSocket, std::to_string(TypeRequest::SEND_MESSAGE).c_str(), sizeof(SEND_MESSAGE), 0);
 
         int iResult = send(ConnectSocket, (char*)(&msg), sizeof(msg), 0);
         if (iResult == SOCKET_ERROR) {
             printf("send failed with error: %d\n", WSAGetLastError());
         }
-        return iResult;
+        return iResult != SOCKET_ERROR;
     }
 
-    int finishWork() {
-        return send(ConnectSocket, std::to_string(TypeRequest::FINISH_WORK).c_str(), sizeof(FINISH_WORK), 0);
+    bool finishWork() {
+        return SOCKET_ERROR != send(ConnectSocket, std::to_string(TypeRequest::FINISH_WORK).c_str(), sizeof(FINISH_WORK), 0);
     }
 
     std::vector<CUser> getAllUsers(CUser name) {
@@ -141,7 +148,7 @@ public:
         do {
             size = recv(ConnectSocket, (char*)&user, sizeof(user), 0);
             users.push_back(user);
-        } while (size > 0);
+        } while (size > sizeof(TypeRequest::SECCESS));
         return users;
     }
 
@@ -155,7 +162,7 @@ public:
         do {
             size = recv(ConnectSocket, (char*)&chat, sizeof(chat), 0);
             chats.push_back(chat);
-        } while (size > 0);
+        } while (size > sizeof(TypeRequest::SECCESS));
         return chats;
     }
 
@@ -169,7 +176,7 @@ public:
         do {
             size = recv(ConnectSocket, (char*)&msg, sizeof(msg), 0);
             msgs.push_back(msg);
-        } while (size > 0);
+        } while (size > sizeof(TypeRequest::SECCESS));
         return msgs;
     }
 

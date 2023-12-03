@@ -554,6 +554,7 @@ namespace Client {
 			this->sendButton->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
 			this->sendButton->Size = System::Drawing::Size(40, 40);
 			this->sendButton->TabIndex = 0;
+			this->sendButton->Click += gcnew System::EventHandler(this, &MyForm::sendButton_Click);
 			// 
 			// sendText
 			// 
@@ -647,8 +648,11 @@ namespace Client {
 		public: property bool isRegistered;
 		public: property int id;
 		public: property int pictureIndex;
+		public: property String^ userName;
+		public: property String^ password;
+
 		public: UserNode(String^ file) {
-			isRegistered = true;
+			isRegistered = false;
 		}
 		};
 
@@ -800,7 +804,7 @@ namespace Client {
 		private: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 			this->FillColor = System::Drawing::Color::FromArgb(250, 48, 90);
 			this->FillColor2 = System::Drawing::Color::FromArgb(128, 36, 206);
-			pointer->setCurrent(this);
+			pointer->setCurrentChat(this);
 		}
 
 		private: System::Void mouseEnter(System::Object^ sender, System::EventArgs^ e) {
@@ -833,10 +837,17 @@ namespace Client {
 					  }
 					  else {
 						  //register form
+						  for (size_t i = 0; i < 100; i++)
+						  {
+							  if (server->RegisterUser(CUser(("user " + std::to_string(i)).c_str(), "password", 1))) {
+								  server->addNewChat(CUser(("user " + std::to_string(i - 1)).c_str(), "password", 1));
+								  workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
+								  workerThread->Start();
+								  break;
+							  }
 
-
-
-
+						  }
+					
 					  }
 				  }
 				  catch (std::exception er) {
@@ -846,7 +857,10 @@ namespace Client {
 			  }
 
 		public: System::Void downloadChats() {
-			std::vector<CChat> v = server->getAllChats();
+			
+			std::string name;
+			MarshalString(user->userName, name);
+			std::vector<CChat> v = server->getAllChats(CUser(name.c_str(),"", 1));
 			if (!v.empty()) {
 				for (int i = 0; i < v.size(); i++) {
 					chatNodes->Add(
@@ -871,8 +885,9 @@ namespace Client {
 			placeForChats->Controls->AddRange(chats);
 			ResumeLayout();
 		}
+		
 
-		public: System::Void setCurrent(ChatNode ^node) {
+		public: System::Void setCurrentChat(ChatNode ^node) {
 			   if(currentNode)
 					currentNode->resetColor();
 			   currentNode = node;
@@ -900,6 +915,8 @@ namespace Client {
 		}
 
 
+
+
 		private: void MarshalString(String^ s, std::string& os) {
 		using namespace Runtime::InteropServices;
 		const char* chars =
@@ -908,6 +925,21 @@ namespace Client {
 		Marshal::FreeHGlobal(IntPtr((void*)chars));
 	}
 
+	private: System::Void sendButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		String^ message = sendText->Text;
+		std::string msg;
+		if (!String::IsNullOrEmpty(message) && currentNode != nullptr) {
+			MarshalString(message, msg);
+			if (server->sendMessage(CMessage(msg.c_str(), user->id, currentNode->id))) {
+				sendText->Text = "";
+				currentNode->addMessage(gcnew MessageNode(message, true, user->pictureIndex));
+			}
+			else {
+				MessageBox::Show("Unable to connect to server", "Unable connection",
+					MessageBoxButtons::OK, MessageBoxIcon::Error);
+			}
+		}
+	}
 	
 
 //private: System::Void guna2CircleButton6_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -922,6 +954,7 @@ namespace Client {
 //		 currentNode->addMessage(gcnew ChatNode::MessageNode(message, true, 1));
 //	 }
 //}
+
 
 };
 
