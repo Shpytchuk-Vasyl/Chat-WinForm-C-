@@ -647,6 +647,9 @@ namespace Client {
 		public: property bool isRegistered;
 		public: property int id;
 		public: property int pictureIndex;
+		public: property String^ userName;
+		public: property String^ password;
+
 		public: UserNode(String^ file) {
 			isRegistered = true;
 		}
@@ -800,7 +803,7 @@ namespace Client {
 		private: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 			this->FillColor = System::Drawing::Color::FromArgb(250, 48, 90);
 			this->FillColor2 = System::Drawing::Color::FromArgb(128, 36, 206);
-			pointer->setCurrent(this);
+			pointer->setCurrentChat(this);
 		}
 
 		private: System::Void mouseEnter(System::Object^ sender, System::EventArgs^ e) {
@@ -833,8 +836,14 @@ namespace Client {
 					  }
 					  else {
 						  //register form
+						  for (size_t i = 0; i < 100; i++)
+						  {
+							  if (server->RegisterUser(CUser("user 1", "passwor", 1))) {
+								  break;
+							  }
 
-
+						  }
+						  
 
 
 					  }
@@ -846,7 +855,10 @@ namespace Client {
 			  }
 
 		public: System::Void downloadChats() {
-			std::vector<CChat> v = server->getAllChats();
+			
+			std::string name;
+			MarshalString(user->userName, name);
+			std::vector<CChat> v = server->getAllChats(CUser(name.c_str(),"", 1));
 			if (!v.empty()) {
 				for (int i = 0; i < v.size(); i++) {
 					chatNodes->Add(
@@ -871,8 +883,9 @@ namespace Client {
 			placeForChats->Controls->AddRange(chats);
 			ResumeLayout();
 		}
+		
 
-		public: System::Void setCurrent(ChatNode ^node) {
+		public: System::Void setCurrentChat(ChatNode ^node) {
 			   if(currentNode)
 					currentNode->resetColor();
 			   currentNode = node;
@@ -898,6 +911,8 @@ namespace Client {
 			   placeForMessages->Controls->Add(currentNode->messageView);
 			   ResumeLayout();
 		}
+
+
 
 
 		private: void MarshalString(String^ s, std::string& os) {
