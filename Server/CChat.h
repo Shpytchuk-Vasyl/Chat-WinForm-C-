@@ -14,10 +14,13 @@ public:
         user1_id(u1),
         user2_id(u2)
     {}
+    CChat(int chat_id) :
+        chat_id(chat_id)
+    {}
     CChat() {}
     
     // Getter for user2_id
-    int getUser1Id() const {
+    int getUser1Id()  {
         return user2_id;
     }
 
@@ -28,7 +31,7 @@ public:
 
 
     // Getter for user2_id
-    int getUser2Id() const {
+    int getUser2Id() {
         return user2_id;
     }
 
@@ -40,7 +43,7 @@ public:
 
 
     // Getter for unread1
-    int getUnread1() const {
+    int getUnread1()  {
         return unread1;
     }
 
@@ -50,8 +53,11 @@ public:
     }
 
     // Getter for unread2
-    int getUnread2() const {
+    int getUnread2() {
         return unread2;
+    }
+    int getChatId() {
+        return chat_id;
     }
 
     // Setter for unread2
@@ -59,7 +65,7 @@ public:
         unread2 = unread;
     }
 
-    CUser getUser2() const {
+    CUser getUser2()  {
         return user2;
     }
 
@@ -67,7 +73,7 @@ public:
         user2 = us;
     }
 
-    CUser getUser1() const {
+    CUser getUser1()  {
         return user1;
     }
 

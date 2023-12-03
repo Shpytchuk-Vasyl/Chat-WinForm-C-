@@ -6,6 +6,7 @@ private:
 	char s_name[50] = "";
 	char s_password[50] = "";
 	int i_picture = 0;
+    bool is_online = false;
 public:
 
 	friend class CDatabase;
@@ -23,7 +24,7 @@ public:
 	
 
     // Getter for s_name
-    const char* getName() const {
+    char* getName() {
         return s_name;
     }
 
@@ -50,6 +51,10 @@ public:
     // Setter for i_picture
     void setPicture(int picture) {
         i_picture = picture;
+    }
+
+    bool getStatus() {
+        return is_online;
     }
 };
 
