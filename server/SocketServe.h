@@ -56,6 +56,8 @@ public:
             int iResult = 0;
             int iSendResult = 0;
             int other_user_id = 0;
+            std::vector<CMessage>  msgs;
+            std::vector<CChat>  chats;
             CUser  user_res;
             CChat chat;
             iResult = recv(socketThread.ClientSocket,
@@ -118,9 +120,6 @@ public:
                     break;
 
                 case TypeRequest::SEND_MESSAGE:
-                   
-
-                 
                         iResult = recv(socketThread.ClientSocket,
                             recvbuf,
                             recvbuflen,
@@ -203,16 +202,60 @@ public:
                     // Обробка завершення роботи
                     break;
 
-                case TypeRequest::UPDATE_CHATS:
+                case TypeRequest::UPDATE_CHATS: // отримати  всі чати що повязані з поточним юзером 
                     // Обробка оновлення чатів
-                    break;
+                    chats = socketThread.db->get_chats_with_user(socketThread.current_user_id);
 
+                    for (auto ch : chats) {
+                        memset(recvbuf, 0, recvbuflen);
+                        std::memcpy(recvbuf, (char*)&ch, sizeof(ch));
+                        iSendResult = send(socketThread.ClientSocket, recvbuf, sizeof(recvbuf), 0);
+                        if (iSendResult == SOCKET_ERROR) {
+                            printf("send failed with error: %d\n", WSAGetLastError());
+                            closesocket(socketThread.ClientSocket);
+                            socketThread.isActive = false;
+                            return;
+                        }
+                    }
+                    iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
+                    if (iSendResult == SOCKET_ERROR) {
+                        printf("send failed with error: %d\n", WSAGetLastError());
+                        closesocket(socketThread.ClientSocket);
+                        socketThread.isActive = false;
+                        return;
+                    }
+                    break;
                 case TypeRequest::GET_MESSAGES_FROM_CHAT:
                     // Обробка отримання повідомлень з чату
+                    iResult = recv(socketThread.ClientSocket,
+                        recvbuf,
+                        recvbuflen,
+                        0);
+                    other_user_id = 0;
+                    chat = *(CChat*)recvbuf;
+                   msgs = socketThread.db->get_all_message_from_chat(chat);
+                    for (auto msg : msgs) {
+                        memset(recvbuf, 0, recvbuflen);
+                        std::memcpy(recvbuf, (char*)&msg, sizeof(msg));
+                        iSendResult = send(socketThread.ClientSocket, recvbuf, sizeof(recvbuf), 0);
+                        if (iSendResult == SOCKET_ERROR) {
+                            printf("send failed with error: %d\n", WSAGetLastError());
+                            closesocket(socketThread.ClientSocket);
+                            socketThread.isActive = false;
+                            return;
+                        }
+                    }
+                    iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
+                    if (iSendResult == SOCKET_ERROR) {
+                        printf("send failed with error: %d\n", WSAGetLastError());
+                        closesocket(socketThread.ClientSocket);
+                        socketThread.isActive = false;
+                        return;
+                    }
                     break;
 
-                case TypeRequest::OPEN_CHAT:
-                    // Обробка отримання повідомлень з чату
+                case TypeRequest::OPEN_CHAT://те ж  що і пепереднє 
+                   
                     break;
 
                 default:
