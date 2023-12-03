@@ -102,13 +102,13 @@ public:
         return type == SECCESS;
     }
 
-    int addNewChat(CUser other) {
+    bool addNewChat(CUser other) {
         int iResult = send(ConnectSocket, std::to_string(TypeRequest::ADD_NEW_CHAT).c_str(), sizeof(ADD_NEW_CHAT), 0);
         iResult = send(ConnectSocket, (char*)(&other), sizeof(other), 0);
         if (iResult == SOCKET_ERROR) {
             printf("send failed with error: %d\n", WSAGetLastError());
         }
-        return iResult;
+        return iResult != SOCKET_ERROR;
     }
 
     std::vector<CChat> getAllChats(CUser user) {
@@ -125,18 +125,18 @@ public:
         return chats;
     }
 
-    int sendMessage(CMessage msg) {
+    bool sendMessage(CMessage msg) {
         send(ConnectSocket, std::to_string(TypeRequest::SEND_MESSAGE).c_str(), sizeof(SEND_MESSAGE), 0);
 
         int iResult = send(ConnectSocket, (char*)(&msg), sizeof(msg), 0);
         if (iResult == SOCKET_ERROR) {
             printf("send failed with error: %d\n", WSAGetLastError());
         }
-        return iResult;
+        return iResult != SOCKET_ERROR;
     }
 
-    int finishWork() {
-        return send(ConnectSocket, std::to_string(TypeRequest::FINISH_WORK).c_str(), sizeof(FINISH_WORK), 0);
+    bool finishWork() {
+        return SOCKET_ERROR != send(ConnectSocket, std::to_string(TypeRequest::FINISH_WORK).c_str(), sizeof(FINISH_WORK), 0);
     }
 
     std::vector<CUser> getAllUsers(CUser name) {

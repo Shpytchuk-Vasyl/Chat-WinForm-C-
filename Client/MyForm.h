@@ -554,6 +554,7 @@ namespace Client {
 			this->sendButton->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
 			this->sendButton->Size = System::Drawing::Size(40, 40);
 			this->sendButton->TabIndex = 0;
+			this->sendButton->Click += gcnew System::EventHandler(this, &MyForm::sendButton_Click);
 			// 
 			// sendText
 			// 
@@ -651,7 +652,7 @@ namespace Client {
 		public: property String^ password;
 
 		public: UserNode(String^ file) {
-			isRegistered = true;
+			isRegistered = false;
 		}
 		};
 
@@ -838,14 +839,15 @@ namespace Client {
 						  //register form
 						  for (size_t i = 0; i < 100; i++)
 						  {
-							  if (server->RegisterUser(CUser("user 1", "passwor", 1))) {
+							  if (server->RegisterUser(CUser(("user " + std::to_string(i)).c_str(), "password", 1))) {
+								  server->addNewChat(CUser(("user " + std::to_string(i - 1)).c_str(), "password", 1));
+								  workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
+								  workerThread->Start();
 								  break;
 							  }
 
 						  }
-						  
-
-
+					
 					  }
 				  }
 				  catch (std::exception er) {
@@ -923,6 +925,21 @@ namespace Client {
 		Marshal::FreeHGlobal(IntPtr((void*)chars));
 	}
 
+	private: System::Void sendButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		String^ message = sendText->Text;
+		std::string msg;
+		if (!String::IsNullOrEmpty(message) && currentNode != nullptr) {
+			MarshalString(message, msg);
+			if (server->sendMessage(CMessage(msg.c_str(), user->id, currentNode->id))) {
+				sendText->Text = "";
+				currentNode->addMessage(gcnew MessageNode(message, true, user->pictureIndex));
+			}
+			else {
+				MessageBox::Show("Unable to connect to server", "Unable connection",
+					MessageBoxButtons::OK, MessageBoxIcon::Error);
+			}
+		}
+	}
 	
 
 //private: System::Void guna2CircleButton6_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -937,6 +954,7 @@ namespace Client {
 //		 currentNode->addMessage(gcnew ChatNode::MessageNode(message, true, 1));
 //	 }
 //}
+
 
 };
 
