@@ -104,7 +104,8 @@ public:
                      user_res = *(CUser*)recvbuf;
                     socketThread.current_user_id = socketThread.db->get_user_id(user_res);
                     // std::vector<CChat> chats = socketThread.db->get_chats_with_user(socketThread.current_user_id);
-                     iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
+                    // цього не треба, бо я й так буду знати що сервер не доступний
+                    //iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
                     if (iSendResult == SOCKET_ERROR) {
                         printf("send failed with error: %d\n", WSAGetLastError());
                         closesocket(socketThread.ClientSocket);

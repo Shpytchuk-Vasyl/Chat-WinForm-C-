@@ -17,6 +17,7 @@ std::vector<CChat> CDatabase::get_chats_with_user(int user_id) const {
         chat.setUnread1(resultSet->getInt("num_first_unread"));
         chat.setUser2Id(resultSet->getInt("second_user_id"));
         chat.setUnread2(resultSet->getInt("num_second_unread"));
+        chat.setChatId(resultSet->getInt("id"));
 
         // Отримати дані користувачів, які учасники чату
         chat.setUser1(get_user_by_id(chat.getUser1Id()));
@@ -124,6 +125,7 @@ std::vector<CChat> CDatabase::get_chats() const {
         chat.unread1 = resultSet->getInt("num_first_unread");
         chat.user2_id = resultSet->getInt("second_user_id");
         chat.unread2 = resultSet->getInt("num_second_unread");
+        chat.chat_id = resultSet->getInt("id");
         chat.user1 = this->get_user_by_id(chat.user1_id);
         chat.user2 = this->get_user_by_id(chat.user2_id);
         // Якщо created_at є рядком, не забудьте додати його обробку

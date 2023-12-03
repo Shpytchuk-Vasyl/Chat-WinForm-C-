@@ -56,6 +56,10 @@ public:
     int getUnread2() {
         return unread2;
     }
+    void setChatId(int id) {
+        chat_id = id;
+    }
+
     int getChatId() {
         return chat_id;
     }
@@ -80,4 +84,7 @@ public:
     void setUser1(CUser us) {
         user1 = us;
     }
+
+
+
 };
