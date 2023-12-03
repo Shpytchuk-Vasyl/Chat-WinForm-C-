@@ -58,19 +58,14 @@ public:
             int other_user_id = 0;
             CUser  user_res;
             CChat chat;
-            struct timeval timeout;
-            timeout.tv_sec = 100;  // час в секундах
-            timeout.tv_usec = 0; // мікросекунди
-
-            setsockopt(socketThread.ClientSocket, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(struct timeval));
             iResult = recv(socketThread.ClientSocket,
                 recvbuf,
-                recvbuflen,
+                sizeof(recvbuf),
                 0);
 
             if (iResult > 0) {
                 //printf("Socked %d :Bytes received: %d\n", socketThread.ClientSocket, iResult);
-                TypeRequest type = *reinterpret_cast<TypeRequest*>(recvbuf);
+                TypeRequest type = (TypeRequest)std::atoi(recvbuf);
                 memset(recvbuf, 0, recvbuflen);
                 // отримання значення TypeRequest
 
@@ -82,6 +77,8 @@ public:
                 case TypeRequest::REGISTER_REQUEST:
                     // Обробка запиту на реєстрацію
                    
+                    if (socketThread.ClientSocket == INVALID_SOCKET)
+                        throw std::exception();
 
                     iResult = recv(socketThread.ClientSocket,
                         recvbuf,
@@ -129,10 +126,10 @@ public:
                             0);
                      other_user_id = 0;
                     if (socketThread.current_user_id == socketThread.current_chat.getUser2Id()) {
-                        other_user_id == socketThread.current_chat.getUser1Id();
+                        other_user_id = socketThread.current_chat.getUser1Id();
                     }
                     else {
-                        other_user_id == socketThread.current_chat.getUser2Id();
+                        other_user_id = socketThread.current_chat.getUser2Id();
                     }
                     if (socketThread.isOnline(other_user_id)) {
                         send_addr = INVALID_SOCKET;
@@ -299,10 +296,11 @@ public:
             Listen();
             try {
                 sockaddr* addr = NULL;
-                clients.emplace_back(SockedThread (accept(ListenSocket, addr, NULL),&db,&online,&connection_list));
-                std::thread* th = new std::thread(SockedThread::Run, *clients.end());
+                SOCKET  cs = accept(ListenSocket, NULL, NULL);
+                clients.emplace_back(SockedThread (cs,&db,&online,&connection_list));
+                std::thread* th = new std::thread(SockedThread::Run, clients.back());
                 threads.push_back(th);
-                clients.end()->setThread(th);
+                clients.back().setThread(th);
             }
             catch (std::exception e) {};
         }
@@ -310,8 +308,13 @@ public:
 
 private:
     int Listen() {
-        while (listen(ListenSocket, SOMAXCONN));
-        return 0;
+        int iResult = listen(ListenSocket, SOMAXCONN);
+        if (iResult == SOCKET_ERROR) {
+            printf("listen failed with error: %d\n", WSAGetLastError());
+            closesocket(ListenSocket);
+            WSACleanup();
+            throw std::exception();
+        }
     }
 
 };
