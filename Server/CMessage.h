@@ -2,7 +2,6 @@
 
 #include <string>
 #include "CUser.h"
-#include "CMessage.h"
 class CMessage {	
 	char text[1024] = "";
 	int user_id = 0;

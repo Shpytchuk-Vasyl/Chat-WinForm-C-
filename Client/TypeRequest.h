@@ -4,7 +4,8 @@ static const char* DEFAULT_PORT = "31098";
 static const char* DEFAULT_IP = "localhost";
 
 enum TypeRequest {
-	SECCESS, // опечатка , не хочу змінювати всюди , тому просто буду так юзав поки , потім побацим 
+	SECCESS,
+	ERR,// опечатка , не хочу змінювати всюди , тому просто буду так юзав поки , потім побацим 
 	REGISTER_REQUEST,
 	START_REQUEST,
 	GET_MESSAGE,
