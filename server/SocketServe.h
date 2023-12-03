@@ -21,19 +21,23 @@
 
 class SockedThread {
     SOCKET ClientSocket = INVALID_SOCKET;
-    std::thread* myThread;
-    CDatabase* db;
-    std::vector<int>* online;
-    std::vector<std::pair<int, SOCKET>> *connectoin_list;
+    std::thread* myThread = nullptr;
+    CDatabase* db = nullptr;
+    std::vector<int>* online = nullptr;
+    std::vector<std::pair<int, SOCKET>> *connection_list = nullptr;
     CChat current_chat;
     int current_user_id = 0;
     bool isActive = true;
     int userId = 0;
 
 public:
-    SockedThread(SOCKET clientSocket) {
+    SockedThread(SOCKET clientSocket, CDatabase* db, std::vector<int>* online, std::vector<std::pair<int, SOCKET>>* connectoin_list) {
         this->ClientSocket = clientSocket;
-        if (clientSocket == INVALID_SOCKET) throw std::exception();
+        this->db = db;
+        this->online = online;
+        this->connection_list = connectoin_list;
+        if (clientSocket == INVALID_SOCKET) 
+            throw std::exception();
                                                                                             // доініціалізувати поля ( поки немає звідки )
     }
 
@@ -54,6 +58,11 @@ public:
             int other_user_id = 0;
             CUser  user_res;
             CChat chat;
+            struct timeval timeout;
+            timeout.tv_sec = 100;  // час в секундах
+            timeout.tv_usec = 0; // мікросекунди
+
+            setsockopt(socketThread.ClientSocket, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(struct timeval));
             iResult = recv(socketThread.ClientSocket,
                 recvbuf,
                 recvbuflen,
@@ -127,7 +136,7 @@ public:
                     }
                     if (socketThread.isOnline(other_user_id)) {
                         send_addr = INVALID_SOCKET;
-                        for (auto pair : *socketThread.connectoin_list) {
+                        for (auto pair : *socketThread.connection_list) {
                             if (pair.first == other_user_id) {
                                 send_addr = pair.second;
                                 break;
@@ -165,6 +174,9 @@ public:
                         0);
                     user_res = *(CUser*)recvbuf;
                     other_user_id = socketThread.db->get_user_id(user_res);
+                    if (other_user_id == -1) {
+                        other_user_id = 5;
+                    }
                     chat.setUser1Id(socketThread.current_user_id);
                     chat.setUser2Id(other_user_id);
                     chat.setUser1(socketThread.db->get_user_by_id(socketThread.current_user_id));
@@ -231,6 +243,11 @@ class SocketServer
 {
     SOCKET ListenSocket = INVALID_SOCKET;
     std::vector<SockedThread> clients;
+    CDatabase db;
+    std::vector<int> online;
+    std::vector<std::pair<int, SOCKET>> connection_list;
+    std::vector<std::thread*> threads;
+
 public:
     SocketServer() {
         WSADATA wsaData;
@@ -282,8 +299,9 @@ public:
             Listen();
             try {
                 sockaddr* addr = NULL;
-                clients.emplace_back(SockedThread (accept(ListenSocket, addr, NULL)));
+                clients.emplace_back(SockedThread (accept(ListenSocket, addr, NULL),&db,&online,&connection_list));
                 std::thread* th = new std::thread(SockedThread::Run, *clients.end());
+                threads.push_back(th);
                 clients.end()->setThread(th);
             }
             catch (std::exception e) {};
