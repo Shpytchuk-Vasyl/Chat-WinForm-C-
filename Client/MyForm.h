@@ -650,11 +650,91 @@ namespace Client {
 		public: property int id;
 		public: property int pictureIndex;
 		public: property String^ userName;
-		public: property String^ password;
-
+			  property Guna2CirclePictureBox^ photo;
+			  property Label^ online;
+			  property Label^ chatName;
 		public: UserNode(String^ file) {
 			isRegistered = false;
+
 		}
+
+		public: UserNode(String^ name, int photoIndex, bool status, int user_id) : Guna2GradientPanel() {
+			id = user_id;
+			pictureIndex = photoIndex;
+			userName = name;
+
+			this->photo = (gcnew Guna::UI2::WinForms::Guna2CirclePictureBox());
+			this->photo->BackColor = System::Drawing::Color::Transparent;
+			this->photo->FillColor = System::Drawing::Color::Transparent;
+			this->photo->Image = Image::FromFile("userPhotos/user" + photoIndex + ".png");
+			this->photo->ImageRotate = 0;
+			this->photo->Location = System::Drawing::Point(20, 20);
+			this->photo->ShadowDecoration->Color = System::Drawing::Color::Fuchsia;
+			this->photo->ShadowDecoration->Enabled = true;
+			this->photo->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
+			this->photo->Size = System::Drawing::Size(36, 36);
+			this->photo->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
+			this->photo->TabStop = false;
+			this->photo->UseWaitCursor = true;
+
+
+			this->online = (gcnew Label);
+			this->online->AutoSize = true;
+			this->online->BackColor = System::Drawing::Color::Transparent;
+			this->online->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 7.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->online->ForeColor = System::Drawing::Color::Silver;
+			this->online->Location = System::Drawing::Point(60, 40);
+			this->online->Size = System::Drawing::Size(39, 17);
+			this->online->Text = status ? "Online" : "Offline";
+			this->online->UseWaitCursor = true;
+
+			this->chatName = (gcnew Label);
+			this->chatName->AutoSize = true;
+			this->chatName->BackColor = System::Drawing::Color::Transparent;
+			this->chatName->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->chatName->ForeColor = System::Drawing::Color::Silver;
+			this->chatName->Location = System::Drawing::Point(60, 10);
+			this->chatName->Size = System::Drawing::Size(42, 20);
+			this->chatName->Text = name;
+
+
+			this->BorderThickness = 2;
+			this->Controls->Add(this->online);
+			this->Controls->Add(this->chatName);
+			this->Controls->Add(this->photo);
+			this->CustomBorderColor = System::Drawing::Color::FromArgb(128, 36, 206);
+			this->FillColor = System::Drawing::Color::FromArgb(23, 28, 41);
+			this->FillColor2 = System::Drawing::Color::FromArgb(23, 28, 41);
+			this->AutoSize = false;
+			this->Location = System::Drawing::Point(3, 3);
+			this->ShadowDecoration->Color = System::Drawing::Color::FromArgb(17, 22, 32);
+			this->Size = System::Drawing::Size(200, 80);
+			this->UseWaitCursor = true;
+
+			this->MouseEnter += gcnew System::EventHandler(this, &UserNode::mouseEnter);
+			this->MouseLeave += gcnew System::EventHandler(this, &UserNode::mouseLeave);
+			this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &UserNode::mouseClick);
+
+		}
+
+		private: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+			
+				
+		}
+
+		private: System::Void mouseEnter(System::Object^ sender, System::EventArgs^ e) {
+			this->FillColor = System::Drawing::Color::FromArgb(250, 48, 90);
+			this->FillColor2 = System::Drawing::Color::FromArgb(128, 36, 206);
+			this->ShadowDecoration->Color = Color::DeepPink;
+		}
+		private: System::Void mouseLeave(System::Object^ sender, System::EventArgs^ e) {
+			this->FillColor = System::Drawing::Color::FromArgb(23, 28, 41);
+			this->FillColor2 = System::Drawing::Color::FromArgb(23, 28, 41);
+			this->ShadowDecoration->Color = Color::FromArgb(17, 22, 32);
+		}
+
 		};
 
 		ref class ChatNode : public Guna2GradientPanel
@@ -920,7 +1000,21 @@ namespace Client {
 			   ResumeLayout();
 		}
 
-
+		private: System::Void sendButton_Click(System::Object^ sender, System::EventArgs^ e) {
+			String^ message = sendText->Text;
+			std::string msg;
+			if (!String::IsNullOrEmpty(message) && currentNode != nullptr) {
+				MarshalString(message, msg);
+				if (server->sendMessage(CMessage(msg.c_str(), user->id, currentNode->id))) {
+					sendText->Text = "";
+					currentNode->addMessage(gcnew MessageNode(message, true, user->pictureIndex));
+				}
+				else {
+					MessageBox::Show("Unable to connect to server", "Unable connection",
+						MessageBoxButtons::OK, MessageBoxIcon::Error);
+				}
+			}
+		}
 
 
 		private: void MarshalString(String^ s, std::string& os) {
@@ -931,21 +1025,7 @@ namespace Client {
 		Marshal::FreeHGlobal(IntPtr((void*)chars));
 	}
 
-	private: System::Void sendButton_Click(System::Object^ sender, System::EventArgs^ e) {
-		String^ message = sendText->Text;
-		std::string msg;
-		if (!String::IsNullOrEmpty(message) && currentNode != nullptr) {
-			MarshalString(message, msg);
-			if (server->sendMessage(CMessage(msg.c_str(), user->id, currentNode->id))) {
-				sendText->Text = "";
-				currentNode->addMessage(gcnew MessageNode(message, true, user->pictureIndex));
-			}
-			else {
-				MessageBox::Show("Unable to connect to server", "Unable connection",
-					MessageBoxButtons::OK, MessageBoxIcon::Error);
-			}
-		}
-	}
+	
 	
 
 //private: System::Void guna2CircleButton6_Click(System::Object^ sender, System::EventArgs^ e) {

@@ -115,13 +115,13 @@ public:
         send(ConnectSocket, std::to_string(TypeRequest::START_REQUEST).c_str(), sizeof(START_REQUEST), 0);
         send(ConnectSocket, (char*) &user, sizeof(user), 0);
 
-        int size = 0;
+        int iResult = 0;
         std::vector<CChat> chats;
         CChat chat;
         do {
-            size = recv(ConnectSocket, (char*)&chat, sizeof(chat), 0);
+            iResult = recv(ConnectSocket, (char*)&chat, sizeof(chat), 0);
             chats.push_back(chat);
-        } while (size > sizeof(TypeRequest::SECCESS));
+        } while (iResult > sizeof(TypeRequest::SECCESS));
         return chats;
     }
 
@@ -141,14 +141,15 @@ public:
 
     std::vector<CUser> getAllUsers(CUser name) {
         send(ConnectSocket, std::to_string(TypeRequest::FIND_PEOPLE).c_str(), sizeof(FIND_PEOPLE), 0);
+        send(ConnectSocket, (char*)&name, sizeof(name), 0);
 
-        int size = 0;
+        int iResult = 0;
         std::vector<CUser> users;
         CUser user;
         do {
-            size = recv(ConnectSocket, (char*)&user, sizeof(user), 0);
+            iResult = recv(ConnectSocket, (char*)&user, sizeof(user), 0);
             users.push_back(user);
-        } while (size > sizeof(TypeRequest::SECCESS));
+        } while (iResult > sizeof(TypeRequest::SECCESS));
         return users;
     }
 
@@ -156,13 +157,13 @@ public:
     std::vector<CChat> update() {
         send(ConnectSocket, std::to_string(TypeRequest::UPDATE_CHATS).c_str(), sizeof(UPDATE_CHATS), 0);
 
-        int size = 0;
+        int iResult = 0;
         std::vector<CChat> chats;
         CChat chat;
         do {
-            size = recv(ConnectSocket, (char*)&chat, sizeof(chat), 0);
+            iResult = recv(ConnectSocket, (char*)&chat, sizeof(chat), 0);
             chats.push_back(chat);
-        } while (size > sizeof(TypeRequest::SECCESS));
+        } while (iResult > sizeof(TypeRequest::SECCESS));
         return chats;
     }
 
@@ -170,13 +171,13 @@ public:
         send(ConnectSocket, (char *)(&chat), sizeof(chat), 0);
         send(ConnectSocket, (std::to_string(0) + std::to_string(10)).c_str(), sizeof(chat), 0);
 
-        int size = 0;
+        int iResult = 0;
         std::vector<CMessage> msgs;
         CMessage msg;
         do {
-            size = recv(ConnectSocket, (char*)&msg, sizeof(msg), 0);
+            iResult = recv(ConnectSocket, (char*)&msg, sizeof(msg), 0);
             msgs.push_back(msg);
-        } while (size > sizeof(TypeRequest::SECCESS));
+        } while (iResult > sizeof(TypeRequest::SECCESS));
         return msgs;
     }
 
