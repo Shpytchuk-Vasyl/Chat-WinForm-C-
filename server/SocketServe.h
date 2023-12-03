@@ -1,3 +1,4 @@
+#pragma once
 #undef UNICODE
 
 #define WIN32_LEAN_AND_MEAN
@@ -13,23 +14,30 @@
 
 // Need to link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
+#include "CChat.h"
+#include "DbConector.h"
+#include "CUser.h"
 // #pragma comment (lib, "Mswsock.lib")
 
 class SockedThread {
     SOCKET ClientSocket = INVALID_SOCKET;
-    std::thread* myThread;
-    CDatabase* db;
-    std::vector<int>* online;
-    std::vector<std::pair<int, SOCKET>> *connectoin_list;
+    std::thread* myThread = nullptr;
+    CDatabase* db = nullptr;
+    std::vector<int>* online = nullptr;
+    std::vector<std::pair<int, SOCKET>> *connection_list = nullptr;
     CChat current_chat;
     int current_user_id = 0;
     bool isActive = true;
     int userId = 0;
 
 public:
-    SockedThread(SOCKET clientSocket) {
+    SockedThread(SOCKET clientSocket, CDatabase* db, std::vector<int>* online, std::vector<std::pair<int, SOCKET>>* connectoin_list) {
         this->ClientSocket = clientSocket;
-        if (clientSocket == INVALID_SOCKET) throw std::exception();
+        this->db = db;
+        this->online = online;
+        this->connection_list = connectoin_list;
+        if (clientSocket == INVALID_SOCKET) 
+            throw std::exception();
                                                                                             // доініціалізувати поля ( поки немає звідки )
     }
 
@@ -38,23 +46,33 @@ public:
         return it != online->end();
     }
 
-    static void Run(SockedThread socketThread) {
-        
-       // socketThread.recvbuf[0] = 0;
+        static void Run(SockedThread socketThread) {
+
+        // socketThread.recvbuf[0] = 0;
         do {
             char recvbuf[DEFAULT_BUFLEN] = "";
             int recvbuflen = DEFAULT_BUFLEN;
+            SOCKET send_addr = INVALID_SOCKET;
             int iResult = 0;
-          
+            int iSendResult = 0;
+            int other_user_id = 0;
+            CUser  user_res;
+            CChat chat;
+            struct timeval timeout;
+            timeout.tv_sec = 100;  // час в секундах
+            timeout.tv_usec = 0; // мікросекунди
+
+            setsockopt(socketThread.ClientSocket, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(struct timeval));
             iResult = recv(socketThread.ClientSocket,
-                    recvbuf,
-                    recvbuflen,
-                    0);
+                recvbuf,
+                recvbuflen,
+                0);
 
             if (iResult > 0) {
                 //printf("Socked %d :Bytes received: %d\n", socketThread.ClientSocket, iResult);
-                TypeRequest type= * reinterpret_cast<TypeRequest*>(recvbuf);
-                 // отримання значення TypeRequest
+                TypeRequest type = *reinterpret_cast<TypeRequest*>(recvbuf);
+                memset(recvbuf, 0, recvbuflen);
+                // отримання значення TypeRequest
 
                 switch (type) {
                 case TypeRequest::SECCESS://не може поідеї
@@ -63,11 +81,33 @@ public:
 
                 case TypeRequest::REGISTER_REQUEST:
                     // Обробка запиту на реєстрацію
+                   
+
+                    iResult = recv(socketThread.ClientSocket,
+                        recvbuf,
+                        recvbuflen,
+                        0);
+                    user_res = *(CUser*)recvbuf;
+                    try {
+                        socketThread.db->add_user(user_res);
+                         iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
+                    }
+                    catch (sql::SQLException& e) {
+                         iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::ERR).c_str(), sizeof(ERR), 0);
+                    }
                     break;
 
-                case TypeRequest::START_REQUEST://треба приймати імя та пароль ? 
-                    // Обробка запиту на початок роботи
-                    int iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(FIND_PEOPLE), 0);
+                case TypeRequest::START_REQUEST://отримуємо всі чати
+                   
+
+                    iResult = recv(socketThread.ClientSocket,
+                        recvbuf,
+                        recvbuflen,
+                        0);
+                     user_res = *(CUser*)recvbuf;
+                    socketThread.current_user_id = socketThread.db->get_user_id(user_res);
+                    // std::vector<CChat> chats = socketThread.db->get_chats_with_user(socketThread.current_user_id);
+                     iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
                     if (iSendResult == SOCKET_ERROR) {
                         printf("send failed with error: %d\n", WSAGetLastError());
                         closesocket(socketThread.ClientSocket);
@@ -80,15 +120,14 @@ public:
                     break;
 
                 case TypeRequest::SEND_MESSAGE:
-                    char msg[DEFAULT_BUFLEN] = "";
-                    int size = DEFAULT_BUFLEN;
-                    int iRes = 0;
+                   
 
-                    iRes = recv(socketThread.ClientSocket,
-                        msg,
-                        size,
-                        0);
-                    int other_user_id = 0;
+                 
+                        iResult = recv(socketThread.ClientSocket,
+                            recvbuf,
+                            recvbuflen,
+                            0);
+                     other_user_id = 0;
                     if (socketThread.current_user_id == socketThread.current_chat.getUser2Id()) {
                         other_user_id == socketThread.current_chat.getUser1Id();
                     }
@@ -96,16 +135,16 @@ public:
                         other_user_id == socketThread.current_chat.getUser2Id();
                     }
                     if (socketThread.isOnline(other_user_id)) {
-                        SOCKET send_addr = INVALID_SOCKET;
-                        for (auto pair : *socketThread.connectoin_list) {
+                        send_addr = INVALID_SOCKET;
+                        for (auto pair : *socketThread.connection_list) {
                             if (pair.first == other_user_id) {
                                 send_addr = pair.second;
                                 break;
                             }
                         }
-                        
-                        if (send_addr != INVALID_SOCKET){
-                            int iSendResult = send(send_addr, msg, size, 0);
+
+                        if (send_addr != INVALID_SOCKET) {
+                             iSendResult = send(send_addr, recvbuf, recvbuflen, 0);//надсилати на пайпах 
                             if (iSendResult == SOCKET_ERROR) {
                                 printf("send failed with error: %d\n", WSAGetLastError());
                                 closesocket(socketThread.ClientSocket);
@@ -123,12 +162,35 @@ public:
                         }
                         socketThread.db->update_chat(socketThread.current_chat);
                     }
-                   
+
                     // Обробка відправки повідомлення
                     break;
 
                 case TypeRequest::ADD_NEW_CHAT:
                     // Обробка додавання нового чату
+                    iResult = recv(socketThread.ClientSocket,
+                        recvbuf,
+                        recvbuflen,
+                        0);
+                    user_res = *(CUser*)recvbuf;
+                    other_user_id = socketThread.db->get_user_id(user_res);
+                    if (other_user_id == -1) {
+                        other_user_id = 5;
+                    }
+                    chat.setUser1Id(socketThread.current_user_id);
+                    chat.setUser2Id(other_user_id);
+                    chat.setUser1(socketThread.db->get_user_by_id(socketThread.current_user_id));
+                    chat.setUser2(socketThread.db->get_user_by_id(other_user_id));
+                    socketThread.db->add_chat(chat);
+                    std::memcpy(recvbuf, (char*)(&chat), sizeof(chat));
+                    iSendResult = send(socketThread.ClientSocket, recvbuf, recvbuflen, 0);
+                    if (iSendResult == SOCKET_ERROR) {
+                        printf("send failed with error: %d\n", WSAGetLastError());
+                        closesocket(socketThread.ClientSocket);
+                        socketThread.isActive = false;
+                        return;
+                    }
+                   // iSendResult
                     break;
 
                 case TypeRequest::DELETE_CHAT:
@@ -159,15 +221,6 @@ public:
                     // Обробка, якщо значення не відповідає жодному з case
                     break;
                 }
-
-                int iSendResult = send(socketThread.ClientSocket, recvbuf, iResult, 0);
-                if (iSendResult == SOCKET_ERROR) {
-                    printf("send failed with error: %d\n", WSAGetLastError());
-                    closesocket(socketThread.ClientSocket);
-                    socketThread.isActive = false;
-                    return;
-                }
-                printf("Bytes sent: %d\n", iSendResult);
             }
             else if (iResult == 0)
                 printf("Connection closing...\n");
@@ -180,7 +233,6 @@ public:
 
         } while (true);
     };
-
     void setThread(std::thread* th) {
         myThread = th;
     }
@@ -191,6 +243,11 @@ class SocketServer
 {
     SOCKET ListenSocket = INVALID_SOCKET;
     std::vector<SockedThread> clients;
+    CDatabase db;
+    std::vector<int> online;
+    std::vector<std::pair<int, SOCKET>> connection_list;
+    std::vector<std::thread*> threads;
+
 public:
     SocketServer() {
         WSADATA wsaData;
@@ -242,8 +299,9 @@ public:
             Listen();
             try {
                 sockaddr* addr = NULL;
-                clients.emplace_back(SockedThread (accept(ListenSocket, addr, NULL)));
+                clients.emplace_back(SockedThread (accept(ListenSocket, addr, NULL),&db,&online,&connection_list));
                 std::thread* th = new std::thread(SockedThread::Run, *clients.end());
+                threads.push_back(th);
                 clients.end()->setThread(th);
             }
             catch (std::exception e) {};

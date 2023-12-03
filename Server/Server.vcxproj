@@ -141,6 +141,7 @@
     <ClCompile Include="CChat.cpp" />
     <ClCompile Include="CMessage.cpp" />
     <ClCompile Include="CUser.cpp" />
+    <ClCompile Include="DbConector.cpp" />
     <ClCompile Include="PipeServer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SocketServe.cpp" />

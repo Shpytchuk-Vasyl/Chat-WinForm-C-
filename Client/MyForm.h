@@ -25,6 +25,7 @@ namespace Client {
 		{
 			InitializeComponent();
 			pointer = this;
+			onShow(nullptr);
 		}
 
 	protected:
@@ -905,21 +906,24 @@ namespace Client {
 		public: property UserNode^ user;
 		public: property Thread^ workerThread;
 		
-		protected:   Void onShown(EventArgs^ a) override {
-				  this->onShown(a);
+		protected:   Void onShow(EventArgs^ a) override {
+				  //this->onShow(a);
 				  try {
 					  server = new ServerConnection();
 					  server->Connect(DEFAULT_IP, DEFAULT_PORT);
 					  user = gcnew UserNode("file");
-					  if (user->isRegistered) {
+					  if (false) {
 						  workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
 						  workerThread->Start();
 					  }
 					  else {
+
 						  //register form
+
 						  for (size_t i = 0; i < 100; i++)
 						  {
 							  if (server->RegisterUser(CUser(("user " + std::to_string(i)).c_str(), "password", 1))) {
+								  user->userName = gcnew String(("user " + std::to_string(i)).c_str());
 								  server->addNewChat(CUser(("user " + std::to_string(i - 1)).c_str(), "password", 1));
 								  workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
 								  workerThread->Start();
@@ -940,7 +944,9 @@ namespace Client {
 			
 			std::string name;
 			MarshalString(user->userName, name);
-			std::vector<CChat> v = server->getAllChats(CUser(name.c_str(),"", 1));
+			CUser user("user_conect", "", 1);
+			server->RegisterUser(user);
+			std::vector<CChat> v = server->getAllChats(user);
 			if (!v.empty()) {
 				for (int i = 0; i < v.size(); i++) {
 					chatNodes->Add(

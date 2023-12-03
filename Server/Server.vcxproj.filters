@@ -33,6 +33,9 @@
     <ClCompile Include="CChat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DbConector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SocketServe.h">
