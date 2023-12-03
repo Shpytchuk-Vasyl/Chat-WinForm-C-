@@ -2,6 +2,7 @@
 #include "ServerConnection.h"
 #include "ChatNode.h"
 #include "RequestManager.h"
+#include "UsersViewForm.h"
 
 	
 
@@ -9,10 +10,13 @@ namespace Client {
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
+	using namespace System::Collections::Generic;
 	using namespace System::Windows::Forms;
 	using namespace System::Threading;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::IO;
+	using namespace System::Threading::Tasks;
 
 
 	/// <summary>
@@ -47,7 +51,8 @@ namespace Client {
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel4;
 
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel5;
-	private: Guna::UI2::WinForms::Guna2Button^ guna2Button1;
+	private: Guna::UI2::WinForms::Guna2Button^ CreateNewChat;
+
 	private: Guna::UI2::WinForms::Guna2Button^ guna2Button5;
 	private: Guna::UI2::WinForms::Guna2Button^ guna2Button4;
 	private: Guna::UI2::WinForms::Guna2Button^ guna2Button3;
@@ -94,7 +99,7 @@ namespace Client {
 			this->guna2Button4 = (gcnew Guna::UI2::WinForms::Guna2Button());
 			this->guna2Button3 = (gcnew Guna::UI2::WinForms::Guna2Button());
 			this->guna2Button2 = (gcnew Guna::UI2::WinForms::Guna2Button());
-			this->guna2Button1 = (gcnew Guna::UI2::WinForms::Guna2Button());
+			this->CreateNewChat = (gcnew Guna::UI2::WinForms::Guna2Button());
 			this->profilePicture = (gcnew Guna::UI2::WinForms::Guna2CirclePictureBox());
 			this->guna2Panel2 = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->minimizeButton = (gcnew Guna::UI2::WinForms::Guna2ControlBox());
@@ -140,7 +145,7 @@ namespace Client {
 			this->guna2Panel1->Controls->Add(this->guna2Button4);
 			this->guna2Panel1->Controls->Add(this->guna2Button3);
 			this->guna2Panel1->Controls->Add(this->guna2Button2);
-			this->guna2Panel1->Controls->Add(this->guna2Button1);
+			this->guna2Panel1->Controls->Add(this->CreateNewChat);
 			this->guna2Panel1->Controls->Add(this->profilePicture);
 			this->guna2Panel1->Dock = System::Windows::Forms::DockStyle::Left;
 			this->guna2Panel1->Location = System::Drawing::Point(0, 0);
@@ -224,24 +229,25 @@ namespace Client {
 			this->guna2Button2->Size = System::Drawing::Size(72, 45);
 			this->guna2Button2->TabIndex = 2;
 			// 
-			// guna2Button1
+			// CreateNewChat
 			// 
-			this->guna2Button1->DisabledState->BorderColor = System::Drawing::Color::DarkGray;
-			this->guna2Button1->DisabledState->CustomBorderColor = System::Drawing::Color::DarkGray;
-			this->guna2Button1->DisabledState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(169)),
+			this->CreateNewChat->DisabledState->BorderColor = System::Drawing::Color::DarkGray;
+			this->CreateNewChat->DisabledState->CustomBorderColor = System::Drawing::Color::DarkGray;
+			this->CreateNewChat->DisabledState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(169)),
 				static_cast<System::Int32>(static_cast<System::Byte>(169)), static_cast<System::Int32>(static_cast<System::Byte>(169)));
-			this->guna2Button1->DisabledState->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(141)),
+			this->CreateNewChat->DisabledState->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(141)),
 				static_cast<System::Int32>(static_cast<System::Byte>(141)), static_cast<System::Int32>(static_cast<System::Byte>(141)));
-			this->guna2Button1->FillColor = System::Drawing::Color::Transparent;
-			this->guna2Button1->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
-			this->guna2Button1->ForeColor = System::Drawing::Color::White;
-			this->guna2Button1->HoverState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)),
+			this->CreateNewChat->FillColor = System::Drawing::Color::Transparent;
+			this->CreateNewChat->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
+			this->CreateNewChat->ForeColor = System::Drawing::Color::White;
+			this->CreateNewChat->HoverState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)),
 				static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(47)));
-			this->guna2Button1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"guna2Button1.Image")));
-			this->guna2Button1->Location = System::Drawing::Point(0, 88);
-			this->guna2Button1->Name = L"guna2Button1";
-			this->guna2Button1->Size = System::Drawing::Size(72, 45);
-			this->guna2Button1->TabIndex = 1;
+			this->CreateNewChat->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"CreateNewChat.Image")));
+			this->CreateNewChat->Location = System::Drawing::Point(0, 88);
+			this->CreateNewChat->Name = L"CreateNewChat";
+			this->CreateNewChat->Size = System::Drawing::Size(72, 45);
+			this->CreateNewChat->TabIndex = 1;
+			this->CreateNewChat->Click += gcnew System::EventHandler(this, &MyForm::CreateNewChat_Click);
 			// 
 			// profilePicture
 			// 
@@ -645,97 +651,8 @@ namespace Client {
 		
 
 
-		ref class UserNode : public Guna2GradientPanel {
-		public: property bool isRegistered;
-		public: property int id;
-		public: property int pictureIndex;
-		public: property String^ userName;
-			  property Guna2CirclePictureBox^ photo;
-			  property Label^ online;
-			  property Label^ chatName;
-		public: UserNode(String^ file) {
-			isRegistered = false;
-
-		}
-
-		public: UserNode(String^ name, int photoIndex, bool status, int user_id) : Guna2GradientPanel() {
-			id = user_id;
-			pictureIndex = photoIndex;
-			userName = name;
-
-			this->photo = (gcnew Guna::UI2::WinForms::Guna2CirclePictureBox());
-			this->photo->BackColor = System::Drawing::Color::Transparent;
-			this->photo->FillColor = System::Drawing::Color::Transparent;
-			this->photo->Image = Image::FromFile("userPhotos/user" + photoIndex + ".png");
-			this->photo->ImageRotate = 0;
-			this->photo->Location = System::Drawing::Point(20, 20);
-			this->photo->ShadowDecoration->Color = System::Drawing::Color::Fuchsia;
-			this->photo->ShadowDecoration->Enabled = true;
-			this->photo->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
-			this->photo->Size = System::Drawing::Size(36, 36);
-			this->photo->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
-			this->photo->TabStop = false;
-			this->photo->UseWaitCursor = true;
-
-
-			this->online = (gcnew Label);
-			this->online->AutoSize = true;
-			this->online->BackColor = System::Drawing::Color::Transparent;
-			this->online->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 7.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->online->ForeColor = System::Drawing::Color::Silver;
-			this->online->Location = System::Drawing::Point(60, 40);
-			this->online->Size = System::Drawing::Size(39, 17);
-			this->online->Text = status ? "Online" : "Offline";
-			this->online->UseWaitCursor = true;
-
-			this->chatName = (gcnew Label);
-			this->chatName->AutoSize = true;
-			this->chatName->BackColor = System::Drawing::Color::Transparent;
-			this->chatName->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->chatName->ForeColor = System::Drawing::Color::Silver;
-			this->chatName->Location = System::Drawing::Point(60, 10);
-			this->chatName->Size = System::Drawing::Size(42, 20);
-			this->chatName->Text = name;
-
-
-			this->BorderThickness = 2;
-			this->Controls->Add(this->online);
-			this->Controls->Add(this->chatName);
-			this->Controls->Add(this->photo);
-			this->CustomBorderColor = System::Drawing::Color::FromArgb(128, 36, 206);
-			this->FillColor = System::Drawing::Color::FromArgb(23, 28, 41);
-			this->FillColor2 = System::Drawing::Color::FromArgb(23, 28, 41);
-			this->AutoSize = false;
-			this->Location = System::Drawing::Point(3, 3);
-			this->ShadowDecoration->Color = System::Drawing::Color::FromArgb(17, 22, 32);
-			this->Size = System::Drawing::Size(200, 80);
-			this->UseWaitCursor = true;
-
-			this->MouseEnter += gcnew System::EventHandler(this, &UserNode::mouseEnter);
-			this->MouseLeave += gcnew System::EventHandler(this, &UserNode::mouseLeave);
-			this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &UserNode::mouseClick);
-
-		}
-
-		private: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-			
-				
-		}
-
-		private: System::Void mouseEnter(System::Object^ sender, System::EventArgs^ e) {
-			this->FillColor = System::Drawing::Color::FromArgb(250, 48, 90);
-			this->FillColor2 = System::Drawing::Color::FromArgb(128, 36, 206);
-			this->ShadowDecoration->Color = Color::DeepPink;
-		}
-		private: System::Void mouseLeave(System::Object^ sender, System::EventArgs^ e) {
-			this->FillColor = System::Drawing::Color::FromArgb(23, 28, 41);
-			this->FillColor2 = System::Drawing::Color::FromArgb(23, 28, 41);
-			this->ShadowDecoration->Color = Color::FromArgb(17, 22, 32);
-		}
-
-		};
+		public:
+		
 
 		ref class ChatNode : public Guna2GradientPanel
 		{
@@ -898,70 +815,81 @@ namespace Client {
 
 		};
 
-	   
+
 		public: property ServerConnection* server;
 		public:  property ChatNode^ currentNode;
-		public:  property System::Collections::ArrayList ^ chatNodes;
-		public:  static property MyForm ^ pointer;
+		public:  property System::Collections::ArrayList^ chatNodes;
+		public:  static property MyForm^ pointer;
 		public: property UserNode^ user;
 		public: property Thread^ workerThread;
-		
+
 		protected:   Void onShow(EventArgs^ a) override {
-				  //this->onShow(a);
-				  try {
-					  server = new ServerConnection();
-					  server->Connect(DEFAULT_IP, DEFAULT_PORT);
-					  user = gcnew UserNode("file");
-					  if (false) {
-						  workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
-						  workerThread->Start();
-					  }
-					  else {
+			//this->onShow(a);
+			try {
+				server = new ServerConnection();
+				server->Connect(DEFAULT_IP, DEFAULT_PORT);
+				UserNode::MyUserData(8, 1, "user 1");
+				user = gcnew UserNode("userData/user.bin");
+				if (user->isRegistered) {
+					workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
+					workerThread->Start();
+				}
+				else {
 
-						  //register form
+					//register form
 
-						  for (size_t i = 0; i < 100; i++)
-						  {
-							  if (server->RegisterUser(CUser(("user " + std::to_string(i)).c_str(), "password", 1))) {
-								  user->userName = gcnew String(("user " + std::to_string(i)).c_str());
-								  server->addNewChat(CUser(("user " + std::to_string(i - 1)).c_str(), "password", 1));
-								  workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
-								  workerThread->Start();
-								  break;
-							  }
+					for (size_t i = 0; i < 100; i++)
+					{
+						if (server->RegisterUser(CUser(("user " + std::to_string(i)).c_str(), "password", 1))) {
+							user->userName = gcnew String(("user " + std::to_string(i)).c_str());
+							server->addNewChat(CUser(("user " + std::to_string(i - 1)).c_str(), "password", 1));
+							workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
+							workerThread->Start();
+							break;
+						}
 
-						  }
-					
-					  }
-				  }
-				  catch (std::exception er) {
-					  MessageBox::Show("Unable to connect to server", "Unable connection",
-						  MessageBoxButtons::OK, MessageBoxIcon::Error);
-				  }
-			  }
+					}
+				}
+			}
+			catch (std::exception er) {
+				MessageBox::Show("Unable to connect to server", "Unable connection",
+					MessageBoxButtons::OK, MessageBoxIcon::Error);
+			}
+		}
 
 		public: System::Void downloadChats() {
-			
 			std::string name;
 			MarshalString(user->userName, name);
-			CUser user("user_conect", "", 1);
-			server->RegisterUser(user);
-			std::vector<CChat> v = server->getAllChats(user);
+			CUser u(name.c_str(), "", user->pictureIndex);
+			server->Start(u);
+			std::vector<CChat> v = server->update();
 			if (!v.empty()) {
 				for (int i = 0; i < v.size(); i++) {
-					chatNodes->Add(
-						gcnew ChatNode(
-							gcnew String(v[i].getUser2().getName()),
-							"",
-							v[i].getUnread1(),
-							v[i].getUser2().getPicture(),
-							v[i].getUser2().getStatus(),
-							v[i].getChatId()));
-					array<ChatNode^>^ chatsArray = gcnew array<ChatNode^>(chatNodes->Count);
-					chatNodes->CopyTo(chatsArray);
-
-					this->BeginInvoke(gcnew addChatsToFormDelegare(this, &MyForm::addChatsToForm), chatsArray);
+					if(String::Compare(gcnew String(v[i].getUser1().getName()), user->userName) == 0){
+						chatNodes->Add(
+							gcnew ChatNode(
+								gcnew String(v[i].getUser2().getName()),
+								"",
+								v[i].getUnread1(),
+								v[i].getUser2().getPicture(),
+								v[i].getUser2().getStatus(),
+								v[i].getChatId()));
+					} else {
+						chatNodes->Add(
+							gcnew ChatNode(
+								gcnew String(v[i].getUser1().getName()),
+								"",
+								v[i].getUnread2(),
+								v[i].getUser1().getPicture(),
+								v[i].getUser1().getStatus(),
+								v[i].getChatId()));
+					}
 				}
+				array<ChatNode^>^ chatsArray = gcnew array<ChatNode^>(chatNodes->Count);
+				chatNodes->CopyTo(chatsArray);
+
+				this->BeginInvoke(gcnew addChatsToFormDelegare(this, &MyForm::addChatsToForm), chatsArray);
+
 			}
 		}
 
@@ -977,22 +905,8 @@ namespace Client {
 			   if(currentNode)
 					currentNode->resetColor();
 			   currentNode = node;
-			   std::vector<CMessage> v;
-			   if (Int64::Parse(node->countNewMessage->Text) > 0 && node->messageView->Controls->Count == 0) {
-				   v = server->getAllMessageFromChat(CChat(node->id));
-			   }
-			   else if (node->messageView->Controls->Count == 0) {
-				   v = server->getAllMessageFromChat(CChat(node->id));
-			   }
-			   
-			   for (int i = 0; i < v.size(); i++) {
-				   currentNode->messageView->Controls->Add(gcnew
-					   MessageNode(
-						   gcnew String(v[i].get_text().c_str()),
-						   v[i].get_user_id() == user->id,
-						   v[i].get_user_id() == user->id ? user->pictureIndex : node->picture
-					   ));
-			   }
+			   workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::receiveMessagesRange));
+			   workerThread->Start();
 
 			   SuspendLayout();
 			   placeForMessages->Controls->Clear();
@@ -1025,8 +939,59 @@ namespace Client {
 		Marshal::FreeHGlobal(IntPtr((void*)chars));
 	}
 
+		public: Void receiveMessagesRange() {
+			std::vector<CMessage> v;
+			int countCurrentMsg = currentNode->messageView->Controls->Count;
+			array<MessageNode^>^ result;
+			int newMsg = Int64::Parse(currentNode->countNewMessage->Text);
+			v = server->getAllMessageFromChat(CChat(currentNode->id));
+			if (countCurrentMsg == 0) {
+				int ten = (newMsg + 5 < v.size() ? newMsg + 5 : v.size());
+				v = std::vector<CMessage>(v.begin(), v.begin() + ten);
+				result = gcnew array<MessageNode^>(v.size());
+
+			}
+			else if(newMsg != 0) {
+				v = std::vector<CMessage>(v.begin(), v.begin() + newMsg);
+				result = gcnew array<MessageNode^>(v.size());
+
+			}
+			else {
+				int ten = (countCurrentMsg + 10 < v.size() ? countCurrentMsg + 10 : v.size());
+				v = std::vector<CMessage>(v.begin() + countCurrentMsg, v.begin() + ten);
+				result = gcnew array<MessageNode^>(v.size());
+
+			}
+			for (size_t i = 0; i < v.size(); ++i) {
+				result[i] = gcnew
+					MessageNode(
+						gcnew String(v[i].get_text().c_str()),
+						v[i].get_user_id() == user->id,
+						v[i].get_user_id() == user->id ? user->pictureIndex : currentNode->picture
+					);
+			}
+
+			this->BeginInvoke(gcnew addMessagesToFormDelegate(this, &MyForm::addMessagesToForm), result, newMsg == 0);		
+		}
 	
-	
+
+		public: delegate System::Void addMessagesToFormDelegate(array<MessageNode^>^  msg, bool isOld);
+		public: System::Void addMessagesToForm(array<MessageNode^>^ msg,bool isOld) {
+			SuspendLayout();
+			if (isOld) {
+				List<Control^>^ oldControls = gcnew List<Control^>();
+				for each (Control ^ control in currentNode->messageView->Controls) {
+					oldControls->Add(control);
+				}
+				currentNode->messageView->Controls->Clear();
+				currentNode->messageView->Controls->AddRange(msg);
+				currentNode->messageView->Controls->AddRange(oldControls->ToArray());
+			}
+			else {
+				currentNode->messageView->Controls->AddRange(msg);
+			}
+			ResumeLayout();
+		}
 
 //private: System::Void guna2CircleButton6_Click(System::Object^ sender, System::EventArgs^ e) {
 //	 String^ message = guna2TextBox2->Text;
@@ -1042,6 +1007,16 @@ namespace Client {
 //}
 
 
+private: System::Void CreateNewChat_Click(System::Object^ sender, System::EventArgs^ e) {
+	UsersViewForm^ usersWievForm = gcnew UsersViewForm();
+	usersWievForm->Show();
+	if (usersWievForm->resultUser != nullptr) {
+		std::string name;
+		MarshalString(usersWievForm->resultUser->userName, name);
+		server->addNewChat(CUser(name.c_str(), "", usersWievForm->resultUser->pictureIndex));
+		
+	}
+}
 };
 
 
