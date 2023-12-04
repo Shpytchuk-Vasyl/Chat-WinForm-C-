@@ -705,7 +705,7 @@ namespace Client {
 
 			ChatNode(String^ strChatName, String^ strLastMessage, int intCountNewMessage, int photoIndex, bool status, int chat_id) : Guna2GradientPanel() {
 				id = chat_id;
-				picture = photoIndex;
+				picture = photoIndex;						//тут треба айді чату ?
 
 				messageView = gcnew FlowLayoutPanel();
 				this->messageView->BackColor = System::Drawing::Color::Transparent;
@@ -837,7 +837,7 @@ namespace Client {
 		private: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 			this->FillColor = System::Drawing::Color::FromArgb(250, 48, 90);
 			this->FillColor2 = System::Drawing::Color::FromArgb(128, 36, 206);
-			pointer->setCurrentChat(this);
+			pointer->setCurrentChat(this);						//відкриття чату?
 		}
 
 		private: System::Void mouseEnter(System::Object^ sender, System::EventArgs^ e) {
@@ -924,7 +924,7 @@ namespace Client {
 				}
 
 
-				this->BeginInvoke(gcnew addChatsToFormDelegare(this, &MyForm::addChatsToForm));
+				this->BeginInvoke(gcnew addChatsToFormDelegare(this, &MyForm::addChatsToForm));//?? щось з потоками ?
 
 			}
 		}
@@ -952,7 +952,7 @@ namespace Client {
 
 			   SuspendLayout();
 			   VScrollBarForMessages->BindingContainer = currentNode->messageView;
-			   currentNode->messageView->AutoScroll = false;
+			   currentNode->messageView->AutoScroll = false;//??
 			   placeForMessages->Controls->Clear();
 			   placeForMessages->Controls->Add(currentNode->messageView);
 			   ResumeLayout();
@@ -1025,7 +1025,7 @@ namespace Client {
 			if (isOld) {
 				List<Control^>^ oldControls = gcnew List<Control^>();
 				for each (Control ^ control in currentNode->messageView->Controls) {
-					oldControls->Add(control);
+					oldControls->Add(control);//тут наче  ж збирались кожен раз перевантажувати ?
 				}
 				currentNode->messageView->Controls->Clear();
 				currentNode->messageView->Controls->AddRange(msg);
