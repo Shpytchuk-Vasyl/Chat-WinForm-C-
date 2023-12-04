@@ -42,7 +42,7 @@ namespace Client {
 			if (components)
 			{
 				delete components;
-				if (server) delete server;
+				//if (server) delete server;
 			}
 		}
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel1;
@@ -869,8 +869,7 @@ namespace Client {
 				UserNode::MyUserData(8, 1, "user 1").WriteToFile("userData/user.bin");
 				user = gcnew UserNode("userData/user.bin");
 				if (user->isRegistered) {
-					workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
-					workerThread->Start();
+					downloadChats();
 				}
 				else {
 
@@ -880,8 +879,7 @@ namespace Client {
 					{
 						if (server->RegisterUser(CUser(("user " + std::to_string(i)).c_str(), "password", 1))) {
 						
-							workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
-							workerThread->Start();
+							
 							break;
 						}
 
@@ -921,38 +919,34 @@ namespace Client {
 								v[i].getUser1().getStatus(),
 								v[i].getChatId()));
 					}
+
 				}
 
 
-				this->BeginInvoke(gcnew addChatsToFormDelegare(this, &MyForm::addChatsToForm));
+				SuspendLayout();
+
+				// Конвертуємо ArrayList до array<ChatNode^>
+				array<ChatNode^>^ chatNodesArray = gcnew array<ChatNode^>(chatNodes->Count);
+				chatNodes->CopyTo(chatNodesArray);
+
+				placeForChats->Controls->AddRange(chatNodesArray);
+				placeForChats->AutoScroll = false;
+				ResumeLayout();
 
 			}
 		}
 
-		public: delegate System::Void addChatsToFormDelegare();
-		public: System::Void addChatsToForm() {
-			SuspendLayout();
-
-			// Конвертуємо ArrayList до array<ChatNode^>
-			array<ChatNode^>^ chatNodesArray = gcnew array<ChatNode^>(chatNodes->Count);
-			chatNodes->CopyTo(chatNodesArray);
-
-			placeForChats->Controls->AddRange(chatNodesArray);
-			placeForChats->AutoScroll = false;
-			ResumeLayout();
-		}
 		
 
 		public: System::Void setCurrentChat(ChatNode ^node) {
 			   if(currentNode)
 					currentNode->resetColor();
 			   currentNode = node;
-			   workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::receiveMessagesRange));
-			   workerThread->Start();
+			   receiveMessagesRange();
 
 			   SuspendLayout();
 			   VScrollBarForMessages->BindingContainer = currentNode->messageView;
-			   currentNode->messageView->AutoScroll = false;
+			   currentNode->messageView->AutoScroll = true;
 			   placeForMessages->Controls->Clear();
 			   placeForMessages->Controls->Add(currentNode->messageView);
 			   ResumeLayout();
@@ -1014,8 +1008,7 @@ namespace Client {
 						v[i].get_user_id() == user->id ? user->pictureIndex : currentNode->picture
 					);
 			}
-
-			this->BeginInvoke(gcnew addMessagesToFormDelegate(this, &MyForm::addMessagesToForm), result, newMsg == 0);		
+			addMessagesToForm(result, newMsg == 0);
 		}
 	
 
