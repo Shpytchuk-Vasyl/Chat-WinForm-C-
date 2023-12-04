@@ -58,8 +58,10 @@ public:
             int other_user_id = 0;
             std::vector<CMessage>  msgs;
             std::vector<CChat>  chats;
+            std::vector<CUser>  users;
             CUser  user_res;
             CChat chat;
+
             iResult = recv(socketThread.ClientSocket,
                 recvbuf,
                 sizeof(recvbuf),
@@ -195,6 +197,25 @@ public:
                     break;
 
                 case TypeRequest::FIND_PEOPLE:
+                    users = socketThread.db->get_users();
+                    for (auto us : users) {
+                        memset(recvbuf, 0, recvbuflen);
+                        std::memcpy(recvbuf, (char*)&us, sizeof(us));
+                        iSendResult = send(socketThread.ClientSocket, recvbuf, sizeof(recvbuf), 0);
+                        if (iSendResult == SOCKET_ERROR) {
+                            printf("send failed with error: %d\n", WSAGetLastError());
+                            closesocket(socketThread.ClientSocket);
+                            socketThread.isActive = false;
+                            return;
+                        }
+                    }
+                    iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
+                    if (iSendResult == SOCKET_ERROR) {
+                        printf("send failed with error: %d\n", WSAGetLastError());
+                        closesocket(socketThread.ClientSocket);
+                        socketThread.isActive = false;
+                        return;
+                    }
                     // Обробка пошуку людей
                     break;
 

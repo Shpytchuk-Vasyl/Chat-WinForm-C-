@@ -138,6 +138,29 @@ std::vector<CChat> CDatabase::get_chats() const {
 }
 
 
+
+std::vector<CUser> CDatabase::get_users() const {
+    std::vector<CUser> users;
+
+    sql::PreparedStatement* pstmt = con->prepareStatement("SELECT   name, password, avatar  FROM users");
+    sql::ResultSet* resultSet = pstmt->executeQuery();
+
+    while (resultSet->next()) {
+        CUser user_s;
+        std::memcpy(user_s.s_name, std::string(resultSet->getString("name")).c_str(), sizeof(user_s.s_name));
+       std::memcpy(user_s.s_password, std::string(resultSet->getString("password")).c_str(), sizeof(user_s.s_password));
+       user_s.i_picture = resultSet->getInt("avatar");
+      
+        // якщо created_at Ї р€дком, не забудьте додати його обробку
+        users.push_back(user_s);
+    }
+
+    delete resultSet;
+    delete pstmt;
+    return users;
+}
+
+
 int CDatabase::get_chat_id(const CChat chat)const {
     sql::PreparedStatement* pstmt = con->prepareStatement(
         "SELECT id FROM chats WHERE (first_user_id = ? AND second_user_id = ?) OR (first_user_id = ? AND second_user_id = ?)"
