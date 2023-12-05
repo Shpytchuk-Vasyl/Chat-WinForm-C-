@@ -35,17 +35,20 @@ namespace Client {
 				delete components;
 			}
 		}
-	private: Guna::UI2::WinForms::Guna2GradientPanel^ guna2GradientPanel1;
-	private: Guna::UI2::WinForms::Guna2TextBox^ password;
-	private: Guna::UI2::WinForms::Guna2TextBox^ user;
-	private: Guna::UI2::WinForms::Guna2Button^ logIn;
+	public: Guna::UI2::WinForms::Guna2GradientPanel^ guna2GradientPanel1;
+	public: Guna::UI2::WinForms::Guna2TextBox^ password;
+	public: Guna::UI2::WinForms::Guna2TextBox^ user;
+	public: Guna::UI2::WinForms::Guna2Button^ logIn;
 
 
 
-	private: Guna::UI2::WinForms::Guna2Button^ singIn;
+	public: Guna::UI2::WinForms::Guna2Button^ singIn;
 
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel1;
 	private: Guna::UI2::WinForms::Guna2ControlBox^ exitButton;
+	private: System::Windows::Forms::Label^ errorLabel;
+
+
 	protected:
 
 	private:
@@ -64,6 +67,7 @@ namespace Client {
 			this->guna2GradientPanel1 = (gcnew Guna::UI2::WinForms::Guna2GradientPanel());
 			this->exitButton = (gcnew Guna::UI2::WinForms::Guna2ControlBox());
 			this->guna2Panel1 = (gcnew Guna::UI2::WinForms::Guna2Panel());
+			this->errorLabel = (gcnew System::Windows::Forms::Label());
 			this->user = (gcnew Guna::UI2::WinForms::Guna2TextBox());
 			this->logIn = (gcnew Guna::UI2::WinForms::Guna2Button());
 			this->password = (gcnew Guna::UI2::WinForms::Guna2TextBox());
@@ -85,7 +89,6 @@ namespace Client {
 			this->guna2GradientPanel1->Name = L"guna2GradientPanel1";
 			this->guna2GradientPanel1->Size = System::Drawing::Size(434, 295);
 			this->guna2GradientPanel1->TabIndex = 0;
-			this->guna2GradientPanel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &RegisterForm::guna2GradientPanel1_Paint);
 			// 
 			// exitButton
 			// 
@@ -96,18 +99,29 @@ namespace Client {
 			this->exitButton->Name = L"exitButton";
 			this->exitButton->Size = System::Drawing::Size(45, 29);
 			this->exitButton->TabIndex = 19;
+			this->exitButton->Click += gcnew System::EventHandler(this, &RegisterForm::exitButton_Click);
 			// 
 			// guna2Panel1
 			// 
 			this->guna2Panel1->AutoSize = true;
+			this->guna2Panel1->Controls->Add(this->errorLabel);
 			this->guna2Panel1->Controls->Add(this->user);
 			this->guna2Panel1->Controls->Add(this->logIn);
 			this->guna2Panel1->Controls->Add(this->password);
 			this->guna2Panel1->Controls->Add(this->singIn);
 			this->guna2Panel1->Location = System::Drawing::Point(88, 60);
 			this->guna2Panel1->Name = L"guna2Panel1";
-			this->guna2Panel1->Size = System::Drawing::Size(236, 151);
+			this->guna2Panel1->Size = System::Drawing::Size(256, 191);
 			this->guna2Panel1->TabIndex = 5;
+			// 
+			// errorLabel
+			// 
+			this->errorLabel->AutoSize = true;
+			this->errorLabel->ForeColor = System::Drawing::Color::Black;
+			this->errorLabel->Location = System::Drawing::Point(14, 92);
+			this->errorLabel->Name = L"errorLabel";
+			this->errorLabel->Size = System::Drawing::Size(0, 16);
+			this->errorLabel->TabIndex = 5;
 			// 
 			// user
 			// 
@@ -136,6 +150,7 @@ namespace Client {
 			this->user->SelectedText = L"";
 			this->user->Size = System::Drawing::Size(216, 36);
 			this->user->TabIndex = 1;
+			this->user->TextChanged += gcnew System::EventHandler(this, &RegisterForm::user_TextChanged);
 			// 
 			// logIn
 			// 
@@ -152,7 +167,7 @@ namespace Client {
 			this->logIn->ForeColor = System::Drawing::Color::White;
 			this->logIn->HoverState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)),
 				static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(47)));
-			this->logIn->Location = System::Drawing::Point(138, 103);
+			this->logIn->Location = System::Drawing::Point(138, 132);
 			this->logIn->Name = L"logIn";
 			this->logIn->Size = System::Drawing::Size(95, 45);
 			this->logIn->TabIndex = 4;
@@ -186,7 +201,7 @@ namespace Client {
 			this->password->SelectedText = L"";
 			this->password->Size = System::Drawing::Size(216, 36);
 			this->password->TabIndex = 2;
-			this->password->TextChanged += gcnew System::EventHandler(this, &RegisterForm::guna2TextBox1_TextChanged);
+			this->password->TextChanged += gcnew System::EventHandler(this, &RegisterForm::password_TextChanged);
 			// 
 			// singIn
 			// 
@@ -204,7 +219,7 @@ namespace Client {
 			this->singIn->ForeColor = System::Drawing::Color::White;
 			this->singIn->HoverState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)),
 				static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(47)));
-			this->singIn->Location = System::Drawing::Point(17, 103);
+			this->singIn->Location = System::Drawing::Point(17, 132);
 			this->singIn->Name = L"singIn";
 			this->singIn->Size = System::Drawing::Size(97, 45);
 			this->singIn->TabIndex = 3;
@@ -213,24 +228,41 @@ namespace Client {
 			// 
 			// RegisterForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->ClientSize = System::Drawing::Size(434, 295);
 			this->Controls->Add(this->guna2GradientPanel1);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
 			this->Name = L"RegisterForm";
 			this->ShowIcon = false;
 			this->ShowInTaskbar = false;
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->guna2GradientPanel1->ResumeLayout(false);
 			this->guna2GradientPanel1->PerformLayout();
 			this->guna2Panel1->ResumeLayout(false);
+			this->guna2Panel1->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
 
+		public: property bool isUserCloseWindow;
+
 
 		private: System::Void singIn_Click(System::Object^ sender, System::EventArgs^ e);
 		private: System::Void logIn_Click(System::Object^ sender, System::EventArgs^ e);
+		private: System::Void user_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+			errorLabel->Text = "";
+			user->BorderColor = Color::Transparent;
+		}
+
+		private: System::Void password_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+			errorLabel->Text = "";
+			user->BorderColor = Color::Transparent;
+		}
+
+private: System::Void exitButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	isUserCloseWindow = true;
+	this->Close();
+}
 };
 }

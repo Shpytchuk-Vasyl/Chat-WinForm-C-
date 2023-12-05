@@ -198,16 +198,25 @@ public:
                     break;
 
                 case TypeRequest::FIND_PEOPLE:
+                    memset(recvbuf, 0, recvbuflen);
+                    iResult = recv(socketThread.ClientSocket,
+                        recvbuf,
+                        recvbuflen,
+                        0);
                     users = socketThread.db->get_users();
+                    user_res = *(CUser*)recvbuf;
+                    memset(recvbuf, 0, recvbuflen);
                     for (auto us : users) {
-                        memset(recvbuf, 0, recvbuflen);
-                        std::memcpy(recvbuf, (char*)&us, sizeof(us));
-                        iSendResult = send(socketThread.ClientSocket, recvbuf, sizeof(recvbuf), 0);
-                        if (iSendResult == SOCKET_ERROR) {
-                            printf("send failed with error: %d\n", WSAGetLastError());
-                            closesocket(socketThread.ClientSocket);
-                            socketThread.isActive = false;
-                            return;
+                        if (strstr(us.getName(), user_res.getName())) {
+                            memset(recvbuf, 0, recvbuflen);
+                            std::memcpy(recvbuf, (char*)&us, sizeof(us));
+                            iSendResult = send(socketThread.ClientSocket, recvbuf, sizeof(recvbuf), 0);
+                            if (iSendResult == SOCKET_ERROR) {
+                                printf("send failed with error: %d\n", WSAGetLastError());
+                                closesocket(socketThread.ClientSocket);
+                                socketThread.isActive = false;
+                                return;
+                            }
                         }
                     }
                     iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);

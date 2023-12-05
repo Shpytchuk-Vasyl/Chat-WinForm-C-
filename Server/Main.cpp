@@ -19,7 +19,8 @@ int main(void)
   // db.add_message(msg);
   // db.add_message(msg2);
     SocketServer s;
-    std::thread t(&SocketServer::Run, s);
+   // std::thread t(&SocketServer::Run, s);
+    s.Run();
 }
 
 //

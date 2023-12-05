@@ -13,6 +13,7 @@
 #define BUFSIZE 4096
 #define PIPE_S L"\\\\.\\pipe\\" // визначено в сервері , треба буде в спільний винести 
 class CPipeReciver {
+public:	
 	std::wstring pipe;
 	CUser User;
 	LPTSTR lpszPipename;
@@ -73,6 +74,7 @@ class CPipeReciver {
 			return 1;
 		}
 	}
+
 	std::string read() {
 		char buffer[BUFSIZE];
 		DWORD bytesRead;
@@ -87,14 +89,16 @@ class CPipeReciver {
 	
 	}
 
-	static void ThreadRead(CPipeReciver reciver,Client::MyForm ^form ) {
-		while (true) {
-			std::string res =reciver.read();
-		
-		//form->Invoke()
-		form->currentNode->addMessage(gcnew Client::MessageNode(msclr::interop::marshal_as<System::String^>(res), false, form->currentNode->picture));// треба щоб сетав картинку сам по інфі про юзера з чату 
-			//PlaceForMessages->Controls->Add();// не той клас створив , треба 
-			
-		}
-	}
+	//воно еррори показує
+	//static void ThreadRead(CPipeReciver reciver, Client::MyForm ^form ) {
+	//	while (true) {
+	//		std::string res = reciver.read();
+	//	
+	//	//form->Invoke()
+	//	form->currentNode->addMessage(gcnew Client::MessageNode(msclr::interop::marshal_as<System::String^>(res), false, form->currentNode->picture));// треба щоб сетав картинку сам по інфі про юзера з чату 
+	//		//PlaceForMessages->Controls->Add();// не той клас створив , треба 
+	//		
+	//	}
+	//}
+
 };

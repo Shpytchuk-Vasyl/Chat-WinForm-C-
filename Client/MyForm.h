@@ -4,7 +4,7 @@
 #include "RequestManager.h"
 #include "UsersViewForm.h"
 #include "PipeReciver.h"
-	
+#include "RegisterForm.h"
 
 namespace Client {
 	using namespace System;
@@ -310,6 +310,7 @@ namespace Client {
 			this->maximizeButton->Name = L"maximizeButton";
 			this->maximizeButton->Size = System::Drawing::Size(45, 29);
 			this->maximizeButton->TabIndex = 19;
+			this->maximizeButton->Click += gcnew System::EventHandler(this, &MyForm::maximizeButton_Click);
 			// 
 			// exitButton
 			// 
@@ -661,7 +662,6 @@ namespace Client {
 			this->Controls->Add(this->guna2Panel1);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
 			this->Name = L"MyForm";
-			this->Text = L"";
 			this->guna2Panel1->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->profilePicture))->EndInit();
 			this->guna2Panel2->ResumeLayout(false);
@@ -706,6 +706,7 @@ namespace Client {
 			ChatNode(String^ strChatName, String^ strLastMessage, int intCountNewMessage, int photoIndex, bool status, int chat_id) : Guna2GradientPanel() {
 				id = chat_id;
 				picture = photoIndex;						//тут треба айді чату ?
+														
 
 				messageView = gcnew FlowLayoutPanel();
 				this->messageView->BackColor = System::Drawing::Color::Transparent;
@@ -868,31 +869,30 @@ namespace Client {
 			try {
 				server = new ServerConnection();
 				server->Connect(DEFAULT_IP, DEFAULT_PORT);
-				//reciver = new CPipeReciver() передавати поточного юзера 
-				UserNode::MyUserData(8, 1, "user 1").WriteToFile("userData/user.bin");
-				user = gcnew UserNode("userData/user.bin");
-				if (user->isRegistered) {
-					downloadChats();
-				}
-				else {
-
-					//register form
-
-					for (size_t i = 0; i < 100; i++)
-					{
-						if (server->RegisterUser(CUser(("user " + std::to_string(i)).c_str(), "password", 1))) {
-						
-							
-							break;
-						}
-
-					}
-				}
 			}
 			catch (std::exception er) {
 				MessageBox::Show("Unable to connect to server", "Unable connection",
 					MessageBoxButtons::OK, MessageBoxIcon::Error);
 			}
+				UserNode::MyUserData(8, 1, "user 1","password").WriteToFile("userData/user.bin");
+				user = gcnew UserNode("userData/user.bin");
+				RegisterForm^ reg = gcnew RegisterForm();
+				if (user->isRegistered) {
+					
+					reg->user->Text = user->userName;
+					reg->password->Text = user->password;
+					
+				}
+				reg->ShowDialog();
+				if (reg->isUserCloseWindow) {
+					throw std::exception("user close reqistration window");
+				}
+				std::string n, p;
+				MarshalString(user->userName, n);
+				MarshalString(user->password, p);
+			//	reciver = new CPipeReciver(CUser(n.c_str(),p.c_str(),user->pictureIndex));
+				//workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));
+			
 		}
 
 		public: System::Void downloadChats() {
@@ -939,8 +939,6 @@ namespace Client {
 			}
 		}
 
-		
-
 		public: System::Void setCurrentChat(ChatNode ^node) {
 			   if(currentNode)
 					currentNode->resetColor();
@@ -972,7 +970,7 @@ namespace Client {
 		}
 
 
-		private: void MarshalString(String^ s, std::string& os) {
+		public: static void MarshalString(String^ s, std::string& os) {
 		using namespace Runtime::InteropServices;
 		const char* chars =
 			(const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
@@ -1016,7 +1014,7 @@ namespace Client {
 	
 
 		public: delegate System::Void addMessagesToFormDelegate(array<MessageNode^>^  msg, bool isOld);
-		public: System::Void addMessagesToForm(array<MessageNode^>^ msg,bool isOld) {
+		public: System::Void addMessagesToForm(array<MessageNode^>^ msg, bool isOld) {
 			SuspendLayout();
 			if (isOld) {
 				List<Control^>^ oldControls = gcnew List<Control^>();
@@ -1033,31 +1031,58 @@ namespace Client {
 			ResumeLayout();
 		}
 
-//private: System::Void guna2CircleButton6_Click(System::Object^ sender, System::EventArgs^ e) {
-//	 String^ message = guna2TextBox2->Text;
-//	 if (!String::IsNullOrEmpty(message))
-//	 {
-//		 guna2TextBox2->Text = "";
-//		 ChatNode^ p = gcnew ChatNode("Test " + message[1], "Hello", 5, 1, false);
-//		 p->Size = System::Drawing::Size(200, 80);
-//		 flowLayoutPanel1->Controls->Add(p);
-//		 if (currentNode == nullptr) currentNode = p;
-//		 currentNode->addMessage(gcnew ChatNode::MessageNode(message, true, 1));
-//	 }
-//}
-
-
-private: System::Void CreateNewChat_Click(System::Object^ sender, System::EventArgs^ e) {
+		private: System::Void CreateNewChat_Click(System::Object^ sender, System::EventArgs^ e) {
 	UsersViewForm^ usersWievForm = gcnew UsersViewForm();
 	usersWievForm->ShowDialog();
 	if (usersWievForm->resultUser != nullptr) {
+		array<ChatNode^>^ chatNodesArray = gcnew array<ChatNode^>(chatNodes->Count);
+		chatNodes->CopyTo(chatNodesArray);
+		for (size_t i = 0; i < chatNodes->Count; i++){
+			if (String::Equals(chatNodesArray[i]->chatName, usersWievForm->resultUser->userName)) {
+				setCurrentChat(chatNodesArray[i]);
+				return;
+			}
+		}
 		std::string name;
 		MarshalString(usersWievForm->resultUser->userName, name);
 		server->addNewChat(CUser(name.c_str(), "", usersWievForm->resultUser->pictureIndex));
-		
+		ChatNode^ n = gcnew ChatNode(usersWievForm->resultUser->userName,
+										"",
+										0,	
+										usersWievForm->resultUser->pictureIndex,	
+										String::Equals(usersWievForm->resultUser->online, "Online"),
+										-1);
+		chatNodes->Insert(1, n);
+		setCurrentChat(n);
 	}
 }
 
+		private: System::Void threadReceivMessages() {
+			try {
+				while (true) {
+					std::string msg = reciver->read();
+					array<MessageNode^>^ arr = gcnew array<MessageNode^>(1);
+					arr[0] = gcnew MessageNode(gcnew String(msg.c_str()), false, currentNode->picture);
+					BeginInvoke(gcnew addMessagesToFormDelegate(this, &MyForm::addMessagesToForm), arr, false);
+				}
+			}
+			catch (std::exception e) {
+				printf("%s",e.what());
+			};
+		}
+
+	private: System::Void maximizeButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (this->WindowState == FormWindowState::Maximized) {
+			this->WindowState == FormWindowState::Normal;			
+		}
+		else {
+			this->WindowState = FormWindowState::Maximized;
+		}
+		for (size_t i = 0; i < currentNode->messageView->Controls->Count; i++)
+		{
+			currentNode->messageView->Controls->default[i]->Width = placeForChats->Width;
+		}
+	}
 };
 
 
