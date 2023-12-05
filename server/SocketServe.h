@@ -106,7 +106,8 @@ public:
                         recvbuflen,
                         0);
                      user_res = *(CUser*)recvbuf;
-                    socketThread.current_user_id = socketThread.db->get_user_id(user_res);
+                    socketThread.current_user_id = socketThread.db->get_user_id(user_res);// зробити функцію для  перевірки чи є юзер з заданим імям та паролем 
+                  
                     // std::vector<CChat> chats = socketThread.db->get_chats_with_user(socketThread.current_user_id);
                     // цього не треба, бо я й так буду знати що сервер не доступний
                     //iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
