@@ -143,7 +143,10 @@ public:
         do {
             iResult = recv(ConnectSocket, (char*)&user, sizeof(user), 0);
             users.push_back(user);
-        } while (iResult > sizeof(TypeRequest));
+            if (iResult == SOCKET_ERROR) {
+                throw std::exception();
+            }
+        } while (iResult > sizeof(TypeRequest) && iResult != SOCKET_ERROR);
         return users;
     }
 
@@ -157,6 +160,9 @@ public:
         do {
             iResult = recv(ConnectSocket, (char*)&chat, sizeof(chat), 0);
             chats.push_back(chat);
+            if (iResult == SOCKET_ERROR) {
+                throw std::exception();
+            }
         } while (iResult > sizeof(TypeRequest));
         return chats;
     }
@@ -172,6 +178,9 @@ public:
         do {
             iResult = recv(ConnectSocket, (char*)&msg, sizeof(msg), 0);
             msgs.push_back(msg);
+            if (iResult == SOCKET_ERROR) {
+                throw std::exception();
+            }
         } while (iResult > sizeof(TypeRequest));
         return msgs;
     }

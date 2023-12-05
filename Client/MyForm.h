@@ -42,7 +42,7 @@ namespace Client {
 			if (components)
 			{
 				delete components;
-				if (server) delete server;
+				//if (server) delete server;
 			}
 		}
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel1;
@@ -325,12 +325,12 @@ namespace Client {
 			// 
 			this->nameOtherUser->AutoSize = true;
 			this->nameOtherUser->BackColor = System::Drawing::Color::Transparent;
-			this->nameOtherUser->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 10.8F, System::Drawing::FontStyle::Regular,
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->nameOtherUser->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
 			this->nameOtherUser->ForeColor = System::Drawing::Color::Silver;
 			this->nameOtherUser->Location = System::Drawing::Point(121, 243);
 			this->nameOtherUser->Name = L"nameOtherUser";
-			this->nameOtherUser->Size = System::Drawing::Size(49, 23);
+			this->nameOtherUser->Size = System::Drawing::Size(58, 22);
 			this->nameOtherUser->TabIndex = 16;
 			this->nameOtherUser->Text = L"User2";
 			// 
@@ -416,12 +416,12 @@ namespace Client {
 			// 
 			this->currentChatStatus->AutoSize = true;
 			this->currentChatStatus->BackColor = System::Drawing::Color::Transparent;
-			this->currentChatStatus->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 7.8F, System::Drawing::FontStyle::Regular,
+			this->currentChatStatus->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.8F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
 			this->currentChatStatus->ForeColor = System::Drawing::Color::Silver;
 			this->currentChatStatus->Location = System::Drawing::Point(361, 37);
 			this->currentChatStatus->Name = L"currentChatStatus";
-			this->currentChatStatus->Size = System::Drawing::Size(39, 17);
+			this->currentChatStatus->Size = System::Drawing::Size(45, 16);
 			this->currentChatStatus->TabIndex = 17;
 			this->currentChatStatus->Text = L"Online";
 			// 
@@ -429,12 +429,12 @@ namespace Client {
 			// 
 			this->currentChatName->AutoSize = true;
 			this->currentChatName->BackColor = System::Drawing::Color::Transparent;
-			this->currentChatName->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 9, System::Drawing::FontStyle::Regular,
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->currentChatName->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
 			this->currentChatName->ForeColor = System::Drawing::Color::Silver;
 			this->currentChatName->Location = System::Drawing::Point(358, 16);
 			this->currentChatName->Name = L"currentChatName";
-			this->currentChatName->Size = System::Drawing::Size(42, 20);
+			this->currentChatName->Size = System::Drawing::Size(48, 18);
 			this->currentChatName->TabIndex = 16;
 			this->currentChatName->Text = L"User1";
 			// 
@@ -497,7 +497,7 @@ namespace Client {
 			// 
 			this->VScrollBarChats->AutoRoundedCorners = true;
 			this->VScrollBarChats->AutoScroll = true;
-			this->VScrollBarChats->BackColor = System::Drawing::Color::Transparent;
+			this->VScrollBarChats->BackColor = System::Drawing::Color::Black;
 			this->VScrollBarChats->BindingContainer = this->placeForChats;
 			this->VScrollBarChats->BorderColor = System::Drawing::Color::Transparent;
 			this->VScrollBarChats->BorderRadius = 4;
@@ -627,7 +627,7 @@ namespace Client {
 			// 
 			this->VScrollBarForMessages->AutoRoundedCorners = true;
 			this->VScrollBarForMessages->AutoScroll = true;
-			this->VScrollBarForMessages->BackColor = System::Drawing::Color::Transparent;
+			this->VScrollBarForMessages->BackColor = System::Drawing::Color::Black;
 			this->VScrollBarForMessages->BorderColor = System::Drawing::Color::Transparent;
 			this->VScrollBarForMessages->BorderRadius = 4;
 			this->VScrollBarForMessages->Dock = System::Windows::Forms::DockStyle::Right;
@@ -869,8 +869,7 @@ namespace Client {
 				UserNode::MyUserData(8, 1, "user 1").WriteToFile("userData/user.bin");
 				user = gcnew UserNode("userData/user.bin");
 				if (user->isRegistered) {
-					workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
-					workerThread->Start();
+					downloadChats();
 				}
 				else {
 
@@ -880,8 +879,7 @@ namespace Client {
 					{
 						if (server->RegisterUser(CUser(("user " + std::to_string(i)).c_str(), "password", 1))) {
 						
-							workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::downloadChats));
-							workerThread->Start();
+							
 							break;
 						}
 
@@ -921,38 +919,34 @@ namespace Client {
 								v[i].getUser1().getStatus(),
 								v[i].getChatId()));
 					}
+
 				}
 
 
-				this->BeginInvoke(gcnew addChatsToFormDelegare(this, &MyForm::addChatsToForm));//?? щось з потоками ?
+				SuspendLayout();
+
+				// Конвертуємо ArrayList до array<ChatNode^>
+				array<ChatNode^>^ chatNodesArray = gcnew array<ChatNode^>(chatNodes->Count);
+				chatNodes->CopyTo(chatNodesArray);
+
+				placeForChats->Controls->AddRange(chatNodesArray);
+				placeForChats->AutoScroll = false;
+				ResumeLayout();
 
 			}
 		}
 
-		public: delegate System::Void addChatsToFormDelegare();
-		public: System::Void addChatsToForm() {
-			SuspendLayout();
-
-			// Конвертуємо ArrayList до array<ChatNode^>
-			array<ChatNode^>^ chatNodesArray = gcnew array<ChatNode^>(chatNodes->Count);
-			chatNodes->CopyTo(chatNodesArray);
-
-			placeForChats->Controls->AddRange(chatNodesArray);
-			placeForChats->AutoScroll = false;
-			ResumeLayout();
-		}
 		
 
 		public: System::Void setCurrentChat(ChatNode ^node) {
 			   if(currentNode)
 					currentNode->resetColor();
 			   currentNode = node;
-			   workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::receiveMessagesRange));
-			   workerThread->Start();
+			   receiveMessagesRange();
 
 			   SuspendLayout();
 			   VScrollBarForMessages->BindingContainer = currentNode->messageView;
-			   currentNode->messageView->AutoScroll = false;//??
+			   currentNode->messageView->AutoScroll = true;
 			   placeForMessages->Controls->Clear();
 			   placeForMessages->Controls->Add(currentNode->messageView);
 			   ResumeLayout();
@@ -1014,8 +1008,7 @@ namespace Client {
 						v[i].get_user_id() == user->id ? user->pictureIndex : currentNode->picture
 					);
 			}
-
-			this->BeginInvoke(gcnew addMessagesToFormDelegate(this, &MyForm::addMessagesToForm), result, newMsg == 0);		
+			addMessagesToForm(result, newMsg == 0);
 		}
 	
 
