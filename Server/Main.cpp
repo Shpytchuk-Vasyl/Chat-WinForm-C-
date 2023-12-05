@@ -20,8 +20,6 @@ int main(void)
   // db.add_message(msg2);
     SocketServer s;
     std::thread t(&SocketServer::Run, s);
-    PipeServer pipe;
-    pipe.Run();
 }
 
 //

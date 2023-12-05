@@ -68,6 +68,9 @@
     <ClInclude Include="RegisterForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PipeReciver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">

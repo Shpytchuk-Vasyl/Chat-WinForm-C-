@@ -8,7 +8,7 @@ private:
 	int i_picture = 0;
     bool is_online = false;
 public:
-
+    friend class CPipeReciver;
 	friend class CDatabase;
     CUser() {};
 	CUser(char name[50], char password[50],int picture) {
@@ -45,6 +45,7 @@ public:
 
     // Getter for i_picture
     int getPicture() const {
+
         return i_picture;
     }
 
