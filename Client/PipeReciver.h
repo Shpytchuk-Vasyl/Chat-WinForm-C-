@@ -6,7 +6,7 @@
 #include <strsafe.h>
 #include "../Server/CUser.h"
 
-#include "ChatNode.h"
+#include "MyForm.h"
 #include <msclr\marshal_cppstd.h>
 
 #define PIPE_TIMEOUT 5000
@@ -59,6 +59,7 @@ class CPipeReciver {
 			throw std::exception();
 			
 		}
+		Conect();
 
 	};
 	bool Conect() {
@@ -86,10 +87,12 @@ class CPipeReciver {
 	
 	}
 
-	static void ThreadRead(CPipeReciver reciver, Guna::UI2::WinForms::Guna2Panel^ PlaceForMessages) {
+	static void ThreadRead(CPipeReciver reciver,Client::MyForm ^form ) {
 		while (true) {
 			std::string res =reciver.read();
-			Client::MessageNode(msclr::interop::marshal_as<System::String^>(res), false, 1);// треба щоб сетав картинку сам по інфі про юзера з чату 
+		
+		//form->Invoke()
+		form->currentNode->addMessage(gcnew Client::MessageNode(msclr::interop::marshal_as<System::String^>(res), false, form->currentNode->picture));// треба щоб сетав картинку сам по інфі про юзера з чату 
 			//PlaceForMessages->Controls->Add();// не той клас створив , треба 
 			
 		}

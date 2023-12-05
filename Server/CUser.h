@@ -45,6 +45,7 @@ public:
 
     // Getter for i_picture
     int getPicture() const {
+
         return i_picture;
     }
 

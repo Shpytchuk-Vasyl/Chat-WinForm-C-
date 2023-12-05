@@ -3,7 +3,7 @@
 #include "ChatNode.h"
 #include "RequestManager.h"
 #include "UsersViewForm.h"
-
+#include "PipeReciver.h"
 	
 
 namespace Client {
@@ -860,12 +860,15 @@ namespace Client {
 		public:  static property MyForm^ pointer;
 		public: property UserNode^ user;
 		public: property Thread^ workerThread;
+		public: property CPipeReciver* reciver;
+	
 
 		protected:   Void onShow(EventArgs^ a) override {
 			//this->onShow(a);
 			try {
 				server = new ServerConnection();
 				server->Connect(DEFAULT_IP, DEFAULT_PORT);
+				//reciver = new CPipeReciver() передавати поточного юзера 
 				UserNode::MyUserData(8, 1, "user 1").WriteToFile("userData/user.bin");
 				user = gcnew UserNode("userData/user.bin");
 				if (user->isRegistered) {
