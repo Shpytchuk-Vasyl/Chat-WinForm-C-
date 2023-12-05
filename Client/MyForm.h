@@ -661,7 +661,7 @@ namespace Client {
 			this->Controls->Add(this->guna2Panel1);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
 			this->Name = L"MyForm";
-			this->Text = L"MyForm";
+			this->Text = L"";
 			this->guna2Panel1->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->profilePicture))->EndInit();
 			this->guna2Panel2->ResumeLayout(false);

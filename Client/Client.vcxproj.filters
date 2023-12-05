@@ -36,6 +36,9 @@
     <ClCompile Include="UserNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RegisterForm.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
@@ -60,6 +63,9 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="UserNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RegisterForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

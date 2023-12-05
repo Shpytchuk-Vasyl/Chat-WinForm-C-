@@ -58,15 +58,17 @@ namespace Client {
 			this->Controls->Add(this->message);
 			this->Controls->Add(this->photo);
 			if (isMy) {
-				this->Dock = System::Windows::Forms::DockStyle::Left;
-				this->FillColor = System::Drawing::Color::FromArgb(255, 152, 93);
-				this->FillColor2 = System::Drawing::Color::FromArgb(255, 61, 87);
-			}
-			else {
 				this->Dock = System::Windows::Forms::DockStyle::Right;
 				this->FillColor = System::Drawing::Color::FromArgb(250, 48, 90);
 				this->FillColor2 = System::Drawing::Color::FromArgb(128, 36, 206);
 
+			}
+			else {
+				
+
+				this->Dock = System::Windows::Forms::DockStyle::Left;
+				this->FillColor = System::Drawing::Color::FromArgb(255, 152, 93);
+				this->FillColor2 = System::Drawing::Color::FromArgb(255, 61, 87);
 			}
 			this->Size = System::Drawing::Size(350, 80);
 
