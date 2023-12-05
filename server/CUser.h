@@ -14,12 +14,12 @@ public:
 	CUser(char name[50], char password[50],int picture) {
 		std::memcpy(s_name, name, 50);
 		std::memcpy(s_password, password, 50);
-		i_picture = 0;
+		i_picture = picture;
 	}
 	CUser(const char name[50],const  char password[50], int picture) {
 		std::memcpy(s_name, name, 50);
 		std::memcpy(s_password, password, 50);
-		i_picture = 0;
+		i_picture = picture;
 	}
 	
 

@@ -36,8 +36,10 @@ namespace Client {
 		}
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel1;
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel2;
-	private: Guna::UI2::WinForms::Guna2TextBox^ searchText;
-	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel1;
+	private: Guna::UI2::WinForms::Guna2TextBox^ searchUser;
+
+	private: System::Windows::Forms::FlowLayoutPanel^ placeForUsers;
+
 	private: Guna::UI2::WinForms::Guna2VScrollBar^ VScrollBarForUsers;
 
 	private: Guna::UI2::WinForms::Guna2ControlBox^ exitButton;
@@ -58,10 +60,10 @@ namespace Client {
 		{
 			this->guna2Panel1 = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->VScrollBarForUsers = (gcnew Guna::UI2::WinForms::Guna2VScrollBar());
-			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->placeForUsers = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->guna2Panel2 = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->exitButton = (gcnew Guna::UI2::WinForms::Guna2ControlBox());
-			this->searchText = (gcnew Guna::UI2::WinForms::Guna2TextBox());
+			this->searchUser = (gcnew Guna::UI2::WinForms::Guna2TextBox());
 			this->guna2Panel1->SuspendLayout();
 			this->guna2Panel2->SuspendLayout();
 			this->SuspendLayout();
@@ -71,7 +73,7 @@ namespace Client {
 			this->guna2Panel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)), static_cast<System::Int32>(static_cast<System::Byte>(32)),
 				static_cast<System::Int32>(static_cast<System::Byte>(47)));
 			this->guna2Panel1->Controls->Add(this->VScrollBarForUsers);
-			this->guna2Panel1->Controls->Add(this->flowLayoutPanel1);
+			this->guna2Panel1->Controls->Add(this->placeForUsers);
 			this->guna2Panel1->Controls->Add(this->guna2Panel2);
 			this->guna2Panel1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->guna2Panel1->Location = System::Drawing::Point(0, 0);
@@ -85,9 +87,8 @@ namespace Client {
 			this->VScrollBarForUsers->AutoScroll = true;
 			this->VScrollBarForUsers->AutoSize = true;
 			this->VScrollBarForUsers->BackColor = System::Drawing::Color::Transparent;
-			this->VScrollBarForUsers->BindingContainer = this->flowLayoutPanel1;
+			this->VScrollBarForUsers->BindingContainer = this->placeForUsers;
 			this->VScrollBarForUsers->BorderColor = System::Drawing::Color::Transparent;
-			this->VScrollBarForUsers->BorderRadius = 4;
 			this->VScrollBarForUsers->FillColor = System::Drawing::Color::Transparent;
 			this->VScrollBarForUsers->InUpdate = false;
 			this->VScrollBarForUsers->LargeChange = 10;
@@ -96,29 +97,30 @@ namespace Client {
 			this->VScrollBarForUsers->MaximumSize = System::Drawing::Size(10, 0);
 			this->VScrollBarForUsers->Name = L"VScrollBarForUsers";
 			this->VScrollBarForUsers->ScrollbarSize = 10;
-			this->VScrollBarForUsers->Size = System::Drawing::Size(10, 664);
+			this->VScrollBarForUsers->Size = System::Drawing::Size(10, 0);
 			this->VScrollBarForUsers->TabIndex = 20;
 			this->VScrollBarForUsers->ThumbColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(19)),
 				static_cast<System::Int32>(static_cast<System::Byte>(25)), static_cast<System::Int32>(static_cast<System::Byte>(40)));
-			this->VScrollBarForUsers->ThumbSize = 5;
+			this->VScrollBarForUsers->ThumbSize = 0;
 			// 
-			// flowLayoutPanel1
+			// placeForUsers
 			// 
-			this->flowLayoutPanel1->AutoScroll = true;
-			this->flowLayoutPanel1->BackColor = System::Drawing::Color::Transparent;
-			this->flowLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->flowLayoutPanel1->Location = System::Drawing::Point(0, 54);
-			this->flowLayoutPanel1->Margin = System::Windows::Forms::Padding(3, 3, 10, 3);
-			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
-			this->flowLayoutPanel1->Size = System::Drawing::Size(366, 664);
-			this->flowLayoutPanel1->TabIndex = 1;
+			this->placeForUsers->AutoScroll = true;
+			this->placeForUsers->BackColor = System::Drawing::Color::Transparent;
+			this->placeForUsers->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->placeForUsers->Location = System::Drawing::Point(0, 54);
+			this->placeForUsers->Margin = System::Windows::Forms::Padding(3, 3, 10, 3);
+			this->placeForUsers->Name = L"placeForUsers";
+			this->placeForUsers->Size = System::Drawing::Size(366, 664);
+			this->placeForUsers->TabIndex = 1;
+			this->placeForUsers->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &UsersViewForm::placeForUsers_MouseClick);
 			// 
 			// guna2Panel2
 			// 
 			this->guna2Panel2->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(19)), static_cast<System::Int32>(static_cast<System::Byte>(25)),
 				static_cast<System::Int32>(static_cast<System::Byte>(40)));
 			this->guna2Panel2->Controls->Add(this->exitButton);
-			this->guna2Panel2->Controls->Add(this->searchText);
+			this->guna2Panel2->Controls->Add(this->searchUser);
 			this->guna2Panel2->Dock = System::Windows::Forms::DockStyle::Top;
 			this->guna2Panel2->Location = System::Drawing::Point(0, 0);
 			this->guna2Panel2->Name = L"guna2Panel2";
@@ -135,37 +137,37 @@ namespace Client {
 			this->exitButton->Size = System::Drawing::Size(59, 51);
 			this->exitButton->TabIndex = 19;
 			// 
-			// searchText
+			// searchUser
 			// 
-			this->searchText->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
+			this->searchUser->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
-			this->searchText->BorderColor = System::Drawing::Color::Transparent;
-			this->searchText->Cursor = System::Windows::Forms::Cursors::IBeam;
-			this->searchText->DefaultText = L"";
-			this->searchText->DisabledState->BorderColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(208)),
+			this->searchUser->BorderColor = System::Drawing::Color::Transparent;
+			this->searchUser->Cursor = System::Windows::Forms::Cursors::IBeam;
+			this->searchUser->DefaultText = L"";
+			this->searchUser->DisabledState->BorderColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(208)),
 				static_cast<System::Int32>(static_cast<System::Byte>(208)), static_cast<System::Int32>(static_cast<System::Byte>(208)));
-			this->searchText->DisabledState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(226)),
+			this->searchUser->DisabledState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(226)),
 				static_cast<System::Int32>(static_cast<System::Byte>(226)), static_cast<System::Int32>(static_cast<System::Byte>(226)));
-			this->searchText->DisabledState->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(138)),
+			this->searchUser->DisabledState->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(138)),
 				static_cast<System::Int32>(static_cast<System::Byte>(138)), static_cast<System::Int32>(static_cast<System::Byte>(138)));
-			this->searchText->DisabledState->PlaceholderForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(138)),
+			this->searchUser->DisabledState->PlaceholderForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(138)),
 				static_cast<System::Int32>(static_cast<System::Byte>(138)), static_cast<System::Int32>(static_cast<System::Byte>(138)));
-			this->searchText->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(19)), static_cast<System::Int32>(static_cast<System::Byte>(25)),
+			this->searchUser->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(19)), static_cast<System::Int32>(static_cast<System::Byte>(25)),
 				static_cast<System::Int32>(static_cast<System::Byte>(40)));
-			this->searchText->FocusedState->BorderColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)),
+			this->searchUser->FocusedState->BorderColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)),
 				static_cast<System::Int32>(static_cast<System::Byte>(36)), static_cast<System::Int32>(static_cast<System::Byte>(206)));
-			this->searchText->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
-			this->searchText->HoverState->BorderColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)),
+			this->searchUser->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
+			this->searchUser->HoverState->BorderColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(128)),
 				static_cast<System::Int32>(static_cast<System::Byte>(36)), static_cast<System::Int32>(static_cast<System::Byte>(206)));
-			this->searchText->Location = System::Drawing::Point(14, 9);
-			this->searchText->Name = L"searchText";
-			this->searchText->PasswordChar = '\0';
-			this->searchText->PlaceholderText = L"Search";
-			this->searchText->SelectedText = L"";
-			this->searchText->Size = System::Drawing::Size(264, 36);
-			this->searchText->TabIndex = 1;
-			this->searchText->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &UsersViewForm::searchText_KeyPress);
+			this->searchUser->Location = System::Drawing::Point(14, 9);
+			this->searchUser->Name = L"searchUser";
+			this->searchUser->PasswordChar = '\0';
+			this->searchUser->PlaceholderText = L"Search";
+			this->searchUser->SelectedText = L"";
+			this->searchUser->Size = System::Drawing::Size(264, 36);
+			this->searchUser->TabIndex = 1;
+			this->searchUser->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &UsersViewForm::searchText_KeyPress);
 			// 
 			// UsersViewForm
 			// 
@@ -189,11 +191,23 @@ namespace Client {
 
 
 	public: property UserNode^ resultUser;
-
+	public: property ArrayList^ Users;
 
 
 
 private: System::Void searchText_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e);
 
+private: System::Void placeForUsers_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+	if (Users->Count > 0) {
+		array<UserNode^>^ chatNodesArray = gcnew array<UserNode^>(Users->Count);
+		Users->CopyTo(chatNodesArray);
+		for (int i = 0; i < Users->Count; i++) {
+			if (chatNodesArray[i]->isSelected) {
+				resultUser = chatNodesArray[i];
+				this->Close();
+			}
+		}
+	}
+}
 };
 }

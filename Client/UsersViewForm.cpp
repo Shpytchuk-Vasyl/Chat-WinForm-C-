@@ -6,15 +6,18 @@
 	 if (e->KeyChar == (char)Keys::Enter) {
 		 std::vector<CUser> v;
 		 try {
-			 v = MyForm::pointer->server->getAllUsers(CUser("55", "", 1));
-		 }catch(std::exception e){
+			 std::string userName;
+			 Client::MyForm::MarshalString(searchUser->Text, userName);
+			 v = MyForm::pointer->server->getAllUsers(CUser(userName.c_str(), "", -1));
+		 } catch(std::exception e){
 			 MessageBox::Show("Unable to connect to server", "Unable connection",
 				 MessageBoxButtons::OK, MessageBoxIcon::Error);
 			 return;
 		 }
 		 SuspendLayout();
+		// placeForUsers->Controls->Clear();
 		 for (int i = 0; i < v.size(); i++) {
-			 flowLayoutPanel1->Controls->Add(gcnew UserNode(gcnew String(v[i].getName()), 1, false, i));
+			 placeForUsers->Controls->Add(gcnew UserNode(gcnew String(v[i].getName()), "", v[i].getPicture(), v[i].getStatus(), -1));
 		 }
 		 ResumeLayout();
 	 }

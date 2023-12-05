@@ -22,18 +22,23 @@ namespace Client {
 		  property Guna2CirclePictureBox^ photo;
 		  property Label^ online;
 		  property Label^ chatName;
+		  property String^ password;
+		  property bool isSelected;
+
 	public: UserNode(String^ file) {
 		MyUserData^ data = gcnew MyUserData();
 		isRegistered = data->ReadFromFile(file);
 		id = data->id;
 		pictureIndex = data->pictureIndex;
 		userName = data->userName;
+		password = data->password;
 	}
 
-	public: UserNode(String^ name, int photoIndex, bool status, int user_id) : Guna2GradientPanel() {
+	public: UserNode(String^ name, String^ passwor, int photoIndex, bool status, int user_id) : Guna2GradientPanel() {
 		id = user_id;
 		pictureIndex = photoIndex;
 		userName = name;
+		password = passwor;
 
 		this->photo = (gcnew Guna::UI2::WinForms::Guna2CirclePictureBox());
 		this->photo->BackColor = System::Drawing::Color::Transparent;
@@ -91,9 +96,13 @@ namespace Client {
 
 	}
 
+	public: ~UserNode() {
+			  MyUserData^ save = gcnew MyUserData(id, pictureIndex, userName, password);
+			  save->WriteToFile("");
+	}
+	
 	private: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-
-
+		isSelected = true;
 	}
 
 	private: System::Void mouseEnter(System::Object^ sender, System::EventArgs^ e) {
@@ -112,13 +121,15 @@ namespace Client {
 		property int id;
 		property int pictureIndex;
 		property String^ userName;
+		property String^ password;
 
 		MyUserData() {}
 
-		MyUserData(int _id, int _pictureIndex, String^ _userName) {
+		MyUserData(int _id, int _pictureIndex, String^ _userName, String^ _password) {
 			id = _id;
 			pictureIndex = _pictureIndex;
 			userName = _userName;
+			password = _password;
 		}
 
 		// Метод для запису об'єкта в бінарний файл
@@ -135,6 +146,9 @@ namespace Client {
 
 				// Запис userName
 				writer->Write(userName);
+
+				// Запис password
+				writer->Write(password);
 
 				// Закриття потоків
 				writer->Close();
@@ -161,6 +175,9 @@ namespace Client {
 
 				// Зчитування userName
 				userName = reader->ReadString();
+
+				// Зчитування password
+				password = reader->ReadString();
 
 				// Закриття потоків
 				reader->Close();

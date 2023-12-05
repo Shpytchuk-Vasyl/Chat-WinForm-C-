@@ -135,18 +135,24 @@ public:
 
     std::vector<CUser> getAllUsers(CUser name) {
         send(ConnectSocket, std::to_string(TypeRequest::FIND_PEOPLE).c_str(), sizeof(TypeRequest), 0);
+        Sleep(100);
         send(ConnectSocket, (char*)&name, sizeof(name), 0);
-
+        char recvbuf[DEFAULT_BUFLEN] = "";
         int iResult = 0;
         std::vector<CUser> users;
         CUser user;
         do {
-            iResult = recv(ConnectSocket, (char*)&user, sizeof(user), 0);
-            users.push_back(user);
+            iResult = recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
+            memset(recvbuf, 0, DEFAULT_BUFLEN);
+            std::memcpy((char*)&user, recvbuf, sizeof(user));
+
             if (iResult == SOCKET_ERROR) {
                 throw std::exception();
             }
-        } while (iResult > sizeof(TypeRequest) && iResult != SOCKET_ERROR);
+            else if (iResult <= sizeof(TypeRequest)) break;
+            users.push_back(user);
+            user = CUser();
+        } while (true);
         return users;
     }
 
@@ -158,12 +164,13 @@ public:
         std::vector<CChat> chats;
         CChat chat;
         do {
-            iResult = recv(ConnectSocket, (char*)&chat, sizeof(chat), 0);
-            chats.push_back(chat);
+            iResult = recv(ConnectSocket, (char*)&chat, sizeof(chat), 0);     
             if (iResult == SOCKET_ERROR) {
                 throw std::exception();
             }
-        } while (iResult > sizeof(TypeRequest));
+            else if (iResult <= sizeof(TypeRequest)) break;
+            chats.push_back(chat);
+        } while (true);
         return chats;
     }
 
@@ -177,11 +184,13 @@ public:
         CMessage msg;
         do {
             iResult = recv(ConnectSocket, (char*)&msg, sizeof(msg), 0);
-            msgs.push_back(msg);
+          
             if (iResult == SOCKET_ERROR) {
                 throw std::exception();
             }
-        } while (iResult > sizeof(TypeRequest));
+            else if (iResult <= sizeof(TypeRequest)) break;
+            msgs.push_back(msg);
+        } while (true);
         return msgs;
     }
 
