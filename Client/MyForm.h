@@ -1045,15 +1045,16 @@ namespace Client {
 		}
 		std::string name;
 		MarshalString(usersWievForm->resultUser->userName, name);
-		server->addNewChat(CUser(name.c_str(), "", usersWievForm->resultUser->pictureIndex));
-		ChatNode^ n = gcnew ChatNode(usersWievForm->resultUser->userName,
-										"",
-										0,	
-										usersWievForm->resultUser->pictureIndex,	
-										String::Equals(usersWievForm->resultUser->online, "Online"),
-										-1);
-		chatNodes->Insert(0, n);
-		setCurrentChat(n);
+		if (server->addNewChat(CUser(name.c_str(), "", usersWievForm->resultUser->pictureIndex))) {
+			ChatNode^ n = gcnew ChatNode(usersWievForm->resultUser->userName,
+				"",
+				0,
+				usersWievForm->resultUser->pictureIndex,
+				String::Equals(usersWievForm->resultUser->online, "Online"),
+				-1);
+			chatNodes->Insert(0, n);
+			setCurrentChat(n);
+		}
 	}
 }
 

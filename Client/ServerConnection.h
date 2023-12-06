@@ -109,7 +109,14 @@ public:
         if (iResult == SOCKET_ERROR) {
             printf("send failed with error: %d\n", WSAGetLastError());
         }
-        return iResult != SOCKET_ERROR;
+        CChat chat;
+        char recvbuf[DEFAULT_BUFLEN] = "";
+        iResult = recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
+        std::memcpy((char*)&chat, recvbuf, sizeof(chat));
+        memset(recvbuf, 0, DEFAULT_BUFLEN);
+
+        return iResult != SOCKET_ERROR && 
+            (strcmp(other.getName(), chat.getUser2().getName()) == 0 || strcmp(other.getName(), chat.getUser1().getName()));
     }
 
     bool Start(CUser user) {

@@ -24,7 +24,6 @@ std::vector<CChat> CDatabase::get_chats_with_user(int user_id) const {
         chat.setUser2(get_user_by_id(chat.getUser2Id()));
 
         result.push_back(chat);
-        result.push_back(chat);
     }
 
     delete resultSet;
@@ -87,7 +86,7 @@ int CDatabase::get_user_id(const CUser user)const {
 }
 
 CUser CDatabase::get_user_by_id(int id)const {
-    sql::PreparedStatement* pstmt = con->prepareStatement("SELECT id FROM users WHERE id = ?");
+    sql::PreparedStatement* pstmt = con->prepareStatement("SELECT name, password, avatar FROM users WHERE id = ?");
     pstmt->setInt(1, id);
 
     sql::ResultSet* resultSet = pstmt->executeQuery();

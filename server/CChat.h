@@ -21,12 +21,12 @@ public:
     
     // Getter for user2_id
     int getUser1Id()  {
-        return user2_id;
+        return user1_id;
     }
 
     // Setter for user2_id
     void setUser1Id(int id) {
-        user2_id = id;
+        user1_id = id;
     }
 
 

@@ -91,6 +91,7 @@ public:
                     user_res = *(CUser*)recvbuf;
                     try {
                         socketThread.db->add_user(user_res);
+                        socketThread.current_user_id = socketThread.db->get_user_id(user_res);
                          iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
                     }
                     catch (sql::SQLException& e) {
