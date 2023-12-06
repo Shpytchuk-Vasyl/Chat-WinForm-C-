@@ -135,6 +135,8 @@ public:
                     else {
                         other_user_id = socketThread.current_chat.getUser2Id();
                     }
+                    CMessage msg = *(CMessage*)recvbuf;
+                    socketThread.db->add_message(msg);
                     if (socketThread.isOnline(other_user_id)) {
                         send_addr = INVALID_SOCKET;
                         for (auto pair : *socketThread.connection_list) {
@@ -157,11 +159,14 @@ public:
                     else {
                         if (socketThread.current_user_id == socketThread.current_chat.getUser2Id()) {
                             socketThread.current_chat.setUnread1(socketThread.current_chat.getUnread1() + 1);
+                           // socketThread.db->update_chat(socketThread.current_chat);
+
                         }
                         else {
                             socketThread.current_chat.setUnread2(socketThread.current_chat.getUnread2() + 1);
                         }
                         socketThread.db->update_chat(socketThread.current_chat);
+                       
                     }
 
                     // Обробка відправки повідомлення
