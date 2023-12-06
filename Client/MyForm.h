@@ -933,7 +933,7 @@ namespace Client {
 				chatNodes->CopyTo(chatNodesArray);
 
 				placeForChats->Controls->AddRange(chatNodesArray);
-				placeForChats->AutoScroll = false;
+			//	placeForChats->AutoScroll = false;
 				ResumeLayout();
 
 			}
@@ -1053,6 +1053,11 @@ namespace Client {
 				String::Equals(usersWievForm->resultUser->online, "Online"),
 				-1);
 			chatNodes->Insert(0, n);
+
+			placeForChats->Controls->Clear();
+			placeForChats->Controls->Add(n);
+			placeForChats->Controls->AddRange(chatNodesArray);
+
 			setCurrentChat(n);
 		}
 	}
