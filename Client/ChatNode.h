@@ -37,6 +37,7 @@ namespace Client {
 
 			this->message = gcnew Label();
 			this->message->AutoSize = true;
+			this->message->MaximumSize = System::Drawing::Size(200, 1000);
 			this->message->BackColor = System::Drawing::Color::Transparent;
 			this->message->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 10.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
@@ -46,12 +47,12 @@ namespace Client {
 			this->message->TabIndex = 19;
 			this->message->Text = text;
 			if (isMy) {
-				this->photo->Location = System::Drawing::Point(10, 10);
-				this->message->Location = System::Drawing::Point(70, 10);
+				this->photo->Location = System::Drawing::Point(300 - 56, 10);
+				this->message->Location = System::Drawing::Point(10, 10);
 			}
 			else {
-				this->photo->Location = System::Drawing::Point(this->message->Size.Width - 10, 10);
-				this->message->Location = System::Drawing::Point(10, 10);
+				this->photo->Location = System::Drawing::Point( 10, 10);
+				this->message->Location = System::Drawing::Point(56, 10);
 			}
 			this->BorderRadius = 15;
 
@@ -65,12 +66,11 @@ namespace Client {
 			}
 			else {
 				
-
 				this->Dock = System::Windows::Forms::DockStyle::Left;
 				this->FillColor = System::Drawing::Color::FromArgb(255, 152, 93);
 				this->FillColor2 = System::Drawing::Color::FromArgb(255, 61, 87);
 			}
-			this->Size = System::Drawing::Size(350, 80);
+			this->Size = System::Drawing::Size(300, message->Height);
 
 
 

@@ -37,9 +37,10 @@ System::Void Client::RegisterForm::singIn_Click(System::Object^ sender, System::
 				return;
 			}
 		
-			Client::MyForm::pointer->user = gcnew Client::UserNode(user->Text, password->Text, 1, true, picture);
+			Client::MyForm::pointer->user = gcnew Client::UserNode(user->Text, password->Text, picture, true, -1);
 			Client::MyForm::pointer->downloadChats();
 			this->Close();
+			return;
 		}
 
 		
@@ -66,7 +67,7 @@ System::Void Client::RegisterForm::logIn_Click(System::Object^ sender, System::E
 	Client::MyForm::MarshalString(password->Text, userPassword);
 	CUser u(name.c_str(), userPassword.c_str(), 1);
 	if (Client::MyForm::pointer->server->RegisterUser(u)) {
-		Client::MyForm::pointer->user = gcnew Client::UserNode(user->Text, password->Text, 1, true, picture);
+		Client::MyForm::pointer->user = gcnew Client::UserNode(user->Text, password->Text, picture, true, -1);
 		this->Close();
 	}
 	else {

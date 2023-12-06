@@ -87,6 +87,7 @@ namespace Client {
 	private: Guna::UI2::WinForms::Guna2VScrollBar^ VScrollBarForMessages;
 
 
+
 	private: System::ComponentModel::IContainer^ components;
 
 	private:
@@ -166,6 +167,8 @@ namespace Client {
 			// 
 			// logOutButton
 			// 
+			this->logOutButton->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left)
+				| System::Windows::Forms::AnchorStyles::Right));
 			this->logOutButton->DisabledState->BorderColor = System::Drawing::Color::DarkGray;
 			this->logOutButton->DisabledState->CustomBorderColor = System::Drawing::Color::DarkGray;
 			this->logOutButton->DisabledState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(169)),
@@ -835,7 +838,7 @@ namespace Client {
 				| System::Windows::Forms::AnchorStyles::Right));
 			p->Controls->Add(msg);
 			p->Location = System::Drawing::Point(3, 3);
-			p->Size = System::Drawing::Size(this->messageView->Size.Width, 78);
+			p->Size = System::Drawing::Size(this->messageView->Width, msg->message->Height);
 			messageView->SuspendLayout();
 			messageView->Controls->Add(p);
 			messageView->ResumeLayout();
@@ -880,7 +883,7 @@ namespace Client {
 				MessageBox::Show("Unable to connect to server", "Unable connection",
 					MessageBoxButtons::OK, MessageBoxIcon::Error);
 			}
-				UserNode::MyUserData(8, 1, "user 1","password").WriteToFile("userData/user.bin");
+				//UserNode::MyUserData(8, 1, "user 1","password").WriteToFile("userData/user.bin");
 				user = gcnew UserNode("userData/user.bin");
 				RegisterForm^ reg = gcnew RegisterForm();
 				if (user->isRegistered) {
@@ -893,7 +896,7 @@ namespace Client {
 				if (reg->isUserCloseWindow) {
 					throw std::exception("user close reqistration window");
 				}
-				profilePicture->Image = user->photo->Image;
+				profilePicture->Image = Image::FromFile("userPhotos/user" + user->pictureIndex + ".png");;
 
 			//	reciver = new CPipeReciver(CUser(n.c_str(),p.c_str(),user->pictureIndex));
 				//workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));
@@ -958,7 +961,8 @@ namespace Client {
 
 			   SuspendLayout();
 			   VScrollBarForMessages->BindingContainer = currentNode->messageView;
-			   currentNode->messageView->AutoScroll = true;
+			  // currentNode->messageView->AutoScroll = true;
+			   //currentNode->messageView->VerticalScroll = VScrollBarForMessages->;
 			   placeForMessages->Controls->Clear();
 			   placeForMessages->Controls->Add(currentNode->messageView);
 			   ResumeLayout();
@@ -995,32 +999,34 @@ namespace Client {
 			array<MessageNode^>^ result;
 			int newMsg = Int64::Parse(currentNode->countNewMessage->Text);
 			v = server->getAllMessageFromChat(CChat(currentNode->id));
-			if (countCurrentMsg == 0) {
-				int ten = (newMsg + 5 < v.size() ? newMsg + 5 : v.size());
-				v = std::vector<CMessage>(v.begin(), v.begin() + ten);
-				result = gcnew array<MessageNode^>(v.size());
+			if (v.size() > countCurrentMsg) {
+				if (countCurrentMsg == 0) {
+					int ten = (newMsg + 5 < v.size() ? newMsg + 5 : v.size());
+					v = std::vector<CMessage>(v.begin(), v.begin() + ten);
+					result = gcnew array<MessageNode^>(v.size());
 
-			}
-			else if(newMsg != 0) {
-				v = std::vector<CMessage>(v.begin(), v.begin() + newMsg);
-				result = gcnew array<MessageNode^>(v.size());
+				}
+				else if (newMsg != 0) {
+					v = std::vector<CMessage>(v.begin(), v.begin() + newMsg);
+					result = gcnew array<MessageNode^>(v.size());
 
-			}
-			else {
-				int ten = (countCurrentMsg + 10 < v.size() ? countCurrentMsg + 10 : v.size());
-				v = std::vector<CMessage>(v.begin() + countCurrentMsg, v.begin() + ten);
-				result = gcnew array<MessageNode^>(v.size());
+				}
+				else {
+					int ten = (countCurrentMsg + 10 < v.size() ? countCurrentMsg + 10 : v.size());
+					v = std::vector<CMessage>(v.begin() + countCurrentMsg, v.begin() + ten);
+					result = gcnew array<MessageNode^>(v.size());
 
+				}
+				for (size_t i = 0; i < v.size(); ++i) {
+					result[i] = gcnew
+						MessageNode(
+							gcnew String(v[i].get_text().c_str()),
+							v[i].get_user_id() == user->id,
+							v[i].get_user_id() == user->id ? user->pictureIndex : currentNode->picture
+						);
+				}
+				addMessagesToForm(result, newMsg == 0);
 			}
-			for (size_t i = 0; i < v.size(); ++i) {
-				result[i] = gcnew
-					MessageNode(
-						gcnew String(v[i].get_text().c_str()),
-						v[i].get_user_id() == user->id,
-						v[i].get_user_id() == user->id ? user->pictureIndex : currentNode->picture
-					);
-			}
-			addMessagesToForm(result, newMsg == 0);
 		}
 	
 
@@ -1089,18 +1095,23 @@ namespace Client {
 		}
 
 	private: System::Void maximizeButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		currentNode->messageView->AutoScroll = false;
+		currentNode->messageView->Width = placeForMessages->Width;
+
 		if (this->WindowState == FormWindowState::Maximized) {
+			
 			this->WindowState == FormWindowState::Normal;			
 		}
 		else {
 			this->WindowState = FormWindowState::Normal;
 		}
 		if (currentNode != nullptr)
-		for (size_t i = 0; i < currentNode->messageView->Controls->Count; i++)
-		{
-			
-			currentNode->messageView->Controls->default[i]->Width = placeForChats->Width;
-		}
+			for (size_t i = 0; i < currentNode->messageView->Controls->Count; i++)
+			{
+				currentNode->messageView->Controls->default[i]->Width = placeForMessages->Width;
+			}
+		currentNode->messageView->AutoScroll = true;
+
 	}
 	private: System::Void logOutButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		SuspendLayout();

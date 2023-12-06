@@ -51,9 +51,10 @@ namespace Client {
 
 
 	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel1;
-	private: Guna::UI2::WinForms::Guna2ImageRadioButton^ picture2;
+
 	private: Guna::UI2::WinForms::Guna2ImageRadioButton^ picture3;
 	private: Guna::UI2::WinForms::Guna2ImageRadioButton^ picture4;
+	private: Guna::UI2::WinForms::Guna2ImageRadioButton^ picture2;
 
 
 
@@ -79,21 +80,21 @@ namespace Client {
 		{
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(RegisterForm::typeid));
 			this->guna2GradientPanel1 = (gcnew Guna::UI2::WinForms::Guna2GradientPanel());
-			this->exitButton = (gcnew Guna::UI2::WinForms::Guna2ControlBox());
-			this->guna2Panel1 = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->picture1 = (gcnew Guna::UI2::WinForms::Guna2ImageRadioButton());
 			this->picture2 = (gcnew Guna::UI2::WinForms::Guna2ImageRadioButton());
 			this->picture3 = (gcnew Guna::UI2::WinForms::Guna2ImageRadioButton());
 			this->picture4 = (gcnew Guna::UI2::WinForms::Guna2ImageRadioButton());
+			this->exitButton = (gcnew Guna::UI2::WinForms::Guna2ControlBox());
+			this->guna2Panel1 = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->errorLabel = (gcnew System::Windows::Forms::Label());
 			this->user = (gcnew Guna::UI2::WinForms::Guna2TextBox());
 			this->logIn = (gcnew Guna::UI2::WinForms::Guna2Button());
 			this->password = (gcnew Guna::UI2::WinForms::Guna2TextBox());
 			this->singIn = (gcnew Guna::UI2::WinForms::Guna2Button());
 			this->guna2GradientPanel1->SuspendLayout();
-			this->guna2Panel1->SuspendLayout();
 			this->flowLayoutPanel1->SuspendLayout();
+			this->guna2Panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// guna2GradientPanel1
@@ -111,30 +112,6 @@ namespace Client {
 			this->guna2GradientPanel1->Name = L"guna2GradientPanel1";
 			this->guna2GradientPanel1->Size = System::Drawing::Size(434, 349);
 			this->guna2GradientPanel1->TabIndex = 0;
-			// 
-			// exitButton
-			// 
-			this->exitButton->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->exitButton->FillColor = System::Drawing::Color::Transparent;
-			this->exitButton->IconColor = System::Drawing::Color::White;
-			this->exitButton->Location = System::Drawing::Point(389, 0);
-			this->exitButton->Name = L"exitButton";
-			this->exitButton->Size = System::Drawing::Size(45, 29);
-			this->exitButton->TabIndex = 19;
-			this->exitButton->Click += gcnew System::EventHandler(this, &RegisterForm::exitButton_Click);
-			// 
-			// guna2Panel1
-			// 
-			this->guna2Panel1->AutoSize = true;
-			this->guna2Panel1->Controls->Add(this->errorLabel);
-			this->guna2Panel1->Controls->Add(this->user);
-			this->guna2Panel1->Controls->Add(this->logIn);
-			this->guna2Panel1->Controls->Add(this->password);
-			this->guna2Panel1->Controls->Add(this->singIn);
-			this->guna2Panel1->Location = System::Drawing::Point(88, 60);
-			this->guna2Panel1->Name = L"guna2Panel1";
-			this->guna2Panel1->Size = System::Drawing::Size(252, 292);
-			this->guna2Panel1->TabIndex = 5;
 			// 
 			// flowLayoutPanel1
 			// 
@@ -176,9 +153,9 @@ namespace Client {
 			this->picture2->Location = System::Drawing::Point(89, 3);
 			this->picture2->Name = L"picture2";
 			this->picture2->Size = System::Drawing::Size(80, 80);
-			this->picture2->TabIndex = 10;
+			this->picture2->TabIndex = 13;
 			this->picture2->UseTransparentBackground = true;
-			this->picture2->CheckedChanged += gcnew System::EventHandler(this, &RegisterForm::guna2ImageRadioButton1_CheckedChanged);
+			this->picture2->CheckedChanged += gcnew System::EventHandler(this, &RegisterForm::picture2_CheckedChanged);
 			// 
 			// picture3
 			// 
@@ -198,7 +175,7 @@ namespace Client {
 			// 
 			// picture4
 			// 
-			this->picture4->CheckedState->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"resource.Image1")));
+			this->picture4->CheckedState->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"resource.Image3")));
 			this->picture4->CheckedState->ImageSize = System::Drawing::Size(60, 60);
 			this->picture4->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"picture4.Image")));
 			this->picture4->ImageOffset = System::Drawing::Point(0, 0);
@@ -211,6 +188,30 @@ namespace Client {
 			this->picture4->TabIndex = 12;
 			this->picture4->UseTransparentBackground = true;
 			this->picture4->CheckedChanged += gcnew System::EventHandler(this, &RegisterForm::picture4_CheckedChanged);
+			// 
+			// exitButton
+			// 
+			this->exitButton->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->exitButton->FillColor = System::Drawing::Color::Transparent;
+			this->exitButton->IconColor = System::Drawing::Color::White;
+			this->exitButton->Location = System::Drawing::Point(389, 0);
+			this->exitButton->Name = L"exitButton";
+			this->exitButton->Size = System::Drawing::Size(45, 29);
+			this->exitButton->TabIndex = 19;
+			this->exitButton->Click += gcnew System::EventHandler(this, &RegisterForm::exitButton_Click);
+			// 
+			// guna2Panel1
+			// 
+			this->guna2Panel1->AutoSize = true;
+			this->guna2Panel1->Controls->Add(this->errorLabel);
+			this->guna2Panel1->Controls->Add(this->user);
+			this->guna2Panel1->Controls->Add(this->logIn);
+			this->guna2Panel1->Controls->Add(this->password);
+			this->guna2Panel1->Controls->Add(this->singIn);
+			this->guna2Panel1->Location = System::Drawing::Point(88, 60);
+			this->guna2Panel1->Name = L"guna2Panel1";
+			this->guna2Panel1->Size = System::Drawing::Size(252, 292);
+			this->guna2Panel1->TabIndex = 5;
 			// 
 			// errorLabel
 			// 
@@ -336,9 +337,9 @@ namespace Client {
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->guna2GradientPanel1->ResumeLayout(false);
 			this->guna2GradientPanel1->PerformLayout();
+			this->flowLayoutPanel1->ResumeLayout(false);
 			this->guna2Panel1->ResumeLayout(false);
 			this->guna2Panel1->PerformLayout();
-			this->flowLayoutPanel1->ResumeLayout(false);
 			this->ResumeLayout(false);
 
 		}
@@ -368,16 +369,17 @@ private: System::Void exitButton_Click(System::Object^ sender, System::EventArgs
 private: System::Void guna2ImageRadioButton4_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 	picture = 1;
 }
-private: System::Void guna2ImageRadioButton1_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-	picture = 2;
 
-}
 private: System::Void picture3_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 	picture = 3;
 
 }
 private: System::Void picture4_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 	picture = 4;
+
+}
+private: System::Void picture2_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	picture = 2;
 
 }
 };
