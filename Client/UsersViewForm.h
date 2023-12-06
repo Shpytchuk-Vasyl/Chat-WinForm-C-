@@ -188,23 +188,21 @@ namespace Client {
 		}
 #pragma endregion
 
-
-
 	public: property UserNode^ resultUser;
-	public: property ArrayList^ Users;
 
 
 
-private: System::Void searchText_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e);
+public: System::Void searchText_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e);
 
-private: System::Void placeForUsers_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-	if (Users->Count > 0) {
-		array<UserNode^>^ chatNodesArray = gcnew array<UserNode^>(Users->Count);
-		Users->CopyTo(chatNodesArray);
-		for (int i = 0; i < Users->Count; i++) {
-			if (chatNodesArray[i]->isSelected) {
-				resultUser = chatNodesArray[i];
-				this->Close();
+	   private: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		   resultUser = (UserNode^)sender;
+		   this->Close();
+	   }
+public: System::Void placeForUsers_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+	if (placeForUsers->Controls->Count > 0) {
+		for (int i = 0; i < placeForUsers->Controls->Count; i++) {
+			if (((UserNode^)placeForUsers->Controls->default[i])->isSelected) {
+				
 			}
 		}
 	}

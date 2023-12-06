@@ -9,6 +9,8 @@ int main() {
 		Client::MyForm form;
 		Application::Run(% form);
 	}
-	catch (...) {};
+	catch (std::exception e) {
+		printf("%s", e.what());
+	};
 	return 0;
 }

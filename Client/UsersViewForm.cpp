@@ -15,9 +15,12 @@
 			 return;
 		 }
 		 SuspendLayout();
-		// placeForUsers->Controls->Clear();
+		 placeForUsers->Controls->Clear();
 		 for (int i = 0; i < v.size(); i++) {
-			 placeForUsers->Controls->Add(gcnew UserNode(gcnew String(v[i].getName()), "", v[i].getPicture(), v[i].getStatus(), -1));
+			 UserNode^ node = gcnew UserNode(gcnew String(v[i].getName()), "", v[i].getPicture(), v[i].getStatus(), -1);
+			 node->MouseClick += gcnew  System::Windows::Forms::MouseEventHandler(this, &UsersViewForm::mouseClick);
+
+			 placeForUsers->Controls->Add(node);
 		 }
 		 ResumeLayout();
 	 }

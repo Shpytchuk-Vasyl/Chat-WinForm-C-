@@ -143,8 +143,8 @@ public:
         CUser user;
         do {
             iResult = recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
-            memset(recvbuf, 0, DEFAULT_BUFLEN);
             std::memcpy((char*)&user, recvbuf, sizeof(user));
+            memset(recvbuf, 0, DEFAULT_BUFLEN);
 
             if (iResult == SOCKET_ERROR) {
                 throw std::exception();
@@ -159,12 +159,15 @@ public:
     //Оновлює чати, що не є активними, тобто оновлює кількість не прочитаних повідомленнь
     std::vector<CChat> update() {
         send(ConnectSocket, std::to_string(TypeRequest::UPDATE_CHATS).c_str(), sizeof(TypeRequest), 0);
-
+        char recvbuf[DEFAULT_BUFLEN] = "";
         int iResult = 0;
         std::vector<CChat> chats;
         CChat chat;
         do {
-            iResult = recv(ConnectSocket, (char*)&chat, sizeof(chat), 0);     
+            iResult = recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
+            std::memcpy((char*)&chat, recvbuf, sizeof(chat));
+            memset(recvbuf, 0, DEFAULT_BUFLEN);
+
             if (iResult == SOCKET_ERROR) {
                 throw std::exception();
             }
@@ -176,15 +179,17 @@ public:
 
     std::vector<CMessage> getAllMessageFromChat(CChat chat) {
         send(ConnectSocket, std::to_string(TypeRequest::GET_MESSAGES_FROM_CHAT).c_str(), sizeof(TypeRequest), 0);
+        Sleep(100);
         send(ConnectSocket, (char *)(&chat), sizeof(chat), 0);
-        
+        char recvbuf[DEFAULT_BUFLEN] = "";
 
         int iResult = 0;
         std::vector<CMessage> msgs;
         CMessage msg;
         do {
-            iResult = recv(ConnectSocket, (char*)&msg, sizeof(msg), 0);
-          
+            iResult = recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
+            std::memcpy((char*)&msg, recvbuf, sizeof(msg));
+            memset(recvbuf, 0, DEFAULT_BUFLEN);
             if (iResult == SOCKET_ERROR) {
                 throw std::exception();
             }

@@ -1052,7 +1052,7 @@ namespace Client {
 										usersWievForm->resultUser->pictureIndex,	
 										String::Equals(usersWievForm->resultUser->online, "Online"),
 										-1);
-		chatNodes->Insert(1, n);
+		chatNodes->Insert(0, n);
 		setCurrentChat(n);
 	}
 }
@@ -1076,10 +1076,12 @@ namespace Client {
 			this->WindowState == FormWindowState::Normal;			
 		}
 		else {
-			this->WindowState = FormWindowState::Maximized;
+			this->WindowState = FormWindowState::Normal;
 		}
+		if (currentNode != nullptr)
 		for (size_t i = 0; i < currentNode->messageView->Controls->Count; i++)
 		{
+			
 			currentNode->messageView->Controls->default[i]->Width = placeForChats->Width;
 		}
 	}

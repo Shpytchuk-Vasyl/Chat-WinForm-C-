@@ -92,7 +92,6 @@ namespace Client {
 
 		this->MouseEnter += gcnew System::EventHandler(this, &UserNode::mouseEnter);
 		this->MouseLeave += gcnew System::EventHandler(this, &UserNode::mouseLeave);
-		this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &UserNode::mouseClick);
 
 	}
 
@@ -101,9 +100,7 @@ namespace Client {
 			  save->WriteToFile("");
 	}
 	
-	private: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		isSelected = true;
-	}
+	
 
 	private: System::Void mouseEnter(System::Object^ sender, System::EventArgs^ e) {
 		this->FillColor = System::Drawing::Color::FromArgb(250, 48, 90);
