@@ -30,7 +30,7 @@ namespace Client {
 			InitializeComponent();
 			pointer = this;
 			chatNodes = gcnew ArrayList();
-			onShow(nullptr);
+			onShow();
 		}
 
 	protected:
@@ -41,6 +41,10 @@ namespace Client {
 		{
 			if (components)
 			{
+				if (server != nullptr) {
+					server->finishWork();
+					server = nullptr;
+				}
 				delete components;
 				//if (server) delete server;
 			}
@@ -53,8 +57,9 @@ namespace Client {
 
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel5;
 	private: Guna::UI2::WinForms::Guna2Button^ CreateNewChat;
+	private: Guna::UI2::WinForms::Guna2Button^ logOutButton;
 
-	private: Guna::UI2::WinForms::Guna2Button^ guna2Button5;
+
 	private: Guna::UI2::WinForms::Guna2Button^ guna2Button4;
 	private: Guna::UI2::WinForms::Guna2Button^ guna2Button3;
 	private: Guna::UI2::WinForms::Guna2Button^ guna2Button2;
@@ -100,7 +105,7 @@ namespace Client {
 			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->guna2Panel1 = (gcnew Guna::UI2::WinForms::Guna2Panel());
-			this->guna2Button5 = (gcnew Guna::UI2::WinForms::Guna2Button());
+			this->logOutButton = (gcnew Guna::UI2::WinForms::Guna2Button());
 			this->guna2Button4 = (gcnew Guna::UI2::WinForms::Guna2Button());
 			this->guna2Button3 = (gcnew Guna::UI2::WinForms::Guna2Button());
 			this->guna2Button2 = (gcnew Guna::UI2::WinForms::Guna2Button());
@@ -147,7 +152,7 @@ namespace Client {
 			// 
 			this->guna2Panel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(17)), static_cast<System::Int32>(static_cast<System::Byte>(22)),
 				static_cast<System::Int32>(static_cast<System::Byte>(32)));
-			this->guna2Panel1->Controls->Add(this->guna2Button5);
+			this->guna2Panel1->Controls->Add(this->logOutButton);
 			this->guna2Panel1->Controls->Add(this->guna2Button4);
 			this->guna2Panel1->Controls->Add(this->guna2Button3);
 			this->guna2Panel1->Controls->Add(this->guna2Button2);
@@ -159,24 +164,25 @@ namespace Client {
 			this->guna2Panel1->Size = System::Drawing::Size(72, 581);
 			this->guna2Panel1->TabIndex = 0;
 			// 
-			// guna2Button5
+			// logOutButton
 			// 
-			this->guna2Button5->DisabledState->BorderColor = System::Drawing::Color::DarkGray;
-			this->guna2Button5->DisabledState->CustomBorderColor = System::Drawing::Color::DarkGray;
-			this->guna2Button5->DisabledState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(169)),
+			this->logOutButton->DisabledState->BorderColor = System::Drawing::Color::DarkGray;
+			this->logOutButton->DisabledState->CustomBorderColor = System::Drawing::Color::DarkGray;
+			this->logOutButton->DisabledState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(169)),
 				static_cast<System::Int32>(static_cast<System::Byte>(169)), static_cast<System::Int32>(static_cast<System::Byte>(169)));
-			this->guna2Button5->DisabledState->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(141)),
+			this->logOutButton->DisabledState->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(141)),
 				static_cast<System::Int32>(static_cast<System::Byte>(141)), static_cast<System::Int32>(static_cast<System::Byte>(141)));
-			this->guna2Button5->FillColor = System::Drawing::Color::Transparent;
-			this->guna2Button5->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
-			this->guna2Button5->ForeColor = System::Drawing::Color::White;
-			this->guna2Button5->HoverState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)),
+			this->logOutButton->FillColor = System::Drawing::Color::Transparent;
+			this->logOutButton->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
+			this->logOutButton->ForeColor = System::Drawing::Color::White;
+			this->logOutButton->HoverState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)),
 				static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(47)));
-			this->guna2Button5->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"guna2Button5.Image")));
-			this->guna2Button5->Location = System::Drawing::Point(0, 292);
-			this->guna2Button5->Name = L"guna2Button5";
-			this->guna2Button5->Size = System::Drawing::Size(72, 45);
-			this->guna2Button5->TabIndex = 5;
+			this->logOutButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"logOutButton.Image")));
+			this->logOutButton->Location = System::Drawing::Point(0, 531);
+			this->logOutButton->Name = L"logOutButton";
+			this->logOutButton->Size = System::Drawing::Size(72, 48);
+			this->logOutButton->TabIndex = 5;
+			this->logOutButton->Click += gcnew System::EventHandler(this, &MyForm::logOutButton_Click);
 			// 
 			// guna2Button4
 			// 
@@ -864,7 +870,7 @@ namespace Client {
 		public: property CPipeReciver* reciver;
 	
 
-		protected:   Void onShow(EventArgs^ a) override {
+		protected:   Void onShow() override {
 			//this->onShow(a);
 			try {
 				server = new ServerConnection();
@@ -887,9 +893,8 @@ namespace Client {
 				if (reg->isUserCloseWindow) {
 					throw std::exception("user close reqistration window");
 				}
-				std::string n, p;
-				MarshalString(user->userName, n);
-				MarshalString(user->password, p);
+				profilePicture->Image = user->photo->Image;
+
 			//	reciver = new CPipeReciver(CUser(n.c_str(),p.c_str(),user->pictureIndex));
 				//workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));
 			
@@ -943,6 +948,12 @@ namespace Client {
 			   if(currentNode)
 					currentNode->resetColor();
 			   currentNode = node;
+			   currentChatName->Text = node->chatName->Text;
+			   currentChatStatus->Text = node->online->Text;
+			   currentChatPicture->Image =  Image::FromFile("userPhotos/user" + node->picture + ".png");
+			   photoOtherUser->Image = Image::FromFile("userPhotos/user" + node->picture + ".png");
+			   nameOtherUser->Text = node->chatName->Text;
+
 			   receiveMessagesRange();
 
 			   SuspendLayout();
@@ -1090,6 +1101,12 @@ namespace Client {
 			
 			currentNode->messageView->Controls->default[i]->Width = placeForChats->Width;
 		}
+	}
+	private: System::Void logOutButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		SuspendLayout();
+		placeForChats->Controls->Clear();
+		placeForMessages->Controls->Clear();
+		onShow();
 	}
 };
 
