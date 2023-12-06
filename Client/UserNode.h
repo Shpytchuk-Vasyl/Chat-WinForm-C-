@@ -97,7 +97,7 @@ namespace Client {
 
 	public: ~UserNode() {
 			  MyUserData^ save = gcnew MyUserData(id, pictureIndex, userName, password);
-			  save->WriteToFile("");
+			  save->WriteToFile("userData/user.bin");
 	}
 	
 	
