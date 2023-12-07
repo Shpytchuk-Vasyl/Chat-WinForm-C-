@@ -1,5 +1,4 @@
 #include "SocketServe.h"
-#include "PipeServer.h"
 #include "DbConector.h"
 #include "CUser.h"
 #include "CChat.h"
