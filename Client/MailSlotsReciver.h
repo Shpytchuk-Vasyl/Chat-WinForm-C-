@@ -21,7 +21,7 @@ class MailSlotsReciver
 public:
     MailSlotsReciver(std::string  username) {
         userName = std::wstring(username.begin(), username.end());
-        HANDLE hMailslot = CreateFile((L"\\\\DESKTOP-7CK1JB4\\slot" + userName).c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+        HANDLE hMailslot = CreateFile((L"\\\\DESKTOP-7CK1JB4\\slot\\" + userName).c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
         if (hMailslot == INVALID_HANDLE_VALUE) {
            
             throw std::exception();
