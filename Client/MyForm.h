@@ -44,6 +44,8 @@ namespace Client {
 				if (server != nullptr) {
 					server->finishWork();
 					server = nullptr;
+					user->~UserNode();
+					user = nullptr;
 				}
 				delete components;
 				//if (server) delete server;
@@ -162,7 +164,7 @@ namespace Client {
 			this->guna2Panel1->Dock = System::Windows::Forms::DockStyle::Left;
 			this->guna2Panel1->Location = System::Drawing::Point(0, 0);
 			this->guna2Panel1->Name = L"guna2Panel1";
-			this->guna2Panel1->Size = System::Drawing::Size(72, 581);
+			this->guna2Panel1->Size = System::Drawing::Size(72, 590);
 			this->guna2Panel1->TabIndex = 0;
 			// 
 			// logOutButton
@@ -181,7 +183,7 @@ namespace Client {
 			this->logOutButton->HoverState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)),
 				static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(47)));
 			this->logOutButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"logOutButton.Image")));
-			this->logOutButton->Location = System::Drawing::Point(0, 531);
+			this->logOutButton->Location = System::Drawing::Point(0, 540);
 			this->logOutButton->Name = L"logOutButton";
 			this->logOutButton->Size = System::Drawing::Size(72, 48);
 			this->logOutButton->TabIndex = 5;
@@ -295,7 +297,7 @@ namespace Client {
 			this->guna2Panel2->Dock = System::Windows::Forms::DockStyle::Right;
 			this->guna2Panel2->Location = System::Drawing::Point(1044, 0);
 			this->guna2Panel2->Name = L"guna2Panel2";
-			this->guna2Panel2->Size = System::Drawing::Size(267, 581);
+			this->guna2Panel2->Size = System::Drawing::Size(267, 590);
 			this->guna2Panel2->TabIndex = 1;
 			// 
 			// minimizeButton
@@ -500,7 +502,7 @@ namespace Client {
 			this->guna2Panel4->Dock = System::Windows::Forms::DockStyle::Left;
 			this->guna2Panel4->Location = System::Drawing::Point(72, 67);
 			this->guna2Panel4->Name = L"guna2Panel4";
-			this->guna2Panel4->Size = System::Drawing::Size(295, 514);
+			this->guna2Panel4->Size = System::Drawing::Size(295, 523);
 			this->guna2Panel4->TabIndex = 3;
 			// 
 			// VScrollBarChats
@@ -520,7 +522,7 @@ namespace Client {
 			this->VScrollBarChats->MaximumSize = System::Drawing::Size(10, 0);
 			this->VScrollBarChats->Name = L"VScrollBarChats";
 			this->VScrollBarChats->ScrollbarSize = 10;
-			this->VScrollBarChats->Size = System::Drawing::Size(10, 514);
+			this->VScrollBarChats->Size = System::Drawing::Size(10, 523);
 			this->VScrollBarChats->TabIndex = 19;
 			this->VScrollBarChats->ThumbColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(19)), static_cast<System::Int32>(static_cast<System::Byte>(25)),
 				static_cast<System::Int32>(static_cast<System::Byte>(40)));
@@ -534,7 +536,7 @@ namespace Client {
 			this->placeForChats->Dock = System::Windows::Forms::DockStyle::Left;
 			this->placeForChats->Location = System::Drawing::Point(0, 0);
 			this->placeForChats->Name = L"placeForChats";
-			this->placeForChats->Size = System::Drawing::Size(0, 514);
+			this->placeForChats->Size = System::Drawing::Size(0, 523);
 			this->placeForChats->TabIndex = 19;
 			this->placeForChats->UseWaitCursor = true;
 			// 
@@ -544,7 +546,7 @@ namespace Client {
 			this->guna2Panel5->Controls->Add(this->guna2Panel8);
 			this->guna2Panel5->Controls->Add(this->sendText);
 			this->guna2Panel5->Dock = System::Windows::Forms::DockStyle::Bottom;
-			this->guna2Panel5->Location = System::Drawing::Point(367, 524);
+			this->guna2Panel5->Location = System::Drawing::Point(367, 533);
 			this->guna2Panel5->Name = L"guna2Panel5";
 			this->guna2Panel5->Size = System::Drawing::Size(677, 57);
 			this->guna2Panel5->TabIndex = 4;
@@ -630,7 +632,7 @@ namespace Client {
 			this->placeForMessages->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->placeForMessages->Location = System::Drawing::Point(367, 67);
 			this->placeForMessages->Name = L"placeForMessages";
-			this->placeForMessages->Size = System::Drawing::Size(677, 457);
+			this->placeForMessages->Size = System::Drawing::Size(677, 466);
 			this->placeForMessages->TabIndex = 6;
 			// 
 			// VScrollBarForMessages
@@ -649,7 +651,7 @@ namespace Client {
 			this->VScrollBarForMessages->MaximumSize = System::Drawing::Size(10, 0);
 			this->VScrollBarForMessages->Name = L"VScrollBarForMessages";
 			this->VScrollBarForMessages->ScrollbarSize = 10;
-			this->VScrollBarForMessages->Size = System::Drawing::Size(10, 457);
+			this->VScrollBarForMessages->Size = System::Drawing::Size(10, 466);
 			this->VScrollBarForMessages->TabIndex = 20;
 			this->VScrollBarForMessages->ThumbColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(19)),
 				static_cast<System::Int32>(static_cast<System::Byte>(25)), static_cast<System::Int32>(static_cast<System::Byte>(40)));
@@ -661,7 +663,7 @@ namespace Client {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)), static_cast<System::Int32>(static_cast<System::Byte>(32)),
 				static_cast<System::Int32>(static_cast<System::Byte>(47)));
-			this->ClientSize = System::Drawing::Size(1311, 581);
+			this->ClientSize = System::Drawing::Size(1311, 590);
 			this->Controls->Add(this->VScrollBarForMessages);
 			this->Controls->Add(this->placeForMessages);
 			this->Controls->Add(this->guna2Panel5);
@@ -836,9 +838,9 @@ namespace Client {
 			Guna2Panel^ p = gcnew Guna2Panel();
 			p->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
+			p->Size = System::Drawing::Size(MyForm::pointer->placeForMessages->Width, msg->Height);
 			p->Controls->Add(msg);
 			p->Location = System::Drawing::Point(3, 3);
-			p->Size = System::Drawing::Size(this->messageView->Width, msg->message->Height);
 			messageView->SuspendLayout();
 			messageView->Controls->Add(p);
 			messageView->ResumeLayout();
@@ -897,7 +899,7 @@ namespace Client {
 					throw std::exception("user close reqistration window");
 				}
 				profilePicture->Image = Image::FromFile("userPhotos/user" + user->pictureIndex + ".png");;
-
+				user->isMainUser = true;
 			//	reciver = new CPipeReciver(CUser(n.c_str(),p.c_str(),user->pictureIndex));
 				//workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));
 			
@@ -1021,8 +1023,8 @@ namespace Client {
 					result[i] = gcnew
 						MessageNode(
 							gcnew String(v[i].get_text().c_str()),
-							v[i].get_user_id() == user->id,
-							v[i].get_user_id() == user->id ? user->pictureIndex : currentNode->picture
+							v[i].get_is_my_msg(),
+							v[i].get_is_my_msg() ? user->pictureIndex : currentNode->picture
 						);
 				}
 				addMessagesToForm(result, newMsg == 0);
@@ -1039,11 +1041,15 @@ namespace Client {
 					oldControls->Add(control);//тут наче  ж збирались кожен раз перевантажувати ?
 				}
 				currentNode->messageView->Controls->Clear();
-				currentNode->messageView->Controls->AddRange(msg);
+				for (size_t i = 0; i < msg->Length; ++i) {
+					currentNode->addMessage(msg[i]);
+				}
 				currentNode->messageView->Controls->AddRange(oldControls->ToArray());
 			}
 			else {
-				currentNode->messageView->Controls->AddRange(msg);
+				for (size_t i = 0; i < msg->Length; ++i) {
+					currentNode->addMessage(msg[i]);
+				}
 			}
 			ResumeLayout();
 		}
@@ -1116,6 +1122,8 @@ namespace Client {
 	private: System::Void logOutButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		SuspendLayout();
 		placeForChats->Controls->Clear();
+		chatNodes->Clear();
+		currentNode = nullptr;
 		placeForMessages->Controls->Clear();
 		onShow();
 	}

@@ -21,7 +21,19 @@ public:
 		std::memcpy(s_password, password, 50);
 		i_picture = picture;
 	}
-	
+    CUser(const CUser& other) {
+        // Копіюємо значення з іншого об'єкта до поточного
+
+        // Копіюємо рядок імені
+        std::memcpy(s_name, other.s_name,50);
+
+        // Копіюємо рядок паролю
+        std::memcpy(s_password, other.s_password,50);
+
+        // Копіюємо прості числові значення
+        i_picture = other.i_picture;
+        is_online = other.is_online;
+    }
 
     // Getter for s_name
     char* getName() {

@@ -223,7 +223,7 @@ void CDatabase::add_chat(const CChat chat) const {
 }
 
 void CDatabase::update_chat(CChat chat) const {
-    int id = get_chat_id(chat);
+    int id = chat.chat_id;
     sql::PreparedStatement* pstmt = con->prepareStatement(
         "UPDATE chats SET num_first_unread = ? WHERE id = ?"
     );

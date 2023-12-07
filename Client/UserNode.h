@@ -24,6 +24,7 @@ namespace Client {
 		  property Label^ chatName;
 		  property String^ password;
 		  property bool isSelected;
+		  property bool isMainUser;
 
 	public: UserNode(String^ file) {
 		MyUserData^ data = gcnew MyUserData();
@@ -96,8 +97,10 @@ namespace Client {
 	}
 
 	public: ~UserNode() {
-			  MyUserData^ save = gcnew MyUserData(id, pictureIndex, userName, password);
-			  save->WriteToFile("userData/user.bin");
+		if (isMainUser) {
+			MyUserData^ save = gcnew MyUserData(id, pictureIndex, userName, password);
+			save->WriteToFile("userData/user.bin");
+		}
 	}
 	
 	

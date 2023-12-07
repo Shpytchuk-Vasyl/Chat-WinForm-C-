@@ -8589,7 +8589,7 @@
   <data name="photoOtherUser.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAkgAAAIiCAYAAAAzcTeTAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DgAACw4BQL7hQQAA/7JJREFUeF7snQV8FOf294knBJdABHcLkgRJQgwIELS4a0tb2kKhULS0hUKp4G5B
+        DQAACw0B7QfALAAA/7JJREFUeF7snQV8FOf294knBJdABHcLkgRJQgwIELS4a0tb2kKhULS0hUKp4G5B
         Q0gIFtzdHRIIcXffZH3m954zu+HSe3v/75XeW+DO78PhmXlm5pnZ2c3Od89znvOUkyVLlixZsmTJkiVL
         lixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJ
         kiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZ
@@ -17753,7 +17753,7 @@
   <data name="currentChatPicture.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAaYAAAGwCAYAAADi/sGFAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DQAACw0B7QfALAAA/7JJREFUeF7svQV4FNuatk06HXd3d3d3d3d3D3ElCUkICQESJCG4bdxdN7rZuLu7
+        DAAACwwBP0AiyAAA/7JJREFUeF7svQV4FNuatk06HXd3d3d3d3d3D3ElCUkICQESJCG4bdxdN7rZuLu7
         QyCBACEhoZ9/VZNzvpl/vplvjs1h9qnnut6rOtXVlaaAvvtea9Va4+jQofOPCz8/v4SJkZGXhZlZlJWF
         RZS1pSV762BnF+Xm6homLS0tTw5j/DiaDh06dOjQ+QeEl4dXREFOTsfH0zOyKC9vSV155dXGquqHbfUN
         D9saGh82Vtc8bK2f+LBr2vQ7VcXFu+OiozqSEuImFeTn1tlZWwcoyssbycvK6ikqyOspKynpCggICI6d

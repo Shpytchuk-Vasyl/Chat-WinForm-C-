@@ -61,6 +61,7 @@ public:
             std::vector<CUser>  users;
             CUser  user_res;
             CChat chat;
+            CMessage msg;
 
             iResult = recv(socketThread.ClientSocket,
                 recvbuf,
@@ -135,7 +136,8 @@ public:
                     else {
                         other_user_id = socketThread.current_chat.getUser2Id();
                     }
-                    CMessage msg = *(CMessage*)recvbuf;
+                     msg = *(CMessage*)recvbuf;
+                     msg.set_user_id(socketThread.current_user_id);
                     socketThread.db->add_message(msg);
                     if (socketThread.isOnline(other_user_id)) {
                         send_addr = INVALID_SOCKET;
@@ -270,9 +272,10 @@ public:
                         0);
                     other_user_id = 0;
                     chat = *(CChat*)recvbuf;
-                   msgs = socketThread.db->get_all_message_from_chat(chat);
-                    for (auto msg : msgs) {
+                    msgs = socketThread.db->get_all_message_from_chat(chat);
+                    for (CMessage msg : msgs) {
                         memset(recvbuf, 0, recvbuflen);
+                        msg.set_is_my_msg(msg.get_user_id() == socketThread.current_user_id);
                         std::memcpy(recvbuf, (char*)&msg, sizeof(msg));
                         iSendResult = send(socketThread.ClientSocket, recvbuf, sizeof(recvbuf), 0);
                         if (iSendResult == SOCKET_ERROR) {
@@ -292,7 +295,7 @@ public:
                     break;
 
                 case TypeRequest::OPEN_CHAT://те ж  що і пепереднє 
-                   
+                   // тут напевно треба вставити логіку встановлення поточного чату
                     break;
 
                 default:

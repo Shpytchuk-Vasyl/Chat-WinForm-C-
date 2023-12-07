@@ -70,7 +70,8 @@ namespace Client {
 				this->FillColor = System::Drawing::Color::FromArgb(255, 152, 93);
 				this->FillColor2 = System::Drawing::Color::FromArgb(255, 61, 87);
 			}
-			this->Size = System::Drawing::Size(300, message->Height);
+
+			this->Size = System::Drawing::Size(300, message->Height > 56 ? message->Height : 56);
 
 
 
