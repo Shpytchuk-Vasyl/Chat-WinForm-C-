@@ -742,7 +742,9 @@ namespace Client {
 				//this->countNewMessage->TabIndex = 20;
 				this->countNewMessage->Text = intCountNewMessage.ToString();
 				this->countNewMessage->UseWaitCursor = true;
-
+				if (intCountNewMessage == 0) {
+					this->countNewMessage->Visible = false;
+				}
 
 				this->photo = (gcnew Guna::UI2::WinForms::Guna2CirclePictureBox());
 				this->photo->BackColor = System::Drawing::Color::Transparent;
@@ -793,7 +795,7 @@ namespace Client {
 				this->chatName = (gcnew Label);
 				this->chatName->AutoSize = true;
 				this->chatName->BackColor = System::Drawing::Color::Transparent;
-				this->chatName->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				this->chatName->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 11, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 					static_cast<System::Byte>(204)));
 				this->chatName->ForeColor = System::Drawing::Color::Silver;
 				this->chatName->Location = System::Drawing::Point(60, 10);
@@ -1101,9 +1103,10 @@ namespace Client {
 		}
 
 	private: System::Void maximizeButton_Click(System::Object^ sender, System::EventArgs^ e) {
-		currentNode->messageView->AutoScroll = false;
-		currentNode->messageView->Width = placeForMessages->Width;
-
+		if (currentNode != nullptr) {
+			currentNode->messageView->AutoScroll = false;
+			currentNode->messageView->Width = placeForMessages->Width;
+		}
 		if (this->WindowState == FormWindowState::Maximized) {
 			
 			this->WindowState == FormWindowState::Normal;			
@@ -1116,11 +1119,11 @@ namespace Client {
 			{
 				currentNode->messageView->Controls->default[i]->Width = placeForMessages->Width;
 			}
+		if (currentNode != nullptr) 
 		currentNode->messageView->AutoScroll = true;
 
 	}
-	private: System::Void logOutButton_Click(System::Object^ sender, System::EventArgs^ e) {
-		SuspendLayout();
+	private: System::Void logOutButton_Click(System::Object^ sender, System::EventArgs^ e) {	
 		placeForChats->Controls->Clear();
 		chatNodes->Clear();
 		currentNode = nullptr;
