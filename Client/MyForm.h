@@ -899,8 +899,6 @@ namespace Client {
 				}
 				profilePicture->Image = Image::FromFile("userPhotos/user" + user->pictureIndex + ".png");;
 
-				reciver = new MailSlotsReciver(msclr::interop::marshal_as<std::string>(user->Name));// хз чи тут , треба  буде затестити , не вникав 
-				workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));
 			
 		}
 
@@ -909,6 +907,11 @@ namespace Client {
 			MarshalString(user->userName, name);
 			CUser u(name.c_str(), "", user->pictureIndex);
 			server->Start(u);
+
+			//////////////////////////////////////////////////////////////////////////////////////////////////////
+			reciver = new MailSlotsReciver(msclr::interop::marshal_as<std::string>(user->Name));// хз чи тут , треба  буде затестити , не вникав 
+			workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));//// поки сюди
+			//////////////////////////////////////////////////////////////////////////////////////////////
 			std::vector<CChat> v = server->update();
 			if (!v.empty()) {
 				for (int i = 0; i < v.size(); i++) {
