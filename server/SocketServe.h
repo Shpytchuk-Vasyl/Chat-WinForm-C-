@@ -11,6 +11,7 @@
 #include <thread>
 #include <vector>
 #include <execution>
+#include <algorithm>
 
 // Need to link with Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
@@ -28,6 +29,7 @@ class SockedThread {
     CChat current_chat;
     int current_user_id = 0;
     bool isActive = true;
+    std::vector<std::pair<int, SOCKET>>::iterator it;
     int userId = 0;
 
 public:
@@ -61,7 +63,7 @@ public:
             std::vector<CUser>  users;
             CUser  user_res;
             CChat chat;
-
+            CMessage msg;
             iResult = recv(socketThread.ClientSocket,
                 recvbuf,
                 sizeof(recvbuf),
@@ -80,7 +82,7 @@ public:
 
                 case TypeRequest::REGISTER_REQUEST:
                     // Обробка запиту на реєстрацію
-                   
+
                     if (socketThread.ClientSocket == INVALID_SOCKET)
                         throw std::exception();
 
@@ -92,23 +94,23 @@ public:
                     try {
                         socketThread.db->add_user(user_res);
                         socketThread.current_user_id = socketThread.db->get_user_id(user_res);
-                         iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
+                        iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
                     }
                     catch (sql::SQLException& e) {
-                         iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::ERR).c_str(), sizeof(ERR), 0);
+                        iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::ERR).c_str(), sizeof(ERR), 0);
                     }
                     break;
 
                 case TypeRequest::START_REQUEST://отримуємо всі чати
-                   
+
 
                     iResult = recv(socketThread.ClientSocket,
                         recvbuf,
                         recvbuflen,
                         0);
-                     user_res = *(CUser*)recvbuf;
+                    user_res = *(CUser*)recvbuf;
                     socketThread.current_user_id = socketThread.db->get_user_id(user_res);// зробити функцію для  перевірки чи є юзер з заданим імям та паролем 
-                  
+
                     // std::vector<CChat> chats = socketThread.db->get_chats_with_user(socketThread.current_user_id);
                     // цього не треба, бо я й так буду знати що сервер не доступний
                     //iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
@@ -124,18 +126,18 @@ public:
                     break;
 
                 case TypeRequest::SEND_MESSAGE:
-                        iResult = recv(socketThread.ClientSocket,
-                            recvbuf,
-                            recvbuflen,
-                            0);
-                     other_user_id = 0;
+                    iResult = recv(socketThread.ClientSocket,
+                        recvbuf,
+                        recvbuflen,
+                        0);
+                    other_user_id = 0;
                     if (socketThread.current_user_id == socketThread.current_chat.getUser2Id()) {
                         other_user_id = socketThread.current_chat.getUser1Id();
                     }
                     else {
                         other_user_id = socketThread.current_chat.getUser2Id();
                     }
-                    CMessage msg = *(CMessage*)recvbuf;
+                     msg = *(CMessage*)recvbuf;
                     socketThread.db->add_message(msg);
                     if (socketThread.isOnline(other_user_id)) {
                         send_addr = INVALID_SOCKET;
@@ -147,7 +149,7 @@ public:
                         }
 
                         if (send_addr != INVALID_SOCKET) {
-                             iSendResult = send(send_addr, recvbuf, recvbuflen, 0);//надсилати на пайпах 
+                            iSendResult = send(send_addr, recvbuf, recvbuflen, 0);//надсилати на пайпах 
                             if (iSendResult == SOCKET_ERROR) {
                                 printf("send failed with error: %d\n", WSAGetLastError());
                                 closesocket(socketThread.ClientSocket);
@@ -159,14 +161,14 @@ public:
                     else {
                         if (socketThread.current_user_id == socketThread.current_chat.getUser2Id()) {
                             socketThread.current_chat.setUnread1(socketThread.current_chat.getUnread1() + 1);
-                           // socketThread.db->update_chat(socketThread.current_chat);
+                            // socketThread.db->update_chat(socketThread.current_chat);
 
                         }
                         else {
                             socketThread.current_chat.setUnread2(socketThread.current_chat.getUnread2() + 1);
                         }
                         socketThread.db->update_chat(socketThread.current_chat);
-                       
+
                     }
 
                     // Обробка відправки повідомлення
@@ -196,11 +198,12 @@ public:
                         socketThread.isActive = false;
                         return;
                     }
-                   // iSendResult
+                    // iSendResult
                     break;
 
                 case TypeRequest::DELETE_CHAT:
-                    // Обробка видалення чату
+
+
                     break;
 
                 case TypeRequest::FIND_PEOPLE:
@@ -225,6 +228,7 @@ public:
                             }
                         }
                     }
+                    Sleep(1000);
                     iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
                     if (iSendResult == SOCKET_ERROR) {
                         printf("send failed with error: %d\n", WSAGetLastError());
@@ -236,8 +240,17 @@ public:
                     break;
 
                 case TypeRequest::FINISH_WORK:
-                    // Обробка завершення роботи
-                    break;
+                //    it= std::find_if(socketThread.online->begin(), socketThread.online->end(),
+                //        [socketThread](const auto& user) {
+                //            return user.first == socketThread.current_user_id;
+                //        });
+                ////якщо є чат то кидати мб повідомлення про те що юзер вийшов ?
+                //    // Перевірити, чи знайдено відповідний елемент
+                //    if (it != socketThread.online->end()) {
+                //        // Видалити елемент
+                //        socketThread.online->erase(it);
+                //        // Обробка завершення роботи
+                        break;
 
                 case TypeRequest::UPDATE_CHATS: // отримати  всі чати що повязані з поточним юзером 
                     // Обробка оновлення чатів
@@ -270,7 +283,7 @@ public:
                         0);
                     other_user_id = 0;
                     chat = *(CChat*)recvbuf;
-                   msgs = socketThread.db->get_all_message_from_chat(chat);
+                    msgs = socketThread.db->get_all_message_from_chat(chat);
                     for (auto msg : msgs) {
                         memset(recvbuf, 0, recvbuflen);
                         std::memcpy(recvbuf, (char*)&msg, sizeof(msg));
@@ -282,6 +295,7 @@ public:
                             return;
                         }
                     }
+                    Sleep(1000);
                     iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
                     if (iSendResult == SOCKET_ERROR) {
                         printf("send failed with error: %d\n", WSAGetLastError());
@@ -292,13 +306,14 @@ public:
                     break;
 
                 case TypeRequest::OPEN_CHAT://те ж  що і пепереднє 
-                   
+
                     break;
 
                 default:
                     // Обробка, якщо значення не відповідає жодному з case
                     break;
-                }
+                 }
+                
             }
             else if (iResult == 0)
                 printf("Connection closing...\n");
