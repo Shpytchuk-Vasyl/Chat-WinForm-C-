@@ -6,7 +6,8 @@
 #include <string>
 #include <tchar.h>
 #include <strsafe.h>
-#define SLOT_S L"\\\\.\\slot\\"
+#include <algorithm>
+#define SLOT_S L"\\\\.\\mailslot\\"
 #define PIPE_TIMEOUT 5000
 #define BUFSIZE 4096
 
@@ -21,7 +22,8 @@ class MailSlotsReciver
 public:
     MailSlotsReciver(std::string  username) {
         userName = std::wstring(username.begin(), username.end());
-        HANDLE hMailslot = CreateFile((L"\\\\DESKTOP-7CK1JB4\\slot\\" + userName).c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+        std::replace(userName.begin(), userName.end(), L' ', L'_');
+        HANDLE hMailslot = CreateFileW((L"\\\\DESKTOP-7CK1JB4\\mailslot\\"+userName).c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
         if (hMailslot == INVALID_HANDLE_VALUE) {
            
             throw std::exception();

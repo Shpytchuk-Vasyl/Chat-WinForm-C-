@@ -41,6 +41,7 @@ public:
     int  get_user_id(const CUser)const;
     std::string get_message_text_by_id(int);
     std::vector<CChat> get_chats() const;
+    
     std::vector<CChat> get_chats_with_user(int) const;
     CUser get_user_by_id(int) const;
     std::vector<CUser> get_users() const;

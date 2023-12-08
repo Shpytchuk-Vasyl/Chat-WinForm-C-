@@ -27,7 +27,7 @@ class SockedThread {
     std::thread* myThread = nullptr;
     CDatabase* db = nullptr;
     std::vector<int>* online = nullptr;
-    std::vector<std::pair<int, MailSlotsSender>> *connection_list = nullptr;
+    std::vector<std::pair<int, MailSlotsSender *>> *connection_list = nullptr;
     CChat current_chat;
     int current_user_id = 0;
     bool isActive = true;
@@ -35,7 +35,7 @@ class SockedThread {
     int userId = 0;
 
 public:
-    SockedThread(SOCKET clientSocket, CDatabase* db, std::vector<int>* online, std::vector<std::pair<int, MailSlotsSender>>* connectoin_list, std::vector<SockedThread> *clients) {
+    SockedThread(SOCKET clientSocket, CDatabase* db, std::vector<int>* online, std::vector<std::pair<int, MailSlotsSender*>>* connectoin_list, std::vector<SockedThread> *clients) {
         this->ClientSocket = clientSocket;
         this->db = db;
         this->online = online;
@@ -118,9 +118,8 @@ public:
                     user_res = *(CUser*)recvbuf;
                     try {
                         socketThread.db->add_user(user_res);
-                        socketThread.current_user_id = socketThread.db->get_user_id(user_res);
-
-                        socketThread.online->emplace_back(socketThread.current_user_id, MailSlotsSender(user_res.getName()));
+                        socketThread.current_user_id = socketThread.db->get_user_id(user_res);     
+                        socketThread.connection_list->push_back(std::make_pair(socketThread.current_user_id, new MailSlotsSender(user_res.getName())));
                         iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
                     }
                     catch (sql::SQLException& e) {
@@ -137,8 +136,7 @@ public:
                         0);
                     user_res = *(CUser*)recvbuf;
                     socketThread.current_user_id = socketThread.db->get_user_id(user_res);// зробити функцію для  перевірки чи є юзер з заданим імям та паролем 
-                    socketThread.online->emplace_back(socketThread.current_user_id, MailSlotsSender(user_res.getName()));
-
+                    socketThread.connection_list->push_back(std::make_pair(socketThread.current_user_id, new MailSlotsSender(std::string(user_res.getName()))));
                     // std::vector<CChat> chats = socketThread.db->get_chats_with_user(socketThread.current_user_id);
                     // цього не треба, бо я й так буду знати що сервер не доступний
                     //iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
@@ -172,7 +170,7 @@ public:
                         
                         for (auto pair : *socketThread.connection_list) {
                             if (pair.first == other_user_id) {
-                                if (!pair.second.send(msg.get_text())) {//  можу переробити щоб кидати не тльки  текст але не думаю що є сенс 
+                                if (!pair.second->send(msg.get_text())) {//  можу переробити щоб кидати не тльки  текст але не думаю що є сенс 
                                     std::cout << "err sending to " << other_user_id;
                                 }
                                 break;
@@ -212,7 +210,10 @@ public:
                     chat.setUser2Id(other_user_id);
                     chat.setUser1(socketThread.db->get_user_by_id(socketThread.current_user_id));
                     chat.setUser2(socketThread.db->get_user_by_id(other_user_id));
-                    socketThread.db->add_chat(chat);
+                    if (socketThread.db->get_chat_id(chat) == -1) {
+                        socketThread.db->add_chat(chat);
+                     }
+                    
                     std::memcpy(recvbuf, (char*)(&chat), sizeof(chat));
                     iSendResult = send(socketThread.ClientSocket, recvbuf, recvbuflen, 0);
                     if (iSendResult == SOCKET_ERROR) {
@@ -363,7 +364,7 @@ class SocketServer
     std::vector<SockedThread> clients;
     CDatabase db;
     std::vector<int> online;
-    std::vector<std::pair<int, MailSlotsSender>> connection_list;
+    std::vector<std::pair<int, MailSlotsSender*>> connection_list;
     std::vector<std::thread*> threads;
 
 public:
@@ -418,7 +419,7 @@ public:
             try {
                 sockaddr* addr = NULL;
                 SOCKET  cs = accept(ListenSocket, NULL, NULL);
-                clients.emplace_back(SockedThread (cs,&db,&online,&connection_list, &clients));
+                clients.push_back(SockedThread (cs,&db,&online,&connection_list, &clients));
                 std::thread* th = new std::thread(SockedThread::Run, clients.back());
                 threads.push_back(th);
                 clients.back().setThread(th);

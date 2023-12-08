@@ -268,3 +268,4 @@ std::vector<CMessage> CDatabase::get_all_message_from_chat(const CChat chat) con
     delete resultSet;
     return messages;
 }
+
