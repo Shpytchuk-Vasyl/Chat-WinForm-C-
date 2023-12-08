@@ -142,7 +142,7 @@
     <ClCompile Include="CMessage.cpp" />
     <ClCompile Include="CUser.cpp" />
     <ClCompile Include="DbConector.cpp" />
-    <ClCompile Include="PipeServer.cpp" />
+    <ClCompile Include="MailSlotsSender.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SocketServe.cpp" />
   </ItemGroup>
@@ -151,7 +151,7 @@
     <ClInclude Include="CMessage.h" />
     <ClInclude Include="CUser.h" />
     <ClInclude Include="DbConector.h" />
-    <ClInclude Include="PipeServer.h" />
+    <ClInclude Include="MailSlotsSender.h" />
     <ClInclude Include="SocketServe.h" />
   </ItemGroup>
   <ItemGroup>

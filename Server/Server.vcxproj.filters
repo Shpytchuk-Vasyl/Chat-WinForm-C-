@@ -21,7 +21,7 @@
     <ClCompile Include="SocketServe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PipeServer.cpp">
+    <ClCompile Include="MailSlotsSender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CUser.cpp">
@@ -41,7 +41,7 @@
     <ClInclude Include="SocketServe.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PipeServer.h">
+    <ClInclude Include="MailSlotsSender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DbConector.h">

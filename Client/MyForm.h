@@ -2,8 +2,9 @@
 #include "ServerConnection.h"
 #include "ChatNode.h"
 #include "RequestManager.h"
+#include <msclr/marshal_cppstd.h>
 #include "UsersViewForm.h"
-#include "PipeReciver.h"
+#include "MailSlotsReciver.h"
 #include "RegisterForm.h"
 
 namespace Client {
@@ -874,7 +875,7 @@ namespace Client {
 		public:  static property MyForm^ pointer;
 		public: property UserNode^ user;
 		public: property Thread^ workerThread;
-		public: property CPipeReciver* reciver;
+		public: property MailSlotsReciver* reciver;
 	
 
 		protected:   Void onShow() override {
@@ -912,6 +913,11 @@ namespace Client {
 			MarshalString(user->userName, name);
 			CUser u(name.c_str(), "", user->pictureIndex);
 			server->Start(u);
+
+			//////////////////////////////////////////////////////////////////////////////////////////////////////
+			reciver = new MailSlotsReciver(msclr::interop::marshal_as<std::string>(user->Name));// хз чи тут , треба  буде затестити , не вникав 
+			workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));//// поки сюди
+			//////////////////////////////////////////////////////////////////////////////////////////////
 			std::vector<CChat> v = server->update();
 			if (!v.empty()) {
 				for (int i = 0; i < v.size(); i++) {
@@ -1091,10 +1097,16 @@ namespace Client {
 		private: System::Void threadReceivMessages() {
 			try {
 				while (true) {
-					std::string msg = reciver->read();
-					array<MessageNode^>^ arr = gcnew array<MessageNode^>(1);
-					arr[0] = gcnew MessageNode(gcnew String(msg.c_str()), false, currentNode->picture);
-					BeginInvoke(gcnew addMessagesToFormDelegate(this, &MyForm::addMessagesToForm), arr, false);
+					std::string msg;
+		
+					if (reciver->recive(msg)){
+						array<MessageNode^>^ arr = gcnew array<MessageNode^>(1);
+						arr[0] = gcnew MessageNode(gcnew String(msg.c_str()), false, currentNode->picture);
+						BeginInvoke(gcnew addMessagesToFormDelegate(this, &MyForm::addMessagesToForm), arr, false);
+					}
+					else{
+						break;
+					}
 				}
 			}
 			catch (std::exception e) {

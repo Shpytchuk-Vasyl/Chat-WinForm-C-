@@ -1,5 +1,4 @@
 #include "SocketServe.h"
-#include "PipeServer.h"
 #include "DbConector.h"
 #include "CUser.h"
 #include "CChat.h"
@@ -7,19 +6,7 @@
 //#include "DbConector.h"
 int main(void)
 {
-  //  //CUser user("user3", "pass", 1);
-  //  CChat ch(5, 2);
-  // 
-  //  CDatabase db;
-  //  
-  ////  db.add_user(user);
-  // //db.add_chat(ch);
-  // CMessage msg("acd", 1, db.get_chat_id(ch));
-  // CMessage msg2("asdvsd", 2, db.get_chat_id(ch));
-  // db.add_message(msg);
-  // db.add_message(msg2);
-    SocketServer s;
-   // std::thread t(&SocketServer::Run, s);
+    SocketServer s;  
     s.Run();
 }
 
