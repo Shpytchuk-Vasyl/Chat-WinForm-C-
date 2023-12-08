@@ -40,11 +40,11 @@ public:
         std::memcpy(buffer, msg.c_str(), sizeof(msg.c_str()));
 
         if (WriteFile(hMailslot, buffer, strlen(buffer) + 1, &bytesWritten, nullptr)) {
-            std::cout << "Повідомлення відправлено на сервер: " << std::endl;
+            std::cout << "Sended " << std::endl;
             return 1;
         }
         else {
-            std::cerr << "Не вдалося записати в Mailslot. Код помилки: " << GetLastError() << std::endl;
+            std::cerr << "Not sended: " << GetLastError() << std::endl;
             return 0;
         }
 
