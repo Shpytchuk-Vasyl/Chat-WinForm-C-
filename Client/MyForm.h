@@ -1,7 +1,6 @@
 #pragma once
 #include "ServerConnection.h"
 #include "ChatNode.h"
-#include "RequestManager.h"
 #include <msclr/marshal_cppstd.h>
 #include "UsersViewForm.h"
 #include "MailSlotsReciver.h"
@@ -86,7 +85,7 @@ namespace Client {
     private: System::Windows::Forms::Label^ currentChatStatus;
     private: System::Windows::Forms::Label^ currentChatName;
     private: Guna::UI2::WinForms::Guna2CirclePictureBox^ currentChatPicture;
-    private: Guna::UI2::WinForms::Guna2Panel^ placeForMessages;
+    public: Guna::UI2::WinForms::Guna2Panel^ placeForMessages;
 	private: Guna::UI2::WinForms::Guna2VScrollBar^ VScrollBarForMessages;
 
 
@@ -700,173 +699,7 @@ namespace Client {
 		public:
 		
 
-		ref class ChatNode : public Guna2GradientPanel
-		{
-
-		public:
-			property Guna2CirclePictureBox^ photo;
-			property Label^ chatName;
-			property Label^ lastMessage;
-			property Label^ online;
-			property Guna2CircleButton^ countNewMessage;
-			property FlowLayoutPanel^ messageView;
-			property int id;
-			property int picture;
-
-		public:
-
-			ChatNode(String^ strChatName, String^ strLastMessage, int intCountNewMessage, int photoIndex, bool status, int chat_id) : Guna2GradientPanel() {
-				id = chat_id;
-				picture = photoIndex;						//тут треба айді чату ?
-														
-
-				messageView = gcnew FlowLayoutPanel();
-				this->messageView->BackColor = System::Drawing::Color::Transparent;
-				this->messageView->Dock = System::Windows::Forms::DockStyle::Fill;
-				this->messageView->Location = System::Drawing::Point(367, 67);
-				this->messageView->AutoScroll = false;
-
-				this->countNewMessage = (gcnew Guna::UI2::WinForms::Guna2CircleButton());
-				this->countNewMessage->BackColor = System::Drawing::Color::Transparent;
-				this->countNewMessage->DisabledState->BorderColor = System::Drawing::Color::DarkGray;
-				this->countNewMessage->DisabledState->CustomBorderColor = System::Drawing::Color::DarkGray;
-				this->countNewMessage->DisabledState->FillColor = System::Drawing::Color::FromArgb(169, 169, 169);
-				this->countNewMessage->DisabledState->ForeColor = System::Drawing::Color::FromArgb(141, 141, 141);
-				this->countNewMessage->FillColor = System::Drawing::Color::Magenta;
-				this->countNewMessage->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 7.8F, System::Drawing::FontStyle::Regular,
-					System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-				this->countNewMessage->ForeColor = System::Drawing::Color::White;
-				this->countNewMessage->Location = System::Drawing::Point(150, 30);
-				this->countNewMessage->Name = "countNewMessage : " + strChatName;
-				this->countNewMessage->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
-				this->countNewMessage->Size = System::Drawing::Size(30, 30);
-				//this->countNewMessage->TabIndex = 20;
-				this->countNewMessage->Text = intCountNewMessage.ToString();
-				this->countNewMessage->UseWaitCursor = true;
-				if (intCountNewMessage == 0) {
-					this->countNewMessage->Visible = false;
-				}
-
-				this->photo = (gcnew Guna::UI2::WinForms::Guna2CirclePictureBox());
-				this->photo->BackColor = System::Drawing::Color::Transparent;
-				this->photo->FillColor = System::Drawing::Color::Transparent;
-				this->photo->Image = Image::FromFile("userPhotos/user" + photoIndex + ".png");
-				this->photo->ImageRotate = 0;
-				this->photo->Location = System::Drawing::Point(20, 20);
-				this->photo->Name = "photo : " + strChatName;
-				this->photo->ShadowDecoration->Color = System::Drawing::Color::Fuchsia;
-				this->photo->ShadowDecoration->Enabled = true;
-				this->photo->ShadowDecoration->Mode = Guna::UI2::WinForms::Enums::ShadowMode::Circle;
-				this->photo->Size = System::Drawing::Size(36, 36);
-				this->photo->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
-				//this->photo->TabIndex = 11;
-				this->photo->TabStop = false;
-				this->photo->UseWaitCursor = true;
-
-				this->online = (gcnew Label);
-				this->online->AutoSize = true;
-				this->online->BackColor = System::Drawing::Color::Transparent;
-				this->online->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 7.8F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-					static_cast<System::Byte>(204)));
-				this->online->ForeColor = System::Drawing::Color::Silver;
-				this->online->Location = System::Drawing::Point(150, 10);
-				this->online->Name = L"online : " + strChatName;
-				this->online->Size = System::Drawing::Size(39, 17);
-				//this->online->TabIndex = 14;
-				this->online->Text = status ? "Online" : "Offline";
-				this->online->UseWaitCursor = true;
-
-
-
-
-				this->lastMessage = (gcnew Label);
-				this->lastMessage->AutoSize = true;
-				this->lastMessage->BackColor = System::Drawing::Color::Transparent;
-				this->lastMessage->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-					static_cast<System::Byte>(204)));
-				this->lastMessage->ForeColor = System::Drawing::Color::Gray;
-				this->lastMessage->Location = System::Drawing::Point(60, 40);
-				this->lastMessage->Name = L"lastMessage : " + strChatName;
-				this->lastMessage->Size = System::Drawing::Size(50, 20);
-				//this->lastMessage->TabIndex = 13;
-				this->lastMessage->Text = strLastMessage;
-				this->lastMessage->UseWaitCursor = true;
-
-
-				this->chatName = (gcnew Label);
-				this->chatName->AutoSize = true;
-				this->chatName->BackColor = System::Drawing::Color::Transparent;
-				this->chatName->Font = (gcnew System::Drawing::Font(L"Franklin Gothic Medium Cond", 11, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-					static_cast<System::Byte>(204)));
-				this->chatName->ForeColor = System::Drawing::Color::Silver;
-				this->chatName->Location = System::Drawing::Point(60, 10);
-				this->chatName->Name = "chatName : " + strChatName;
-				this->chatName->Size = System::Drawing::Size(42, 20);
-				this->chatName->Text = strChatName;
-
-
-
-
-
-				this->BorderThickness = 2;
-				this->Controls->Add(this->countNewMessage);
-				this->Controls->Add(this->online);
-				this->Controls->Add(this->chatName);
-				this->Controls->Add(this->lastMessage);
-				this->Controls->Add(this->photo);
-				this->CustomBorderColor = System::Drawing::Color::FromArgb(128, 36, 206);
-				this->FillColor = System::Drawing::Color::FromArgb(23, 28, 41);
-				this->FillColor2 = System::Drawing::Color::FromArgb(23, 28, 41);
-				this->AutoSize = false;
-				//this->Anchor = (AnchorStyles::Left | AnchorStyles::Top);
-				this->Location = System::Drawing::Point(3, 3);
-				this->Name = "ChatNode : " + strChatName;
-				this->ShadowDecoration->Color = System::Drawing::Color::FromArgb(17, 22, 32);
-				this->Size = System::Drawing::Size(200, 80);
-				this->UseWaitCursor = true;
-
-				this->MouseEnter += gcnew System::EventHandler(this, &ChatNode::mouseEnter);
-				this->MouseLeave += gcnew System::EventHandler(this, &ChatNode::mouseLeave);
-				this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &ChatNode::mouseClick);
-
-			}
-
-
-		public: System::Void resetColor() {
-			this->FillColor = System::Drawing::Color::FromArgb(23, 28, 41);
-			this->FillColor2 = System::Drawing::Color::FromArgb(23, 28, 41);
-		}
-
-		public: System::Void addMessage(MessageNode^ msg) {
-			Guna2Panel^ p = gcnew Guna2Panel();
-			p->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-				| System::Windows::Forms::AnchorStyles::Right));
-			p->Size = System::Drawing::Size(MyForm::pointer->placeForMessages->Width, msg->Height);
-			p->Controls->Add(msg);
-			p->Location = System::Drawing::Point(3, 3);
-			messageView->SuspendLayout();
-			messageView->Controls->Add(p);
-			messageView->ResumeLayout();
-		}
-
-		private: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-			this->FillColor = System::Drawing::Color::FromArgb(250, 48, 90);
-			this->FillColor2 = System::Drawing::Color::FromArgb(128, 36, 206);
-			pointer->setCurrentChat(this);						//відкриття чату?
-		}
-
-		private: System::Void mouseEnter(System::Object^ sender, System::EventArgs^ e) {
-			if (this->FillColor != System::Drawing::Color::FromArgb(250, 48, 90)) {
-				this->FillColor = System::Drawing::Color::FromArgb(19, 25, 40);
-				this->FillColor2 = System::Drawing::Color::FromArgb(19, 25, 40);
-			}
-		}
-		private: System::Void mouseLeave(System::Object^ sender, System::EventArgs^ e) {
-			if(this->FillColor != System::Drawing::Color::FromArgb(250, 48, 90))
-			resetColor();
-		}
-
-		};
+	
 
 
 		public: property ServerConnection* server;
@@ -878,270 +711,27 @@ namespace Client {
 		public: property MailSlotsReciver* reciver;
 	
 
-		protected:   Void onShow() override {
-			//this->onShow(a);
-			try {
-				server = new ServerConnection();
-				server->Connect(DEFAULT_IP, DEFAULT_PORT);
-			}
-			catch (std::exception er) {
-				MessageBox::Show("Unable to connect to server", "Unable connection",
-					MessageBoxButtons::OK, MessageBoxIcon::Error);
-			}
-				//UserNode::MyUserData(8, 1, "user 1","password").WriteToFile("userData/user.bin");
-				user = gcnew UserNode("userData/user.bin");
-				RegisterForm^ reg = gcnew RegisterForm();
-				if (user->isRegistered) {
-					
-					reg->user->Text = user->userName;
-					reg->password->Text = user->password;
-					
-				}
-				reg->ShowDialog();
-				if (reg->isUserCloseWindow) {
-					throw std::exception("user close reqistration window");
-				}
-				profilePicture->Image = Image::FromFile("userPhotos/user" + user->pictureIndex + ".png");;
-				user->isMainUser = true;
-			//	reciver = new CPipeReciver(CUser(n.c_str(),p.c_str(),user->pictureIndex));
-				//workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));
-			
-		}
+	protected: System::Void onShow() override;
 
-		public: System::Void downloadChats() {
-			std::string name;
-			MarshalString(user->userName, name);
-			CUser u(name.c_str(), "", user->pictureIndex);
-			server->Start(u);
+	public: System::Void downloadChats();
 
-			//////////////////////////////////////////////////////////////////////////////////////////////////////
-			reciver = new MailSlotsReciver(msclr::interop::marshal_as<std::string>(user->Name));// хз чи тут , треба  буде затестити , не вникав 
-			workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));//// поки сюди
-			//////////////////////////////////////////////////////////////////////////////////////////////
-			std::vector<CChat> v = server->update();
-			if (!v.empty()) {
-				for (int i = 0; i < v.size(); i++) {
-					if(String::Compare(gcnew String(v[i].getUser1().getName()), user->userName) == 0){
-						chatNodes->Add(
-							gcnew ChatNode(
-								gcnew String(v[i].getUser2().getName()),
-								"",
-								v[i].getUnread1(),
-								v[i].getUser2().getPicture(),
-								v[i].getUser2().getStatus(),
-								v[i].getChatId()));
-					} else {
-						chatNodes->Add(
-							gcnew ChatNode(
-								gcnew String(v[i].getUser1().getName()),
-								"",
-								v[i].getUnread2(),
-								v[i].getUser1().getPicture(),
-								v[i].getUser1().getStatus(),
-								v[i].getChatId()));
-					}
+	public: System::Void setCurrentChat(ChatNode^ node);
 
-				}
+	private: System::Void sendButton_Click(System::Object^ sender, System::EventArgs^ e);
 
+	public: static void MarshalString(String^ s, std::string& os);
 
-				SuspendLayout();
-
-				// Конвертуємо ArrayList до array<ChatNode^>
-				array<ChatNode^>^ chatNodesArray = gcnew array<ChatNode^>(chatNodes->Count);
-				chatNodes->CopyTo(chatNodesArray);
-
-				placeForChats->Controls->AddRange(chatNodesArray);
-			//	placeForChats->AutoScroll = false;
-				ResumeLayout();
-
-			}
-		}
-
-		public: System::Void setCurrentChat(ChatNode ^node) {
-			   if(currentNode)
-					currentNode->resetColor();
-			   currentNode = node;
-			   currentChatName->Text = node->chatName->Text;
-			   currentChatStatus->Text = node->online->Text;
-			   currentChatPicture->Image =  Image::FromFile("userPhotos/user" + node->picture + ".png");
-			   photoOtherUser->Image = Image::FromFile("userPhotos/user" + node->picture + ".png");
-			   nameOtherUser->Text = node->chatName->Text;
-
-			   receiveMessagesRange();
-
-			   SuspendLayout();
-			   VScrollBarForMessages->BindingContainer = currentNode->messageView;
-			  // currentNode->messageView->AutoScroll = true;
-			   //currentNode->messageView->VerticalScroll = VScrollBarForMessages->;
-			   placeForMessages->Controls->Clear();
-			   placeForMessages->Controls->Add(currentNode->messageView);
-			   ResumeLayout();
-		}
-
-		private: System::Void sendButton_Click(System::Object^ sender, System::EventArgs^ e) {
-			String^ message = sendText->Text;
-			std::string msg;
-			if (!String::IsNullOrEmpty(message) && currentNode != nullptr) {
-				MarshalString(message, msg);
-				if (server->sendMessage(CMessage(msg.c_str(), user->id, currentNode->id))) {
-					sendText->Text = "";
-					currentNode->addMessage(gcnew MessageNode(message, true, user->pictureIndex));
-				}
-				else {
-					MessageBox::Show("Unable to connect to server", "Unable connection",
-						MessageBoxButtons::OK, MessageBoxIcon::Error);
-				}
-			}
-		}
-
-
-		public: static void MarshalString(String^ s, std::string& os) {
-		using namespace Runtime::InteropServices;
-		const char* chars =
-			(const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
-		os = chars;
-		Marshal::FreeHGlobal(IntPtr((void*)chars));
-	}
-
-		public: Void receiveMessagesRange() {
-			std::vector<CMessage> v;
-			int countCurrentMsg = currentNode->messageView->Controls->Count;
-			array<MessageNode^>^ result;
-			int newMsg = Int64::Parse(currentNode->countNewMessage->Text);
-			v = server->getAllMessageFromChat(CChat(currentNode->id));
-			if (v.size() > countCurrentMsg) {
-				if (countCurrentMsg == 0) {
-					int ten = (newMsg + 5 < v.size() ? newMsg + 5 : v.size());
-					v = std::vector<CMessage>(v.begin(), v.begin() + ten);
-					result = gcnew array<MessageNode^>(v.size());
-
-				}
-				else if (newMsg != 0) {
-					v = std::vector<CMessage>(v.begin(), v.begin() + newMsg);
-					result = gcnew array<MessageNode^>(v.size());
-
-				}
-				else {
-					int ten = (countCurrentMsg + 10 < v.size() ? countCurrentMsg + 10 : v.size());
-					v = std::vector<CMessage>(v.begin() + countCurrentMsg, v.begin() + ten);
-					result = gcnew array<MessageNode^>(v.size());
-
-				}
-				for (size_t i = 0; i < v.size(); ++i) {
-					result[i] = gcnew
-						MessageNode(
-							gcnew String(v[i].get_text().c_str()),
-							v[i].get_is_my_msg(),
-							v[i].get_is_my_msg() ? user->pictureIndex : currentNode->picture
-						);
-				}
-				addMessagesToForm(result, newMsg == 0);
-			}
-		}
+	public: Void receiveMessagesRange();
 	
+	public: delegate System::Void addMessagesToFormDelegate(array<MessageNode^>^  msg, bool isOld);
+	public: System::Void addMessagesToForm(array<MessageNode^>^ msg, bool isOld);
 
-		public: delegate System::Void addMessagesToFormDelegate(array<MessageNode^>^  msg, bool isOld);
-		public: System::Void addMessagesToForm(array<MessageNode^>^ msg, bool isOld) {
-			SuspendLayout();
-			if (isOld) {
-				List<Control^>^ oldControls = gcnew List<Control^>();
-				for each (Control ^ control in currentNode->messageView->Controls) {
-					oldControls->Add(control);//тут наче  ж збирались кожен раз перевантажувати ?
-				}
-				currentNode->messageView->Controls->Clear();
-				for (size_t i = 0; i < msg->Length; ++i) {
-					currentNode->addMessage(msg[i]);
-				}
-				currentNode->messageView->Controls->AddRange(oldControls->ToArray());
-			}
-			else {
-				for (size_t i = 0; i < msg->Length; ++i) {
-					currentNode->addMessage(msg[i]);
-				}
-			}
-			ResumeLayout();
-		}
+	private: System::Void CreateNewChat_Click(System::Object^ sender, System::EventArgs^ e);
 
-		private: System::Void CreateNewChat_Click(System::Object^ sender, System::EventArgs^ e) {
-	UsersViewForm^ usersWievForm = gcnew UsersViewForm();
-	usersWievForm->ShowDialog();
-	if (usersWievForm->resultUser != nullptr) {
-		array<ChatNode^>^ chatNodesArray = gcnew array<ChatNode^>(chatNodes->Count);
-		chatNodes->CopyTo(chatNodesArray);
-		for (size_t i = 0; i < chatNodes->Count; i++){
-			if (String::Equals(chatNodesArray[i]->chatName, usersWievForm->resultUser->userName)) {
-				setCurrentChat(chatNodesArray[i]);
-				return;
-			}
-		}
-		std::string name;
-		MarshalString(usersWievForm->resultUser->userName, name);
-		if (server->addNewChat(CUser(name.c_str(), "", usersWievForm->resultUser->pictureIndex))) {
-			ChatNode^ n = gcnew ChatNode(usersWievForm->resultUser->userName,
-				"",
-				0,
-				usersWievForm->resultUser->pictureIndex,
-				String::Equals(usersWievForm->resultUser->online, "Online"),
-				-1);
-			chatNodes->Insert(0, n);
+	private: System::Void threadReceivMessages();
+	private: System::Void maximizeButton_Click(System::Object^ sender, System::EventArgs^ e);
 
-			placeForChats->Controls->Clear();
-			placeForChats->Controls->Add(n);
-			placeForChats->Controls->AddRange(chatNodesArray);
-
-			setCurrentChat(n);
-		}
-	}
-}
-
-		private: System::Void threadReceivMessages() {
-			try {
-				while (true) {
-					std::string msg;
-		
-					if (reciver->recive(msg)){
-						array<MessageNode^>^ arr = gcnew array<MessageNode^>(1);
-						arr[0] = gcnew MessageNode(gcnew String(msg.c_str()), false, currentNode->picture);
-						BeginInvoke(gcnew addMessagesToFormDelegate(this, &MyForm::addMessagesToForm), arr, false);
-					}
-					else{
-						break;
-					}
-				}
-			}
-			catch (std::exception e) {
-				printf("%s",e.what());
-			};
-		}
-
-	private: System::Void maximizeButton_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (currentNode != nullptr) {
-			currentNode->messageView->AutoScroll = false;
-			currentNode->messageView->Width = placeForMessages->Width;
-		}
-		if (this->WindowState == FormWindowState::Maximized) {
-			
-			this->WindowState == FormWindowState::Normal;			
-		}
-		else {
-			this->WindowState = FormWindowState::Normal;
-		}
-		if (currentNode != nullptr)
-			for (size_t i = 0; i < currentNode->messageView->Controls->Count; i++)
-			{
-				currentNode->messageView->Controls->default[i]->Width = placeForMessages->Width;
-			}
-		if (currentNode != nullptr) 
-		currentNode->messageView->AutoScroll = true;
-
-	}
-	private: System::Void logOutButton_Click(System::Object^ sender, System::EventArgs^ e) {	
-		placeForChats->Controls->Clear();
-		chatNodes->Clear();
-		currentNode = nullptr;
-		placeForMessages->Controls->Clear();
-		onShow();
-	}
+	private: System::Void logOutButton_Click(System::Object^ sender, System::EventArgs^ e);
 };
 
 

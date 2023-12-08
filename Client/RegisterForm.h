@@ -40,25 +40,17 @@ namespace Client {
 	public: Guna::UI2::WinForms::Guna2TextBox^ user;
 	public: Guna::UI2::WinForms::Guna2Button^ logIn;
 
-
-
 	public: Guna::UI2::WinForms::Guna2Button^ singIn;
 
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel1;
 	private: Guna::UI2::WinForms::Guna2ControlBox^ exitButton;
 	private: System::Windows::Forms::Label^ errorLabel;
 	private: Guna::UI2::WinForms::Guna2ImageRadioButton^ picture1;
-
-
 	private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel1;
 
 	private: Guna::UI2::WinForms::Guna2ImageRadioButton^ picture3;
 	private: Guna::UI2::WinForms::Guna2ImageRadioButton^ picture4;
 	private: Guna::UI2::WinForms::Guna2ImageRadioButton^ picture2;
-
-
-
-
 
 
 
@@ -351,36 +343,31 @@ namespace Client {
 
 		private: System::Void singIn_Click(System::Object^ sender, System::EventArgs^ e);
 		private: System::Void logIn_Click(System::Object^ sender, System::EventArgs^ e);
-		private: System::Void user_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	
+
+	private: System::Void user_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 			errorLabel->Text = "";
 			user->BorderColor = Color::Transparent;
 		}
-
-		private: System::Void password_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	private: System::Void password_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 			errorLabel->Text = "";
 			user->BorderColor = Color::Transparent;
 		}
-
-private: System::Void exitButton_Click(System::Object^ sender, System::EventArgs^ e) {
-	isUserCloseWindow = true;
-	this->Close();
-}
-
-private: System::Void guna2ImageRadioButton4_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-	picture = 1;
-}
-
-private: System::Void picture3_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-	picture = 3;
-
-}
-private: System::Void picture4_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-	picture = 4;
-
-}
-private: System::Void picture2_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-	picture = 2;
-
-}
+	private: System::Void exitButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		isUserCloseWindow = true;
+		this->Close();
+	}
+	private: System::Void guna2ImageRadioButton4_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+		picture = 1;
+	}
+	private: System::Void picture3_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+		picture = 3;
+	}
+	private: System::Void picture4_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+		picture = 4;
+	}
+	private: System::Void picture2_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+		picture = 2;
+	}
 };
 }
