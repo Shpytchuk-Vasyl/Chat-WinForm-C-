@@ -2,7 +2,9 @@
 static const size_t DEFAULT_BUFLEN = 8192;
 static const char* DEFAULT_PORT = "31098";
 static const char* DEFAULT_IP = "localhost";
-
+#define userFile "userData/user.bin"
+#define userPhoto "userPhotos/user"
+//static const char* DEFAULT_IP = "192.168.93.56";
 enum TypeRequest {
 	SECCESS,
 	ERR,// опечатка , не хочу змінювати всюди , тому просто буду так юзав поки , потім побацим 

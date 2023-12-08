@@ -24,7 +24,20 @@ public:
         chat_id(chat_id)
     {}
     CChat() {}
-    
+
+    CChat(const CChat& other) {
+        // Копіюємо значення з іншого об'єкта до поточного
+        user1_id = other.user1_id;
+        user2_id = other.user2_id;
+        unread1 = other.unread1;
+        unread2 = other.unread2;
+        chat_id = other.chat_id;
+
+        // Викликаємо конструктор копіювання для об'єктів класу CUser
+        user1 = other.user1;
+        user2 = other.user2;
+    }
+
     // Getter for user2_id
     int getUser1Id()  {
         return user1_id;

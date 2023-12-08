@@ -37,11 +37,8 @@ namespace Client {
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel1;
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel2;
 	private: Guna::UI2::WinForms::Guna2TextBox^ searchUser;
-
 	private: System::Windows::Forms::FlowLayoutPanel^ placeForUsers;
-
 	private: Guna::UI2::WinForms::Guna2VScrollBar^ VScrollBarForUsers;
-
 	private: Guna::UI2::WinForms::Guna2ControlBox^ exitButton;
 	protected:
 
@@ -113,7 +110,6 @@ namespace Client {
 			this->placeForUsers->Name = L"placeForUsers";
 			this->placeForUsers->Size = System::Drawing::Size(366, 664);
 			this->placeForUsers->TabIndex = 1;
-			this->placeForUsers->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &UsersViewForm::placeForUsers_MouseClick);
 			// 
 			// guna2Panel2
 			// 
@@ -192,20 +188,9 @@ namespace Client {
 
 
 
-public: System::Void searchText_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e);
+		public: System::Void searchText_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e);
 
-	   private: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-		   resultUser = (UserNode^)sender;
-		   this->Close();
-	   }
-public: System::Void placeForUsers_MouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
-	if (placeForUsers->Controls->Count > 0) {
-		for (int i = 0; i < placeForUsers->Controls->Count; i++) {
-			if (((UserNode^)placeForUsers->Controls->default[i])->isSelected) {
-				
-			}
-		}
-	}
-}
+	   private: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);
+	
 };
 }

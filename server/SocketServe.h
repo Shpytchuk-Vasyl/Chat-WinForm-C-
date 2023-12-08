@@ -166,6 +166,7 @@ public:
                         other_user_id = socketThread.current_chat.getUser2Id();
                     }
                      msg = *(CMessage*)recvbuf;
+                     msg.set_user_id(socketThread.current_user_id);
                     socketThread.db->add_message(msg);
                     if (socketThread.isOnline(other_user_id)&& socketThread.isChatOpened(socketThread.current_chat,other_user_id)) {
                         
@@ -309,6 +310,7 @@ public:
                     socketThread.current_chat = chat;
                     for (auto msg : msgs) {
                         memset(recvbuf, 0, recvbuflen);
+                        msg.set_is_my_msg(msg.get_user_id() == socketThread.current_user_id);
                         std::memcpy(recvbuf, (char*)&msg, sizeof(msg));
                         iSendResult = send(socketThread.ClientSocket, recvbuf, sizeof(recvbuf), 0);
                         if (iSendResult == SOCKET_ERROR) {
@@ -329,7 +331,7 @@ public:
                     break;
 
                 case TypeRequest::OPEN_CHAT://те ж  що і пепереднє 
-
+                   // тут напевно треба вставити логіку встановлення поточного чату
                     break;
 
                 default:
