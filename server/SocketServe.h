@@ -33,7 +33,6 @@ class SockedThread {
     bool isActive = true;
     std::vector<std::pair<int, SOCKET>>::iterator it;
     int userId = 0;
-
 public:
     SockedThread(SOCKET clientSocket, CDatabase* db, std::vector<int>* online, std::vector<std::pair<int, MailSlotsSender*>>* connectoin_list, std::vector<SockedThread> *clients) {
         this->ClientSocket = clientSocket;
@@ -89,6 +88,9 @@ public:
             CUser  user_res;
             CChat chat;
             CMessage msg;
+
+            int chatId = -1;
+
             iResult = recv(socketThread.ClientSocket,
                 recvbuf,
                 sizeof(recvbuf),
@@ -210,9 +212,14 @@ public:
                     chat.setUser2Id(other_user_id);
                     chat.setUser1(socketThread.db->get_user_by_id(socketThread.current_user_id));
                     chat.setUser2(socketThread.db->get_user_by_id(other_user_id));
-                    if (socketThread.db->get_chat_id(chat) == -1) {
+                    chatId = socketThread.db->get_chat_id(chat);
+                    if (chatId == -1) {
                         socketThread.db->add_chat(chat);
                      }
+                    else {
+
+                        chat = socketThread.db->get_chat_by_id(chatId);
+                    }
                     
                     std::memcpy(recvbuf, (char*)(&chat), sizeof(chat));
                     iSendResult = send(socketThread.ClientSocket, recvbuf, recvbuflen, 0);

@@ -269,3 +269,31 @@ std::vector<CMessage> CDatabase::get_all_message_from_chat(const CChat chat) con
     return messages;
 }
 
+CChat  CDatabase::get_chat_by_id(int id) const{
+    sql::PreparedStatement* pstmt = con->prepareStatement("SELECT  first_user_id , num_first_unread , second_user_id , num_second_unread  FROM chats WHERE id = ?");
+    pstmt->setInt(1, id);
+    
+    sql::ResultSet* resultSet = pstmt->executeQuery();
+
+    if (resultSet->next()) {
+
+        CChat chat;
+        chat.setUser1Id(resultSet->getInt("first_user_id"));
+        chat.setUnread1(resultSet->getInt("num_first_unread"));
+        chat.setUser1(get_user_by_id(chat.getUser1Id()));
+        chat.setUser2Id(resultSet->getInt("second_user_id"));
+        chat.setUnread1(resultSet->getInt("num_second_unread"));
+        chat.setUser2(get_user_by_id(chat.getUser2Id()));
+        delete resultSet;
+        delete pstmt;
+
+        return chat;
+    }
+    else {
+       
+        delete resultSet;
+        delete pstmt;
+        throw std::exception();
+    }
+   
+}

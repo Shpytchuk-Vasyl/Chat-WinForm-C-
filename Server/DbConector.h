@@ -46,4 +46,5 @@ public:
     CUser get_user_by_id(int) const;
     std::vector<CUser> get_users() const;
     int get_chat_id(const CChat) const;
+    CChat get_chat_by_id(int id) const;
 };
