@@ -167,7 +167,7 @@ public:
                     }
                      msg = *(CMessage*)recvbuf;
                     socketThread.db->add_message(msg);
-                    if (socketThread.isOnline(other_user_id)&& socketThread.isChatOpened(chat,other_user_id)) {
+                    if (socketThread.isOnline(other_user_id)&& socketThread.isChatOpened(socketThread.current_chat,other_user_id)) {
                         
                         for (auto pair : *socketThread.connection_list) {
                             if (pair.first == other_user_id) {
@@ -306,6 +306,7 @@ public:
                     other_user_id = 0;
                     chat = *(CChat*)recvbuf;
                     msgs = socketThread.db->get_all_message_from_chat(chat);
+                    socketThread.current_chat = chat;
                     for (auto msg : msgs) {
                         memset(recvbuf, 0, recvbuflen);
                         std::memcpy(recvbuf, (char*)&msg, sizeof(msg));
