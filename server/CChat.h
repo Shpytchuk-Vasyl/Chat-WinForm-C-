@@ -9,7 +9,7 @@ class CChat
     int chat_id = 0;
     CUser user1, user2;
 public:
-    bool operator ==(CChat ch) {
+    bool operator ==(const CChat &ch) {
         if ((user1_id == ch.user1_id || user1_id == ch.user2_id) && (user2_id == ch.user1_id || user2_id == ch.user2_id)) {
             return true;
         }
