@@ -133,6 +133,17 @@ namespace Client {
 		this->FillColor2 = System::Drawing::Color::FromArgb(23, 28, 41);
 	}
 
+	System::Void ChatNode::setCountNewMsg(int intCountNewMessage)
+	{
+		if (intCountNewMessage == 0) {
+			this->countNewMessage->Visible = false;
+		}
+		else {
+			this->countNewMessage->Visible = true;
+			this->countNewMessage->Text = intCountNewMessage.ToString();
+		}
+	}
+
 	System::Void  ChatNode::addMessage(MessageNode^ msg) {
 		Guna2Panel^ p = gcnew Guna2Panel();
 		p->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)

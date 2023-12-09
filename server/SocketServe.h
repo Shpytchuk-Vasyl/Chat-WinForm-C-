@@ -52,13 +52,20 @@ public:
     CChat get_curent_chat() {
         return *current_chat;
     }
-    bool isOnline(int idin) {
+    int isOnline(int idin) {
+        //std::cout << "size vector online " << online->size() << std::endl;
         for (auto id : *online) {
             if (id == idin) {
-                return true;
+               // std::cout << "true\n";
+                return 1;
             }
         }
-        return false;
+        return 0;
+    }
+
+    void setUserStatus(CUser* user, int id) {
+        user->setStatus(isOnline(id));
+       // std::cout << user->getName() << " - "<<user->getStatus() <<std::endl;
     }
 
     bool isChatOpened(CChat &chat , int userid) {
@@ -327,6 +334,9 @@ public:
                     chats = socketThread.db->get_chats_with_user(*socketThread.current_user_id);
 
                     for (auto ch : chats) {
+                    
+                        socketThread.setUserStatus(&(ch.getUser1()), ch.getUser1Id());
+                        socketThread.setUserStatus(&(ch.getUser2()), ch.getUser2Id());
                         memset(recvbuf, 0, recvbuflen);
                         std::memcpy(recvbuf, (char*)&ch, sizeof(ch));
                         iSendResult = send(socketThread.ClientSocket, recvbuf, sizeof(recvbuf), 0);

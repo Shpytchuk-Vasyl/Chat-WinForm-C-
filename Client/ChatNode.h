@@ -29,6 +29,8 @@ namespace Client {
 
 	public: System::Void resetColor(); 
 
+	public: System::Void setCountNewMsg(int count);
+
 	public: System::Void addMessage(MessageNode^ msg);
 
 	public: System::Void mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e);

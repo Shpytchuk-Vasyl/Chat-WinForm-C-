@@ -662,7 +662,7 @@ namespace Client {
 			// timerUpdateChats
 			// 
 			this->timerUpdateChats->Enabled = true;
-			this->timerUpdateChats->Interval = 60000;
+			this->timerUpdateChats->Interval = 20000;
 			this->timerUpdateChats->Tick += gcnew System::EventHandler(this, &MyForm::timerUpdateChats_Tick);
 			// 
 			// MyForm
@@ -734,8 +734,8 @@ namespace Client {
 	public: delegate System::Void addMessagesToFormDelegate(array<MessageNode^>^  msg, bool isOld);
 	public: System::Void addMessagesToForm(array<MessageNode^>^ msg, bool isOld);
 
-	public: delegate System::Void addChatsToFormDelegate(array<ChatNode^>^ chats);
-	public: System::Void addChatsToForm(array<ChatNode^>^ chats);
+	public: delegate System::Void addChatsToFormDelegate(List<ChatNode^> ^);
+	public: System::Void addChatsToForm(List<ChatNode^>^);
 
 	public: delegate System::Void changeChatStatusDelegate(ChatNode^ chat, bool status);
 	public: System::Void changeChatStatus(ChatNode ^ chat, bool status);
