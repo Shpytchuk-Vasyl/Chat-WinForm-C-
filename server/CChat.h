@@ -88,7 +88,7 @@ public:
         unread2 = unread;
     }
 
-    CUser getUser2()  {
+    CUser& getUser2() {
         return user2;
     }
 
@@ -96,7 +96,7 @@ public:
         user2 = us;
     }
 
-    CUser getUser1()  {
+    CUser& getUser1() {
         return user1;
     }
 

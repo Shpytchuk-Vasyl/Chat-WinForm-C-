@@ -20,6 +20,7 @@ public:
 		std::memcpy(s_name, name, 50);
 		std::memcpy(s_password, password, 50);
 		i_picture = picture;
+
 	}
     CUser(const CUser& other) {
         // Копіюємо значення з іншого об'єкта до поточного
@@ -68,6 +69,10 @@ public:
 
     bool getStatus() {
         return is_online;
+    }
+
+    void setStatus(bool s) {
+      is_online = s;
     }
 };
 
