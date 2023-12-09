@@ -1,5 +1,6 @@
 #pragma once
 #include "MessageNode.h"
+#include "TypeRequest.h"
 
 namespace Client {
 
