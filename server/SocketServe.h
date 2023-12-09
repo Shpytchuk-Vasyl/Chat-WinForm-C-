@@ -128,12 +128,19 @@ public:
                         recvbuflen,
                         0);
                     user_res = *(CUser*)recvbuf;
+
+                    iResult = recv(socketThread.ClientSocket,
+                        recvbuf,
+                        recvbuflen,
+                        0);
+                    
                     try {
                         socketThread.db->add_user(user_res);
                         *socketThread.current_user_id = socketThread.db->get_user_id(user_res);     
-                        socketThread.connection_list->push_back(std::make_pair(*socketThread.current_user_id, new MailSlotsSender(user_res.getName())));
+                       
                         socketThread.online->push_back(*socketThread.current_user_id);
                         iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
+                        socketThread.connection_list->push_back(std::make_pair(*socketThread.current_user_id, new MailSlotsSender(std::string(user_res.getName()), std::string(recvbuf))));
                     }
                     catch (sql::SQLException& e) {
                         iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::ERR).c_str(), sizeof(ERR), 0);
@@ -149,7 +156,12 @@ public:
                         0);
                     user_res = *(CUser*)recvbuf;
                     *socketThread.current_user_id = socketThread.db->get_user_id(user_res);// зробити функцію для  перевірки чи є юзер з заданим імям та паролем 
-                    socketThread.connection_list->push_back(std::make_pair(*socketThread.current_user_id, new MailSlotsSender(std::string(user_res.getName()))));
+
+                    iResult = recv(socketThread.ClientSocket,
+                        recvbuf,
+                        recvbuflen,
+                        0);
+                    socketThread.connection_list->push_back(std::make_pair(*socketThread.current_user_id, new MailSlotsSender(std::string(user_res.getName()),std::string(recvbuf))));
                     socketThread.online->push_back(*socketThread.current_user_id);
                     // std::vector<CChat> chats = socketThread.db->get_chats_with_user(socketThread.current_user_id);
                     // цього не треба, бо я й так буду знати що сервер не доступний
