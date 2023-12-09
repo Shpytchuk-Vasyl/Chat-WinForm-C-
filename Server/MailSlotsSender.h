@@ -6,7 +6,8 @@
 #include <tchar.h>
 #include <algorithm>
 #include <strsafe.h>
-#define SLOT_S L"\\\\.\\mailslot\\"
+#define SLOT_S L"\\\\"
+#define SLOT_S2 L ""
 #define PIPE_TIMEOUT 5000
 #define BUFSIZE 4096
 
@@ -15,30 +16,40 @@
 class MailSlotsSender
 {
 	std::wstring userName;
-	HANDLE hMailslot;
+	HANDLE hMailslot = INVALID_HANDLE_VALUE;
+    std::wstring hostName;
 
 
 public:
-    MailSlotsSender(std::string  username) {
+    MailSlotsSender(std::string  username,std::string hostname ) {
         userName = std::wstring(username.begin(), username.end());
+        hostName = std::wstring(hostname.begin(), hostname.end());
         std::replace(userName.begin(), userName.end(), L' ', L'_');
-         
+        int c = 0;
+        while (hMailslot == INVALID_HANDLE_VALUE) {
+            Sleep(10);
+            hMailslot = CreateFileW((SLOT_S+hostName + L"\\mailslot\\" + userName).c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+            c++;
+            if (c >= 100000000) {
+                throw std::exception();
+            }
+        }
+        
 
-        hMailslot = CreateMailslotW((SLOT_S+userName).c_str(), 0, MAILSLOT_WAIT_FOREVER, nullptr);//xzzzzz W???
-
-        if (hMailslot == INVALID_HANDLE_VALUE) {
+        std::cout << " hcreated =" << hMailslot << std::endl;
+      /*  if (hMailslot == INVALID_HANDLE_VALUE) {
             std::cout << "Failed to create Mailslot. Error code: " << GetLastError() << std::endl;
             throw std::exception();
-        }
+        }*/
         std::cout << "Mailslot server is created" << std::endl;
 
     }
 
     bool send(std::string msg) {
-        char buffer[BUFSIZE];
+        char buffer[BUFSIZE] = " ";
         DWORD bytesWritten;
         std::memcpy(buffer, msg.c_str(), sizeof(msg.c_str()));
-
+        std::cout << " h =" << hMailslot << " msg = " << msg << std::endl;
         if (WriteFile(hMailslot, buffer, strlen(buffer) + 1, &bytesWritten, nullptr)) {
             std::cout << "Sended " << std::endl;
             return 1;
@@ -50,7 +61,8 @@ public:
 
     }
 
-    ~MailSlotsSender() {
+
+   ~MailSlotsSender() {
         CloseHandle(hMailslot);
     }
     

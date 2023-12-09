@@ -11,7 +11,7 @@
 #define PIPE_TIMEOUT 5000
 #define BUFSIZE 4096
 //static std::wstring DESKTOP = L"\\\\DESKTOP-7CK1JB4\\mailslot\\";
-static std::wstring DESKTOP = L"\\\\LAPTOP-U2800VIR\\mailslot\\";
+//static std::wstring DESKTOP = L"\\\\LAPTOP-U2800VIR\\mailslot\\";
 
 
 class MailSlotsReciver
@@ -24,11 +24,7 @@ public:
     MailSlotsReciver(std::string  username) {
         userName = std::wstring(username.begin(), username.end());
         std::replace(userName.begin(), userName.end(), L' ', L'_');
-        HANDLE hMailslot = CreateFileW((DESKTOP + userName).c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
-        if (hMailslot == INVALID_HANDLE_VALUE) {
-           
-            throw std::exception();
-        }
+        hMailslot = CreateMailslotW((SLOT_S + userName).c_str(), 0, MAILSLOT_WAIT_FOREVER, nullptr);//xzzzzz W???
     }
 
     bool recive(std::string &msg) {
