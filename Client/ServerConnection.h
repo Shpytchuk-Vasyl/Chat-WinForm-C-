@@ -102,6 +102,7 @@ public:
         char computerName[DEFAULT_BUFLEN] = "";
         for (size_t i = 0; i <= size; i++)
             computerName[i] = computerNameWCHAR[i];
+        send(ConnectSocket, (char*)computerName, DEFAULT_BUFLEN, 0);
 
         char buf[10];
         iResult = recv(ConnectSocket, buf, sizeof(buf), 0);
@@ -113,7 +114,7 @@ public:
         return type == SECCESS;
     }
 
-    bool addNewChat(CUser other) {
+    CChat addNewChat(CUser other) {
         serverMutex.lock();
         int iResult = send(ConnectSocket, std::to_string(TypeRequest::ADD_NEW_CHAT).c_str(), sizeof(ADD_NEW_CHAT), 0);
         iResult = send(ConnectSocket, (char*)(&other), sizeof(other), 0);
@@ -126,8 +127,7 @@ public:
         std::memcpy((char*)&chat, recvbuf, sizeof(chat));
         memset(recvbuf, 0, DEFAULT_BUFLEN);
         serverMutex.unlock();
-        return iResult != SOCKET_ERROR && 
-            (strcmp(other.getName(), chat.getUser2().getName()) == 0 || strcmp(other.getName(), chat.getUser1().getName()));
+        return  chat;
     }
 
     bool Start(CUser user) {

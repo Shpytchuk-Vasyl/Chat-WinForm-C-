@@ -253,7 +253,8 @@ public:
                     chatId = socketThread.db->get_chat_id(chat);
                     if (chatId == -1) {
                         socketThread.db->add_chat(chat);
-                     }
+                        chat.setChatId(socketThread.db->get_chat_id(chat));
+                    }
                     else {
 
                         chat = socketThread.db->get_chat_by_id(chatId);

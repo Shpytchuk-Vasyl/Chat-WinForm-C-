@@ -143,6 +143,7 @@ void MyForm::MarshalString(String^ s, std::string& os) {
  Void MyForm::receiveMessagesRange() {
 	std::vector<CMessage> v;
 	int countCurrentMsg = currentNode->messageView->Controls->Count;
+	
 	array<MessageNode^>^ result;
 	int newMsg = Int64::Parse(currentNode->countNewMessage->Text);
 	v = server->getAllMessageFromChat(CChat(currentNode->id));
@@ -210,13 +211,15 @@ System::Void MyForm::CreateNewChat_Click(System::Object^ sender, System::EventAr
 		}
 		std::string name;
 		MarshalString(usersWievForm->resultUser->userName, name);
-		if (server->addNewChat(CUser(name.c_str(), "", usersWievForm->resultUser->pictureIndex))) {
+		CChat chat;
+		chat = server->addNewChat(CUser(name.c_str(), "", usersWievForm->resultUser->pictureIndex));
+		if(chat.getUser1Id() != 0) {
 			ChatNode^ n = gcnew ChatNode(usersWievForm->resultUser->userName,
 				"",
 				0,
 				usersWievForm->resultUser->pictureIndex,
 				String::Equals(usersWievForm->resultUser->online, "Online"),
-				-1);
+				chat.getChatId());
 			chatNodes->Insert(0, n);
 
 			placeForChats->Controls->Clear();

@@ -148,7 +148,8 @@ namespace Client {
 	System::Void ChatNode::mouseClick(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 		this->FillColor = System::Drawing::Color::FromArgb(250, 48, 90);
 		this->FillColor2 = System::Drawing::Color::FromArgb(128, 36, 206);
-		MyForm::pointer->setCurrentChat(this);						//відкриття чату?
+		if(MyForm::pointer->currentNode != this)
+			MyForm::pointer->setCurrentChat(this);						//відкриття чату?
 	}
 
 	 System::Void ChatNode::mouseEnter(System::Object^ sender, System::EventArgs^ e) {
