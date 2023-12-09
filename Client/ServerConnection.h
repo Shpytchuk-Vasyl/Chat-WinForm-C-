@@ -13,15 +13,18 @@
 #pragma comment (lib, "Mswsock.lib")
 #pragma comment (lib, "AdvApi32.lib")
 #include <string>
+#include <mutex>
 #include "TypeRequest.h"
 #include "../server/CUser.h"
 #include "../server/CChat.h"
 #include "../server/CMessage.h"
 #include <vector>
 
-class ServerConnection {
-public:
 
+class ServerConnection {
+    std::mutex serverMutex;
+public:
+    
     SOCKET ConnectSocket;
     char recvbuf[DEFAULT_BUFLEN] = { 0 };
     int recvbuflen = DEFAULT_BUFLEN;
@@ -93,6 +96,13 @@ public:
             printf("send failed with error: %d\n", WSAGetLastError());
         }
 
+        WCHAR computerNameWCHAR[100] = { 0 };
+        DWORD size = 100;
+        GetComputerName(computerNameWCHAR, &size);
+        char computerName[DEFAULT_BUFLEN] = "";
+        for (size_t i = 0; i <= size; i++)
+            computerName[i] = computerNameWCHAR[i];
+
         char buf[10];
         iResult = recv(ConnectSocket, buf, sizeof(buf), 0);
         TypeRequest type = (TypeRequest)std::atoi(buf);
@@ -104,6 +114,7 @@ public:
     }
 
     bool addNewChat(CUser other) {
+        serverMutex.lock();
         int iResult = send(ConnectSocket, std::to_string(TypeRequest::ADD_NEW_CHAT).c_str(), sizeof(ADD_NEW_CHAT), 0);
         iResult = send(ConnectSocket, (char*)(&other), sizeof(other), 0);
         if (iResult == SOCKET_ERROR) {
@@ -114,7 +125,7 @@ public:
         iResult = recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
         std::memcpy((char*)&chat, recvbuf, sizeof(chat));
         memset(recvbuf, 0, DEFAULT_BUFLEN);
-
+        serverMutex.unlock();
         return iResult != SOCKET_ERROR && 
             (strcmp(other.getName(), chat.getUser2().getName()) == 0 || strcmp(other.getName(), chat.getUser1().getName()));
     }
@@ -122,17 +133,28 @@ public:
     bool Start(CUser user) {
         send(ConnectSocket, std::to_string(TypeRequest::START_REQUEST).c_str(), sizeof(TypeRequest), 0);
         Sleep(100);
-        return SOCKET_ERROR != send(ConnectSocket, (char*) (& user), sizeof(user), 0);
+        send(ConnectSocket, (char*)(&user), sizeof(user), 0);
+        Sleep(100);
+        WCHAR computerNameWCHAR[100] = { 0 };
+        DWORD size = 100;
+        GetComputerName(computerNameWCHAR, &size);
+        char computerName[DEFAULT_BUFLEN] = "";
+        for (size_t i = 0; i <= size; i++)
+            computerName[i] = computerNameWCHAR[i];
+    
+        return SOCKET_ERROR != send(ConnectSocket, (char*)computerName, DEFAULT_BUFLEN, 0);
         
     }
 
     bool sendMessage(CMessage msg) {
+        serverMutex.lock();
         send(ConnectSocket, std::to_string(TypeRequest::SEND_MESSAGE).c_str(), sizeof(TypeRequest), 0);
         Sleep(100);
-        int iResult = send(ConnectSocket, (char*)(&msg), sizeof(msg), 0);
+        int iResult = send(ConnectSocket, (char*)(&msg), sizeof(msg), 0);     
         if (iResult == SOCKET_ERROR) {
             printf("send failed with error: %d\n", WSAGetLastError());
         }
+        serverMutex.unlock();
         return iResult != SOCKET_ERROR;
     }
 
@@ -141,6 +163,7 @@ public:
     }
 
     std::vector<CUser> getAllUsers(CUser name) {
+        serverMutex.lock();
         send(ConnectSocket, std::to_string(TypeRequest::FIND_PEOPLE).c_str(), sizeof(TypeRequest), 0);
         Sleep(100);
         send(ConnectSocket, (char*)&name, sizeof(name), 0);
@@ -160,11 +183,13 @@ public:
             users.push_back(user);
             user = CUser();
         } while (true);
+        serverMutex.unlock();
         return users;
     }
 
     //Оновлює чати, що не є активними, тобто оновлює кількість не прочитаних повідомленнь
     std::vector<CChat> update() {
+        serverMutex.lock();
         send(ConnectSocket, std::to_string(TypeRequest::UPDATE_CHATS).c_str(), sizeof(TypeRequest), 0);
         char recvbuf[DEFAULT_BUFLEN] = "";
         int iResult = 0;
@@ -181,10 +206,12 @@ public:
             else if (iResult <= sizeof(TypeRequest)) break;
             chats.push_back(chat);
         } while (true);
+        serverMutex.unlock();
         return chats;
     }
 
     std::vector<CMessage> getAllMessageFromChat(CChat chat) {
+        serverMutex.lock();
         send(ConnectSocket, std::to_string(TypeRequest::GET_MESSAGES_FROM_CHAT).c_str(), sizeof(TypeRequest), 0);
         Sleep(100);
         send(ConnectSocket, (char *)(&chat), sizeof(chat), 0);
@@ -203,14 +230,8 @@ public:
             else if (iResult <= sizeof(TypeRequest)) break;
             msgs.push_back(msg);
         } while (true);
+        serverMutex.unlock();
         return msgs;
     }
-
-    //Pipe
-    CMessage getMessageAsyn() {    
-        return CMessage("Error :)", -1, -1);
-    }
-
-    //немає отримати юзерів ? 
 
 };

@@ -10,8 +10,8 @@
 #define SLOT_S L"\\\\.\\mailslot\\"
 #define PIPE_TIMEOUT 5000
 #define BUFSIZE 4096
-static std::wstring DESKTOP = L"\\\\DESKTOP-7CK1JB4\\mailslot\\";
-//static std::wstring DESKTOP = L"\\\\LAPTOP-U2800VIR\\mailslot\\";
+//static std::wstring DESKTOP = L"\\\\DESKTOP-7CK1JB4\\mailslot\\";
+static std::wstring DESKTOP = L"\\\\LAPTOP-U2800VIR\\mailslot\\";
 
 
 class MailSlotsReciver

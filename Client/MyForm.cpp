@@ -35,9 +35,17 @@ Void MyForm::onShow() {
 	if (reg->isUserCloseWindow) {
 		throw std::exception("user close reqistration window");
 	}
-	profilePicture->Image = Image::FromFile(userPhoto + user->pictureIndex + ".png");;
+	if (reciver == nullptr) {
+		std::string name;
+		MarshalString(user->userName, name);
+		reciver = new MailSlotsReciver(name);// хз чи тут , треба  буде затестити , не вникав 
+		workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));//// поки сюди
+	}
+	profilePicture->Image = Image::FromFile(userPhoto + user->pictureIndex + ".png");
+	currentChatName->Text = user->userName;
+	currentChatPicture->Image = Image::FromFile(userPhoto + user->pictureIndex + ".png");
 	user->isMainUser = true;
-
+	
 }
 
 System::Void MyForm::downloadChats() {
@@ -77,10 +85,8 @@ System::Void MyForm::downloadChats() {
 
 		}
 
-
 		SuspendLayout();
 
-		// Конвертуємо ArrayList до array<ChatNode^>
 		array<ChatNode^>^ chatNodesArray = gcnew array<ChatNode^>(chatNodes->Count);
 		chatNodes->CopyTo(chatNodesArray);
 
@@ -88,15 +94,15 @@ System::Void MyForm::downloadChats() {
 		ResumeLayout();
 
 	}
+
+	timerUpdateChats->Start();
 }
 
 System::Void MyForm::setCurrentChat(ChatNode^ node) {
 	if (currentNode)
 		currentNode->resetColor();
 	currentNode = node;
-	currentChatName->Text = node->chatName->Text;
 	currentChatStatus->Text = node->online->Text;
-	currentChatPicture->Image = Image::FromFile(userPhoto + node->picture + ".png");
 	photoOtherUser->Image = Image::FromFile(userPhoto + node->picture + ".png");
 	nameOtherUser->Text = node->chatName->Text;
 
@@ -140,24 +146,8 @@ void MyForm::MarshalString(String^ s, std::string& os) {
 	array<MessageNode^>^ result;
 	int newMsg = Int64::Parse(currentNode->countNewMessage->Text);
 	v = server->getAllMessageFromChat(CChat(currentNode->id));
-	if (v.size() > countCurrentMsg) {
-		if (countCurrentMsg == 0) {
-			int ten = (newMsg + 5 < v.size() ? newMsg + 5 : v.size());
-			v = std::vector<CMessage>(v.begin(), v.begin() + ten);
-			result = gcnew array<MessageNode^>(v.size());
-
-		}
-		else if (newMsg != 0) {
-			v = std::vector<CMessage>(v.begin(), v.begin() + newMsg);
-			result = gcnew array<MessageNode^>(v.size());
-
-		}
-		else {
-			int ten = (countCurrentMsg + 10 < v.size() ? countCurrentMsg + 10 : v.size());
-			v = std::vector<CMessage>(v.begin() + countCurrentMsg, v.begin() + ten);
-			result = gcnew array<MessageNode^>(v.size());
-
-		}
+	if (v.size() > countCurrentMsg) {			
+		result = gcnew array<MessageNode^>(v.size());
 		for (size_t i = 0; i < v.size(); ++i) {
 			result[i] = gcnew
 				MessageNode(
@@ -190,6 +180,20 @@ System::Void MyForm::addMessagesToForm(array<MessageNode^>^ msg, bool isOld) {
 		}
 	}
 	ResumeLayout();
+}
+
+System::Void MyForm::addChatsToForm(array<ChatNode^>^ chats)
+{
+	chatNodes->AddRange(chats);
+	placeForChats->Controls->AddRange(chats);
+}
+
+System::Void MyForm::changeChatStatus(ChatNode^ chat, bool status){
+	chat->online->Text = status ? "online" : "ofline";
+}
+
+System::Void MyForm::changeChatUnreadMessages(ChatNode^ chat, int unread){
+	chat->countNewMessage->Text = unread.ToString();
 }
 
 System::Void MyForm::CreateNewChat_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -267,11 +271,73 @@ System::Void MyForm::CreateNewChat_Click(System::Object^ sender, System::EventAr
 }
 
 System::Void MyForm::logOutButton_Click(System::Object^ sender, System::EventArgs^ e) {
+	timerUpdateChats->Stop();
 	placeForChats->Controls->Clear();
 	chatNodes->Clear();
 	currentNode = nullptr;
 	placeForMessages->Controls->Clear();
 	onShow();
+}
+
+System::Void MyForm::timerUpdateChats_Tick(System::Object^ sender, System::EventArgs^ e) {
+	std::vector<CChat> v = server->update();
+	if (!v.empty()) {
+		array<ChatNode^>^ chatNodesArray = gcnew array<ChatNode^>(10);
+		for (int i = 0, counter = 0; i < v.size(); i++) {
+			bool isFind = false;
+			for (size_t i1 = 0; i1 < chatNodes->Count; i1++)
+			{
+				if (String::Compare(gcnew String(v[i].getUser2().getName()), ((ChatNode^)chatNodes->default[i1])->chatName->Text) == 0) {
+					if (Int64::Parse(((ChatNode^)chatNodes->default[i1])->countNewMessage->Text) != v[i].getUnread1()) {
+						BeginInvoke(gcnew changeChatUnreadMessagesDelegate(this, &MyForm::changeChatUnreadMessages), ((ChatNode^)chatNodes->default[i1]), v[i].getUnread1());
+					}
+					if (String::Compare(v[i].getUser2().getStatus() ? "online" : "ofline", ((ChatNode^)chatNodes->default[i1])->online->Text)) {
+						BeginInvoke(gcnew changeChatStatusDelegate(this, &MyForm::changeChatStatus), ((ChatNode^)chatNodes->default[i1]), v[i].getUser2().getStatus());
+					}
+					isFind = true;
+					break;
+				}
+				else if (String::Compare(gcnew String(v[i].getUser1().getName()), ((ChatNode^)chatNodes->default[i1])->chatName->Text) == 0) {
+					if (Int64::Parse(((ChatNode^)chatNodes->default[i1])->countNewMessage->Text) != v[i].getUnread2()) {
+						BeginInvoke(gcnew changeChatUnreadMessagesDelegate(this, &MyForm::changeChatUnreadMessages), ((ChatNode^)chatNodes->default[i1]), v[i].getUnread2());
+					}
+					if (String::Compare(v[i].getUser1().getStatus() ? "online" : "ofline", ((ChatNode^)chatNodes->default[i1])->online->Text)) {
+						BeginInvoke(gcnew changeChatStatusDelegate(this, &MyForm::changeChatStatus), ((ChatNode^)chatNodes->default[i1]), v[i].getUser1().getStatus());
+					}
+					isFind = true;
+					break;
+				}
+			}
+
+			if (!isFind && counter < 10) {
+				if (String::Compare(gcnew String(v[i].getUser1().getName()), user->userName) == 0) {
+					chatNodesArray[counter] =
+						gcnew ChatNode(
+							gcnew String(v[i].getUser2().getName()),
+							"",
+							v[i].getUnread1(),
+							v[i].getUser2().getPicture(),
+							v[i].getUser2().getStatus(),
+							v[i].getChatId());
+				}
+				else {
+					chatNodesArray[counter] =
+						gcnew ChatNode(
+							gcnew String(v[i].getUser1().getName()),
+							"",
+							v[i].getUnread2(),
+							v[i].getUser1().getPicture(),
+							v[i].getUser1().getStatus(),
+							v[i].getChatId());
+				}
+				counter++;
+			}
+		}
+		if (chatNodesArray[0] != nullptr) {
+			BeginInvoke(gcnew addChatsToFormDelegate(this, &MyForm::addChatsToForm), chatNodesArray);
+		}
+	}
+
 }
 
 }

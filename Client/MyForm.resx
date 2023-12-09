@@ -8589,7 +8589,7 @@
   <data name="photoOtherUser.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAkgAAAIiCAYAAAAzcTeTAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DQAACw0B7QfALAAA/7JJREFUeF7snQV8FOf294knBJdABHcLkgRJQgwIELS4a0tb2kKhULS0hUKp4G5B
+        DAAACwwBP0AiyAAA/7JJREFUeF7snQV8FOf294knBJdABHcLkgRJQgwIELS4a0tb2kKhULS0hUKp4G5B
         Q0gIFtzdHRIIcXffZH3m954zu+HSe3v/75XeW+DO78PhmXlm5pnZ2c3Od89znvOUkyVLlixZsmTJkiVL
         lixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJ
         kiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZsmTJkiVLlixZ
@@ -23357,5 +23357,8 @@
   </metadata>
   <metadata name="guna2ShadowForm1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>205, 17</value>
+  </metadata>
+  <metadata name="timerUpdateChats.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>398, 17</value>
   </metadata>
 </root>

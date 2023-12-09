@@ -87,6 +87,7 @@ namespace Client {
     private: Guna::UI2::WinForms::Guna2CirclePictureBox^ currentChatPicture;
     public: Guna::UI2::WinForms::Guna2Panel^ placeForMessages;
 	private: Guna::UI2::WinForms::Guna2VScrollBar^ VScrollBarForMessages;
+	private: System::Windows::Forms::Timer^ timerUpdateChats;
 
 
 
@@ -138,6 +139,7 @@ namespace Client {
 			this->guna2ShadowForm1 = (gcnew Guna::UI2::WinForms::Guna2ShadowForm(this->components));
 			this->placeForMessages = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->VScrollBarForMessages = (gcnew Guna::UI2::WinForms::Guna2VScrollBar());
+			this->timerUpdateChats = (gcnew System::Windows::Forms::Timer(this->components));
 			this->guna2Panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->profilePicture))->BeginInit();
 			this->guna2Panel2->SuspendLayout();
@@ -657,6 +659,12 @@ namespace Client {
 				static_cast<System::Int32>(static_cast<System::Byte>(25)), static_cast<System::Int32>(static_cast<System::Byte>(40)));
 			this->VScrollBarForMessages->ThumbSize = 5;
 			// 
+			// timerUpdateChats
+			// 
+			this->timerUpdateChats->Enabled = true;
+			this->timerUpdateChats->Interval = 60000;
+			this->timerUpdateChats->Tick += gcnew System::EventHandler(this, &MyForm::timerUpdateChats_Tick);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
@@ -726,12 +734,22 @@ namespace Client {
 	public: delegate System::Void addMessagesToFormDelegate(array<MessageNode^>^  msg, bool isOld);
 	public: System::Void addMessagesToForm(array<MessageNode^>^ msg, bool isOld);
 
+	public: delegate System::Void addChatsToFormDelegate(array<ChatNode^>^ chats);
+	public: System::Void addChatsToForm(array<ChatNode^>^ chats);
+
+	public: delegate System::Void changeChatStatusDelegate(ChatNode^ chat, bool status);
+	public: System::Void changeChatStatus(ChatNode ^ chat, bool status);
+	
+	public: delegate System::Void changeChatUnreadMessagesDelegate(ChatNode^ chat, int unread);
+	public: System::Void changeChatUnreadMessages(ChatNode^ chat, int unread);
+
 	private: System::Void CreateNewChat_Click(System::Object^ sender, System::EventArgs^ e);
 
 	private: System::Void threadReceivMessages();
 	private: System::Void maximizeButton_Click(System::Object^ sender, System::EventArgs^ e);
 
 	private: System::Void logOutButton_Click(System::Object^ sender, System::EventArgs^ e);
+	private: System::Void timerUpdateChats_Tick(System::Object^ sender, System::EventArgs^ e);
 };
 
 
