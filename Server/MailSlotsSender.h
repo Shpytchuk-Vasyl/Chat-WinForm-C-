@@ -27,7 +27,7 @@ public:
         std::replace(userName.begin(), userName.end(), L' ', L'_');
         int c = 0;
        // CreateFile(L"\\\\.\\mailslot\\MyMailslot", GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
-        hMailslot = CreateFileW((SLOT_S + hostName + L"\\mailslot\\" + userName).c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+        hMailslot = CreateFileW((SLOT_S + hostName + L"\\mailslot\\" + userName).c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
     
 
         std::cout << " hcreated =" << hMailslot << std::endl;
@@ -40,7 +40,7 @@ public:
     }
 
     bool send(std::string msg) {
-        char buffer[BUFSIZE] = " ";
+        /*char buffer[BUFSIZE] = " ";
         DWORD bytesWritten = BUFSIZE;
         std::memcpy(buffer, msg.c_str(), sizeof(msg.c_str()));
         std::cout << " h =" << hMailslot << " msg = " << msg << std::endl;
@@ -52,7 +52,25 @@ public:
         else {
             std::cerr << "Not sended: " << GetLastError() << std::endl;
             return 0;
+        }*/
+
+        LPCTSTR lpszMessage = (LPCTSTR)(msg.c_str());
+        DWORD bytesWritten = BUFSIZE;
+       // std::memcpy(lpszMessage, msg.c_str(), sizeof(msg.c_str()));
+
+        std::cout << " h =" << hMailslot << " msg = " << msg << std::endl;
+
+        if (WriteFile(hMailslot, lpszMessage, msg.size(), &bytesWritten, nullptr)) {
+            std::cout << "Sended " << msg << " size:" << bytesWritten << " " << msg.size() << std::endl;
+            return 1;
         }
+        else {
+            std::cerr << "Not sended: " << GetLastError() << std::endl;
+            return 0;
+        }
+
+
+
 
     }
 
