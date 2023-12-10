@@ -39,7 +39,8 @@ namespace Client {
 				workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));//// поки сюди
 			}
 			catch (std::exception e) {
-
+				MessageBox::Show("Unable to connect to server", "Unable connection",
+					MessageBoxButtons::OK, MessageBoxIcon::Error);
 			}
 		}
 
@@ -72,9 +73,9 @@ namespace Client {
 	private: Guna::UI2::WinForms::Guna2Button^ logOutButton;
 
 
-	private: Guna::UI2::WinForms::Guna2Button^ guna2Button4;
-	private: Guna::UI2::WinForms::Guna2Button^ guna2Button3;
-	private: Guna::UI2::WinForms::Guna2Button^ guna2Button2;
+
+
+
 	private: Guna::UI2::WinForms::Guna2VScrollBar^ VScrollBarChats;
 
 	private: Guna::UI2::WinForms::Guna2Panel^ guna2Panel8;
@@ -120,9 +121,6 @@ namespace Client {
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->guna2Panel1 = (gcnew Guna::UI2::WinForms::Guna2Panel());
 			this->logOutButton = (gcnew Guna::UI2::WinForms::Guna2Button());
-			this->guna2Button4 = (gcnew Guna::UI2::WinForms::Guna2Button());
-			this->guna2Button3 = (gcnew Guna::UI2::WinForms::Guna2Button());
-			this->guna2Button2 = (gcnew Guna::UI2::WinForms::Guna2Button());
 			this->CreateNewChat = (gcnew Guna::UI2::WinForms::Guna2Button());
 			this->profilePicture = (gcnew Guna::UI2::WinForms::Guna2CirclePictureBox());
 			this->guna2Panel2 = (gcnew Guna::UI2::WinForms::Guna2Panel());
@@ -168,9 +166,6 @@ namespace Client {
 			this->guna2Panel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(17)), static_cast<System::Int32>(static_cast<System::Byte>(22)),
 				static_cast<System::Int32>(static_cast<System::Byte>(32)));
 			this->guna2Panel1->Controls->Add(this->logOutButton);
-			this->guna2Panel1->Controls->Add(this->guna2Button4);
-			this->guna2Panel1->Controls->Add(this->guna2Button3);
-			this->guna2Panel1->Controls->Add(this->guna2Button2);
 			this->guna2Panel1->Controls->Add(this->CreateNewChat);
 			this->guna2Panel1->Controls->Add(this->profilePicture);
 			this->guna2Panel1->Dock = System::Windows::Forms::DockStyle::Left;
@@ -195,68 +190,12 @@ namespace Client {
 			this->logOutButton->HoverState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)),
 				static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(47)));
 			this->logOutButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"logOutButton.Image")));
+			this->logOutButton->ImageSize = System::Drawing::Size(40, 40);
 			this->logOutButton->Location = System::Drawing::Point(0, 540);
 			this->logOutButton->Name = L"logOutButton";
-			this->logOutButton->Size = System::Drawing::Size(72, 48);
+			this->logOutButton->Size = System::Drawing::Size(72, 50);
 			this->logOutButton->TabIndex = 5;
 			this->logOutButton->Click += gcnew System::EventHandler(this, &MyForm::logOutButton_Click);
-			// 
-			// guna2Button4
-			// 
-			this->guna2Button4->DisabledState->BorderColor = System::Drawing::Color::DarkGray;
-			this->guna2Button4->DisabledState->CustomBorderColor = System::Drawing::Color::DarkGray;
-			this->guna2Button4->DisabledState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(169)),
-				static_cast<System::Int32>(static_cast<System::Byte>(169)), static_cast<System::Int32>(static_cast<System::Byte>(169)));
-			this->guna2Button4->DisabledState->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(141)),
-				static_cast<System::Int32>(static_cast<System::Byte>(141)), static_cast<System::Int32>(static_cast<System::Byte>(141)));
-			this->guna2Button4->FillColor = System::Drawing::Color::Transparent;
-			this->guna2Button4->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
-			this->guna2Button4->ForeColor = System::Drawing::Color::White;
-			this->guna2Button4->HoverState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)),
-				static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(47)));
-			this->guna2Button4->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"guna2Button4.Image")));
-			this->guna2Button4->Location = System::Drawing::Point(0, 241);
-			this->guna2Button4->Name = L"guna2Button4";
-			this->guna2Button4->Size = System::Drawing::Size(72, 45);
-			this->guna2Button4->TabIndex = 4;
-			// 
-			// guna2Button3
-			// 
-			this->guna2Button3->DisabledState->BorderColor = System::Drawing::Color::DarkGray;
-			this->guna2Button3->DisabledState->CustomBorderColor = System::Drawing::Color::DarkGray;
-			this->guna2Button3->DisabledState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(169)),
-				static_cast<System::Int32>(static_cast<System::Byte>(169)), static_cast<System::Int32>(static_cast<System::Byte>(169)));
-			this->guna2Button3->DisabledState->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(141)),
-				static_cast<System::Int32>(static_cast<System::Byte>(141)), static_cast<System::Int32>(static_cast<System::Byte>(141)));
-			this->guna2Button3->FillColor = System::Drawing::Color::Transparent;
-			this->guna2Button3->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
-			this->guna2Button3->ForeColor = System::Drawing::Color::White;
-			this->guna2Button3->HoverState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)),
-				static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(47)));
-			this->guna2Button3->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"guna2Button3.Image")));
-			this->guna2Button3->Location = System::Drawing::Point(0, 190);
-			this->guna2Button3->Name = L"guna2Button3";
-			this->guna2Button3->Size = System::Drawing::Size(72, 45);
-			this->guna2Button3->TabIndex = 3;
-			// 
-			// guna2Button2
-			// 
-			this->guna2Button2->DisabledState->BorderColor = System::Drawing::Color::DarkGray;
-			this->guna2Button2->DisabledState->CustomBorderColor = System::Drawing::Color::DarkGray;
-			this->guna2Button2->DisabledState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(169)),
-				static_cast<System::Int32>(static_cast<System::Byte>(169)), static_cast<System::Int32>(static_cast<System::Byte>(169)));
-			this->guna2Button2->DisabledState->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(141)),
-				static_cast<System::Int32>(static_cast<System::Byte>(141)), static_cast<System::Int32>(static_cast<System::Byte>(141)));
-			this->guna2Button2->FillColor = System::Drawing::Color::Transparent;
-			this->guna2Button2->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
-			this->guna2Button2->ForeColor = System::Drawing::Color::White;
-			this->guna2Button2->HoverState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)),
-				static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(47)));
-			this->guna2Button2->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"guna2Button2.Image")));
-			this->guna2Button2->Location = System::Drawing::Point(0, 139);
-			this->guna2Button2->Name = L"guna2Button2";
-			this->guna2Button2->Size = System::Drawing::Size(72, 45);
-			this->guna2Button2->TabIndex = 2;
 			// 
 			// CreateNewChat
 			// 
@@ -268,13 +207,14 @@ namespace Client {
 				static_cast<System::Int32>(static_cast<System::Byte>(141)), static_cast<System::Int32>(static_cast<System::Byte>(141)));
 			this->CreateNewChat->FillColor = System::Drawing::Color::Transparent;
 			this->CreateNewChat->Font = (gcnew System::Drawing::Font(L"Segoe UI", 9));
-			this->CreateNewChat->ForeColor = System::Drawing::Color::White;
+			this->CreateNewChat->ForeColor = System::Drawing::Color::Transparent;
 			this->CreateNewChat->HoverState->FillColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(26)),
 				static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(47)));
 			this->CreateNewChat->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"CreateNewChat.Image")));
+			this->CreateNewChat->ImageSize = System::Drawing::Size(40, 40);
 			this->CreateNewChat->Location = System::Drawing::Point(0, 88);
 			this->CreateNewChat->Name = L"CreateNewChat";
-			this->CreateNewChat->Size = System::Drawing::Size(72, 45);
+			this->CreateNewChat->Size = System::Drawing::Size(72, 50);
 			this->CreateNewChat->TabIndex = 1;
 			this->CreateNewChat->Click += gcnew System::EventHandler(this, &MyForm::CreateNewChat_Click);
 			// 
@@ -448,6 +388,7 @@ namespace Client {
 			this->currentChatStatus->Size = System::Drawing::Size(45, 16);
 			this->currentChatStatus->TabIndex = 17;
 			this->currentChatStatus->Text = L"Online";
+			this->currentChatStatus->Visible = false;
 			// 
 			// currentChatName
 			// 
