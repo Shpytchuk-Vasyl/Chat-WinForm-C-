@@ -96,14 +96,6 @@ public:
             printf("send failed with error: %d\n", WSAGetLastError());
         }
 
-        WCHAR computerNameWCHAR[100] = { 0 };
-        DWORD size = 100;
-        GetComputerName(computerNameWCHAR, &size);
-        char computerName[DEFAULT_BUFLEN] = "";
-        for (size_t i = 0; i <= size; i++)
-            computerName[i] = computerNameWCHAR[i];
-        send(ConnectSocket, (char*)computerName, DEFAULT_BUFLEN, 0);
-
         char buf[10];
         iResult = recv(ConnectSocket, buf, sizeof(buf), 0);
         TypeRequest type = (TypeRequest)std::atoi(buf);
@@ -112,6 +104,18 @@ public:
         }
          
         return type == SECCESS;
+    }
+
+    bool createSlot() {
+        send(ConnectSocket, std::to_string(TypeRequest::SLOT_CREATED).c_str(), sizeof(TypeRequest), 0);
+        WCHAR computerNameWCHAR[100] = { 0 };
+        DWORD size = 100;
+        GetComputerName(computerNameWCHAR, &size);
+        char computerName[DEFAULT_BUFLEN] = "";
+        for (size_t i = 0; i <= size; i++)
+            computerName[i] = computerNameWCHAR[i];
+        return SOCKET_ERROR != send(ConnectSocket, (char*)computerName, DEFAULT_BUFLEN, 0);
+
     }
 
     CChat addNewChat(CUser other) {
@@ -133,16 +137,7 @@ public:
     bool Start(CUser user) {
         send(ConnectSocket, std::to_string(TypeRequest::START_REQUEST).c_str(), sizeof(TypeRequest), 0);
         Sleep(100);
-        send(ConnectSocket, (char*)(&user), sizeof(user), 0);
-        Sleep(100);
-        WCHAR computerNameWCHAR[100] = { 0 };
-        DWORD size = 100;
-        GetComputerName(computerNameWCHAR, &size);
-        char computerName[DEFAULT_BUFLEN] = "";
-        for (size_t i = 0; i <= size; i++)
-            computerName[i] = computerNameWCHAR[i];
-    
-        return SOCKET_ERROR != send(ConnectSocket, (char*)computerName, DEFAULT_BUFLEN, 0);
+        return SOCKET_ERROR != send(ConnectSocket, (char*)(&user), sizeof(user), 0);
         
     }
 
@@ -233,5 +228,6 @@ public:
         serverMutex.unlock();
         return msgs;
     }
+
 
 };

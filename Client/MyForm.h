@@ -30,7 +30,17 @@ namespace Client {
 			InitializeComponent();
 			pointer = this;
 			chatNodes = gcnew ArrayList();
-			onShow();
+			onShow(); 
+			try {
+				std::string name;
+				MarshalString(user->userName, name);
+				reciver = new MailSlotsReciver(name);// хз чи тут , треба  буде затестити , не вникав 
+				server->createSlot();
+				workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));//// поки сюди
+			}
+			catch (std::exception e) {
+
+			}
 		}
 
 	protected:

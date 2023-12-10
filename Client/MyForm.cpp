@@ -35,12 +35,7 @@ Void MyForm::onShow() {
 	if (reg->isUserCloseWindow) {
 		throw std::exception("user close reqistration window");
 	}
-	if (reciver == nullptr) {
-		std::string name;
-		MarshalString(user->userName, name);
-		reciver = new MailSlotsReciver(name);// хз чи тут , треба  буде затестити , не вникав 
-		workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));//// поки сюди
-	}
+
 	profilePicture->Image = Image::FromFile(userPhoto + user->pictureIndex + ".png");
 	currentChatName->Text = user->userName;
 	currentChatPicture->Image = Image::FromFile(userPhoto + user->pictureIndex + ".png");
@@ -53,11 +48,6 @@ System::Void MyForm::downloadChats() {
 	MarshalString(user->userName, name);
 	CUser u(name.c_str(), "", user->pictureIndex);
 	server->Start(u);
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	reciver = new MailSlotsReciver(name);// хз чи тут , треба  буде затестити , не вникав 
-	workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));//// поки сюди
-	//////////////////////////////////////////////////////////////////////////////////////////////
 
 	std::vector<CChat> v = server->update();
 	if (!v.empty()) {
