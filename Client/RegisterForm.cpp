@@ -65,7 +65,7 @@ System::Void Client::RegisterForm::logIn_Click(System::Object^ sender, System::E
 	Client::MyForm::MarshalString(user->Text, name);
 	std::string userPassword;
 	Client::MyForm::MarshalString(password->Text, userPassword);
-	CUser u(name.c_str(), userPassword.c_str(), 1);
+	CUser u(name.c_str(), userPassword.c_str(), picture);
 	if (Client::MyForm::pointer->server->RegisterUser(u)) {
 
 		Client::MyForm::pointer->user = gcnew Client::UserNode(user->Text, password->Text, picture, true);
