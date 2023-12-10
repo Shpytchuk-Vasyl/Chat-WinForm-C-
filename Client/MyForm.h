@@ -37,6 +37,7 @@ namespace Client {
 				reciver = new MailSlotsReciver(name);// хз чи тут , треба  буде затестити , не вникав 
 				server->createSlot();
 				workerThread = gcnew Thread(gcnew ThreadStart(this, &MyForm::threadReceivMessages));//// поки сюди
+				workerThread->Start();
 			}
 			catch (std::exception e) {
 
