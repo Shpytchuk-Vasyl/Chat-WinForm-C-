@@ -11,7 +11,7 @@
 #define PIPE_TIMEOUT 5000
 #define BUFSIZE 4096
 
-
+//
 	
 class MailSlotsSender
 {
@@ -21,18 +21,14 @@ class MailSlotsSender
 
 
 public:
-    MailSlotsSender(std::string  username,std::string hostname ) {
+    MailSlotsSender(std::string  username, std::string hostname) {
         userName = std::wstring(username.begin(), username.end());
         hostName = std::wstring(hostname.begin(), hostname.end());
         std::replace(userName.begin(), userName.end(), L' ', L'_');
         int c = 0;
-        while (hMailslot == INVALID_HANDLE_VALUE) {
-            Sleep(10);
-            hMailslot = CreateFileW((SLOT_S+hostName + L"\\mailslot\\" + userName).c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
-            c++;
-            
-        }
-        
+       // CreateFile(L"\\\\.\\mailslot\\MyMailslot", GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+        hMailslot = CreateFileW((SLOT_S + hostName + L"\\mailslot\\" + userName).c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
+    
 
         std::cout << " hcreated =" << hMailslot << std::endl;
       /*  if (hMailslot == INVALID_HANDLE_VALUE) {
@@ -45,11 +41,12 @@ public:
 
     bool send(std::string msg) {
         char buffer[BUFSIZE] = " ";
-        DWORD bytesWritten;
+        DWORD bytesWritten = BUFSIZE;
         std::memcpy(buffer, msg.c_str(), sizeof(msg.c_str()));
         std::cout << " h =" << hMailslot << " msg = " << msg << std::endl;
-        if (WriteFile(hMailslot, buffer, strlen(buffer) + 1, &bytesWritten, nullptr)) {
-            std::cout << "Sended " << std::endl;
+
+        if (WriteFile(hMailslot, buffer,msg.size(), &bytesWritten, nullptr)) {
+            std::cout << "Sended " << msg<< " size:" << bytesWritten << " "<< msg.size() << std::endl;
             return 1;
         }
         else {

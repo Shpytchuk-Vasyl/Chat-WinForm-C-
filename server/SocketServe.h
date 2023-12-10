@@ -192,6 +192,7 @@ public:
                         recvbuflen,
                         0);
                     other_user_id = 0;
+
                     if (*socketThread.current_user_id == socketThread.current_chat->getUser2Id()) {
                         other_user_id = socketThread.current_chat->getUser1Id();
                         userId = other_user_id;
@@ -219,6 +220,7 @@ public:
                         
                         for (auto pair : *socketThread.connection_list) {
                             if (pair.first == other_user_id) {
+                                std::cout << "server recived to send :" << msg.get_text()<<std::endl;
                                 if (!pair.second->send(msg.get_text())) {//  можу переробити щоб кидати не тльки  текст але не думаю що є сенс 
                                     std::cout << "err sending to " << other_user_id;
                                 }

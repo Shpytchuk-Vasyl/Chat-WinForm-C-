@@ -14,6 +14,7 @@
 #pragma comment (lib, "AdvApi32.lib")
 #include <string>
 #include <mutex>
+#include <iostream>
 #include "TypeRequest.h"
 #include "../server/CUser.h"
 #include "../server/CChat.h"
@@ -144,6 +145,7 @@ public:
     bool sendMessage(CMessage msg) {
         serverMutex.lock();
         send(ConnectSocket, std::to_string(TypeRequest::SEND_MESSAGE).c_str(), sizeof(TypeRequest), 0);
+        std::cout << "sended " << msg.get_text() << std::endl;
         Sleep(100);
         int iResult = send(ConnectSocket, (char*)(&msg), sizeof(msg), 0);     
         if (iResult == SOCKET_ERROR) {
