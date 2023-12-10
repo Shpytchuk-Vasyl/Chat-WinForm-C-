@@ -30,9 +30,7 @@ public:
             Sleep(10);
             hMailslot = CreateFileW((SLOT_S+hostName + L"\\mailslot\\" + userName).c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr);
             c++;
-            if (c >= 100000000) {
-                throw std::exception();
-            }
+            
         }
         
 
