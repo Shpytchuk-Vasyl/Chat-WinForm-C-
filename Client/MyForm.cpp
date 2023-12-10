@@ -269,6 +269,7 @@ System::Void MyForm::logOutButton_Click(System::Object^ sender, System::EventArg
 	chatNodes->Clear();
 	currentNode = nullptr;
 	placeForMessages->Controls->Clear();
+	server->finishWork();
 	onShow();
 }
 
