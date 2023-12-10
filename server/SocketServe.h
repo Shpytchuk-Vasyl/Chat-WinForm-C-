@@ -205,17 +205,19 @@ public:
                      msg.set_user_id(*socketThread.current_user_id);
                      msg.set_chat_id(socketThread.db->get_chat_id(*socketThread.current_chat));
                     socketThread.db->add_message(msg);
-                    std::cout << "online: ";
+                  /*  std::cout << "online: ";
                     for (auto id : *socketThread.online) {
                         std::cout << id;
                         std::cout << " ";
                     }
                     std::cout << "\nclients: ";
                     for (auto cli : *socketThread.clients) {
+                        std::cout << " ";
                         std::cout << cli->current_chat->getChatId();
                         std::cout << " ";
                         std::cout << *cli->current_user_id;
-                    }
+                        std::cout << " ";
+                    }*/
                     if (socketThread.isChatOpened(*socketThread.current_chat, other_user_id)) {
                         
                         for (auto pair : *socketThread.connection_list) {
@@ -321,17 +323,27 @@ public:
                     break;
 
                 case TypeRequest::FINISH_WORK:
-                //    it= std::find_if(socketThread.online->begin(), socketThread.online->end(),
-                //        [socketThread](const auto& user) {
-                //            return user.first == socketThread.current_user_id;
-                //        });
-                ////якщо є чат то кидати мб повідомлення про те що юзер вийшов ?
-                //    // Перевірити, чи знайдено відповідний елемент
-                //    if (it != socketThread.online->end()) {
-                //        // Видалити елемент
-                //        socketThread.online->erase(it);
-                //        // Обробка завершення роботи
-                        break;
+                    for (int i = 0; i < socketThread.online->size(); i++) {
+                        if (socketThread.online->operator[](i) == *socketThread.current_user_id) {
+                            socketThread.online->erase(socketThread.online->begin() + i);
+                        }
+                     }
+                    for (int i = 0; i < socketThread.connection_list->size(); i++) {
+                        if (socketThread.connection_list->operator[](i).first == *socketThread.current_user_id) {
+                            delete socketThread.connection_list->operator[](i).second;
+                            socketThread.connection_list->erase(socketThread.connection_list->begin() + i);
+
+                        }
+                    }
+                    //for (int i = 0; i < socketThread.clients->size(); i++) {
+                    //    if (*socketThread.clients->operator[](i)->current_user_id == *socketThread.current_user_id) {
+                    //        socketThread.clients->erase(socketThread.clients->begin() + i);//видаляю себе неможна
+                    //    }
+                    //}
+                    //не можу видаляти тому костиль поки 
+                    socketThread.current_user_id = 0;
+
+                     break;
 
                 case TypeRequest::UPDATE_CHATS: // отримати  всі чати що повязані з поточним юзером 
                     // Обробка оновлення чатів
@@ -367,16 +379,25 @@ public:
                         0);
                     other_user_id = 0;
                     chat = *(CChat*)recvbuf;
-                    chatId = chat.getChatId();
+                    chatId = chat.getChatId();//aяк  я тут айді чату отримую ?? 
+
                     chat = socketThread.db->get_chat_by_id(chat.getChatId());
                     chat.setChatId(chatId);
 
                     msgs = socketThread.db->get_all_message_from_chat(chat);
                     *socketThread.current_chat = chat;
-                   
+                    //chat.setChatId(socketThread.db->get_chat_id(chat));
+                    if (chat.getUser1Id() == *socketThread.current_user_id) {
+                        chat.setUnread1(0);
+                    }
+                    else {
+                        chat.setUnread2(0);
+                    }
+                    socketThread.db->update_chat(chat);
                     for (auto msg : msgs) {
                         memset(recvbuf, 0, recvbuflen);
                         msg.set_is_my_msg(msg.get_user_id() == *socketThread.current_user_id);
+
                         std::memcpy(recvbuf, (char*)&msg, sizeof(msg));
                         iSendResult = send(socketThread.ClientSocket, recvbuf, sizeof(recvbuf), 0);
                         if (iSendResult == SOCKET_ERROR) {
@@ -388,6 +409,7 @@ public:
                     }
                     Sleep(1000);
                     iSendResult = send(socketThread.ClientSocket, std::to_string(TypeRequest::SECCESS).c_str(), sizeof(SECCESS), 0);
+                    
                     if (iSendResult == SOCKET_ERROR) {
                         printf("send failed with error: %d\n", WSAGetLastError());
                         closesocket(socketThread.ClientSocket);

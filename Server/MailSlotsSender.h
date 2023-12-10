@@ -68,10 +68,6 @@ public:
             std::cerr << "Not sended: " << GetLastError() << std::endl;
             return 0;
         }
-
-
-
-
     }
 
 
