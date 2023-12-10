@@ -177,8 +177,11 @@ public:
                         recvbuf,
                         recvbuflen,
                         0);
-                    socketThread.connection_list->push_back(std::make_pair(*socketThread.current_user_id, new MailSlotsSender(std::string(user_res.getName()), std::string(recvbuf))));
-                    break;
+                    socketThread.connection_list->push_back(std::make_pair(*socketThread.current_user_id, new MailSlotsSender(
+                        std::string(socketThread.db->get_user_by_id
+                    (*socketThread.current_user_id).getName())
+                        , std::string(recvbuf))));
+                    break;                                                                                                                  // якщо не катить змінити на юзера класу
                 case TypeRequest::GET_MESSAGE://не може
                     // Обробка отримання повідомлення
                     break;
